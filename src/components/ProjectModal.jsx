@@ -98,9 +98,36 @@ export const ProjectModal = ({ project, onClose, onStartProject }) => {
           >
             {project.title}
           </h2>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.9rem', color: 'var(--color-accent-lime)' }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.9rem', color: 'var(--color-accent-lime)', display: 'block', marginBottom: '1.5rem' }}>
             Domain: {project.industry}
           </span>
+
+          {/* Project Visual Showcase with Hover Effect */}
+          {project.image && (
+            <div
+              className="img-hover-frame"
+              style={{
+                height: 'clamp(220px, 38vh, 380px)',
+                width: '100%',
+                marginBottom: '1rem'
+              }}
+            >
+              <img
+                src={project.image}
+                alt={project.title}
+                className="img-hover-zoom"
+                loading="lazy"
+              />
+              <div className="corner-bracket-tl" />
+              <div className="corner-bracket-br" />
+              <div className="img-overlay-badge">
+                <span className="lime-dot" style={{ width: '5px', height: '5px' }} />
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--color-accent-lime)' }}>
+                  {project.metricsHighlight}
+                </span>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* 5-Stage Project Detail Template per Prompt Section 18 */}

@@ -26,17 +26,14 @@ export const CapabilitySection = ({ onSelectCapability }) => {
           <span className="micro-label">SYSTEM ARCHITECTURE</span>
         </div>
 
-        <div style={{ marginBottom: 'clamp(3rem, 6vw, 5rem)', maxWidth: '28ch' }}>
+        <div style={{ marginBottom: 'clamp(2rem, 4vw, 3.5rem)', maxWidth: '36ch' }}>
           <h2
             className="display-large"
             style={{
-              color: 'var(--color-warm-white)',
               margin: 0
             }}
           >
-            WE BUILD<br />
-            THE SYSTEM<br />
-            BEHIND THE BUSINESS.
+            WE BUILD THE SYSTEM<br />BEHIND THE BUSINESS.
           </h2>
         </div>
 

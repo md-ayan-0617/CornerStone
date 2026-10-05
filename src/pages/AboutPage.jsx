@@ -26,18 +26,15 @@ export const AboutPage = ({ onNavigate }) => {
           <h1
             className="display-mega"
             style={{
-              color: 'var(--color-warm-white)',
-              margin: '0 0 2rem 0',
-              maxWidth: '14ch'
+              margin: '0 0 1.75rem 0',
+              maxWidth: '22ch'
             }}
           >
-            A DIGITAL<br />
-            FOUNDATION<br />
-            FOR MODERN<br />
-            BUSINESS.
+            A DIGITAL FOUNDATION<br />
+            FOR MODERN BUSINESS.
           </h1>
 
-          <div style={{ borderTop: '1px solid var(--color-border-gray)', paddingTop: '2rem', maxWidth: '48ch' }}>
+          <div style={{ borderTop: '1px solid var(--color-border-gray)', paddingTop: '2rem', maxWidth: '48ch', marginBottom: '2.5rem' }}>
             <p
               style={{
                 fontFamily: 'var(--font-body)',
@@ -49,6 +46,31 @@ export const AboutPage = ({ onNavigate }) => {
             >
               Cornerstone combines technology, design and creativity to help businesses build better ways to attract, communicate with and serve their customers.
             </p>
+          </div>
+
+          {/* Architectural Studio Showcase with Hover Effect */}
+          <div
+            className="img-hover-frame"
+            style={{
+              height: 'clamp(280px, 48vh, 500px)',
+              width: '100%',
+              marginTop: '1rem'
+            }}
+          >
+            <img
+              src="/images/about-monolith.jpg"
+              alt="Cornerstone Studio Monolith"
+              className="img-hover-zoom"
+              loading="lazy"
+            />
+            <div className="corner-bracket-tl" />
+            <div className="corner-bracket-br" />
+            <div className="img-overlay-badge">
+              <span className="lime-dot" style={{ width: '5px', height: '5px' }} />
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--color-accent-lime)' }}>
+                GLOBAL STUDIO &amp; DIGITAL FOUNDATION
+              </span>
+            </div>
           </div>
         </div>
       </section>

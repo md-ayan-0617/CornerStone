@@ -57,7 +57,7 @@ export const Navbar = ({ currentPath = "/", onNavigate }) => {
         }}
       >
         <div className="site-container-fluid" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '76px' }}>
-          
+
           {/* Brand Logo & Architectural Mark */}
           <button
             onClick={() => handleLinkClick('/')}

@@ -60,13 +60,11 @@ export const ContactPage = () => {
           <h1
             className="display-mega"
             style={{
-              color: 'var(--color-warm-white)',
               margin: '0 0 1.5rem 0',
-              maxWidth: '14ch'
+              maxWidth: '20ch'
             }}
           >
-            HAVE SOMETHING<br />
-            WORTH BUILDING?
+            HAVE SOMETHING<br />WORTH BUILDING?
           </h1>
 
           <div style={{ borderTop: '1px solid var(--color-border-gray)', paddingTop: '1.75rem', maxWidth: '48ch' }}>

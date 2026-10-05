@@ -1,17 +1,26 @@
 import React, { useState } from 'react';
 import { FEATURED_PROJECTS } from '../data/siteContent';
-import { ArrowUpRight, Phone, MessageSquare, Laptop, Layers } from 'lucide-react';
+import { ArrowUpRight, Phone, MessageSquare, Laptop, Layers, Eye, Code } from 'lucide-react';
 import CornerstoneMotif from './CornerstoneMotif';
 
 export const SelectedWork = ({ onSelectProject }) => {
   const [hoveredProject, setHoveredProject] = useState(null);
+  const [viewModes, setViewModes] = useState({});
+
+  const toggleViewMode = (e, projectId) => {
+    e.stopPropagation();
+    setViewModes((prev) => ({
+      ...prev,
+      [projectId]: prev[projectId] === 'code' ? 'visual' : 'code'
+    }));
+  };
 
   // Realistic UI Mockup renderer for projects
   const renderProjectVisual = (project) => {
     switch (project.id) {
       case "proj-01": // AI Receptionist - Healthcare
         return (
-          <div style={{ width: '100%', height: '100%', minHeight: '300px', backgroundColor: '#0D1117', border: '1px solid #21262D', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '1.5rem', position: 'relative', overflow: 'hidden' }}>
+          <div style={{ width: '100%', height: '100%', minHeight: '320px', backgroundColor: '#0D1117', border: '1px solid #21262D', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '1.5rem', position: 'relative', overflow: 'hidden' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #21262D', paddingBottom: '0.75rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Phone size={16} color="#B8FF3D" />
@@ -52,7 +61,7 @@ export const SelectedWork = ({ onSelectProject }) => {
 
       case "proj-02": // WhatsApp Lead System - Education
         return (
-          <div style={{ width: '100%', height: '100%', minHeight: '300px', backgroundColor: '#0B141A', border: '1px solid #1F2C34', padding: '1.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+          <div style={{ width: '100%', height: '100%', minHeight: '320px', backgroundColor: '#0B141A', border: '1px solid #1F2C34', padding: '1.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #1F2C34', paddingBottom: '0.75rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <MessageSquare size={16} color="#B8FF3D" />
@@ -88,7 +97,7 @@ export const SelectedWork = ({ onSelectProject }) => {
 
       case "proj-03": // Digital Experience - Hospitality
         return (
-          <div style={{ width: '100%', height: '100%', minHeight: '300px', backgroundColor: '#121212', border: '1px solid #282828', padding: '1.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+          <div style={{ width: '100%', height: '100%', minHeight: '320px', backgroundColor: '#121212', border: '1px solid #282828', padding: '1.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #282828', paddingBottom: '0.75rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Laptop size={16} color="#B8FF3D" />
@@ -117,7 +126,7 @@ export const SelectedWork = ({ onSelectProject }) => {
 
       case "proj-04": // Modular AI Creative - Consumer Brand
         return (
-          <div style={{ width: '100%', height: '100%', minHeight: '300px', backgroundColor: '#121212', border: '1px solid #282828', padding: '1.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+          <div style={{ width: '100%', height: '100%', minHeight: '320px', backgroundColor: '#121212', border: '1px solid #282828', padding: '1.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #282828', paddingBottom: '0.75rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Layers size={16} color="#B8FF3D" />
@@ -175,13 +184,11 @@ export const SelectedWork = ({ onSelectProject }) => {
             <h2
               className="display-large"
               style={{
-                color: 'var(--color-warm-white)',
                 marginTop: '0.5rem',
                 margin: 0
               }}
             >
-              THINGS<br />
-              WE'VE BUILT.
+              THINGS WE'VE BUILT.
             </h2>
           </div>
 
@@ -195,8 +202,10 @@ export const SelectedWork = ({ onSelectProject }) => {
 
         {/* Projects Matrix */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-          {FEATURED_PROJECTS.map((project, index) => {
+          {FEATURED_PROJECTS.map((project) => {
             const isHovered = hoveredProject === project.id;
+            const currentMode = viewModes[project.id] || 'visual';
+
             return (
               <div
                 key={project.id}
@@ -285,9 +294,90 @@ export const SelectedWork = ({ onSelectProject }) => {
                     </div>
                   </div>
 
-                  {/* Right: Realistic UI Architecture Mockup */}
+                  {/* Right: Realistic UI Visual with Hover Effects & Toggle */}
                   <div>
-                    {renderProjectVisual(project)}
+                    {/* View Switcher Header */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                      <span className="micro-label" style={{ color: 'var(--color-muted-gray)', fontSize: '0.65rem' }}>
+                        LIVE DEPLOYMENT DEMONSTRATION
+                      </span>
+                      <button
+                        onClick={(e) => toggleViewMode(e, project.id)}
+                        style={{
+                          background: 'rgba(255, 255, 255, 0.05)',
+                          border: '1px solid var(--color-border-gray)',
+                          color: 'var(--color-warm-white)',
+                          padding: '3px 8px',
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: '0.62rem',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '5px',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease'
+                        }}
+                      >
+                        {currentMode === 'visual' ? (
+                          <>
+                            <Code size={11} color="var(--color-accent-lime)" />
+                            <span>VIEW SCHEMATIC</span>
+                          </>
+                        ) : (
+                          <>
+                            <Eye size={11} color="var(--color-accent-lime)" />
+                            <span>VIEW PREVIEW</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+
+                    {currentMode === 'visual' ? (
+                      <div
+                        className="img-hover-frame"
+                        style={{
+                          height: '320px',
+                          width: '100%',
+                          position: 'relative'
+                        }}
+                      >
+                        <img
+                          src={project.image}
+                          alt={project.title}
+                          className="img-hover-zoom"
+                          loading="lazy"
+                        />
+                        <div className="corner-bracket-tl" />
+                        <div className="corner-bracket-br" />
+
+                        {/* Top tag badge */}
+                        <div
+                          style={{
+                            position: 'absolute',
+                            top: '12px',
+                            left: '12px',
+                            background: 'rgba(10, 10, 10, 0.85)',
+                            padding: '3px 8px',
+                            border: '1px solid rgba(255, 255, 255, 0.15)',
+                            backdropFilter: 'blur(6px)',
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: '0.62rem',
+                            color: 'var(--color-warm-white)'
+                          }}
+                        >
+                          {project.badge}
+                        </div>
+
+                        {/* Bottom metrics badge */}
+                        <div className="img-overlay-badge">
+                          <span className="lime-dot" style={{ width: '5px', height: '5px' }} />
+                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--color-accent-lime)' }}>
+                            {project.metricsHighlight}
+                          </span>
+                        </div>
+                      </div>
+                    ) : (
+                      renderProjectVisual(project)
+                    )}
                   </div>
                 </div>
               </div>

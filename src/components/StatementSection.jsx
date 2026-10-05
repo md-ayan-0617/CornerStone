@@ -34,18 +34,14 @@ export const StatementSection = () => {
         </div>
 
         {/* The Big Statement */}
-        <div style={{ maxWidth: '18ch', marginBottom: 'clamp(3.5rem, 7vw, 6rem)' }}>
+        <div style={{ maxWidth: '28ch', marginBottom: 'clamp(2.5rem, 5vw, 4.5rem)' }}>
           <h2
             className="display-large"
             style={{
-              color: 'var(--color-warm-white)',
               margin: 0
             }}
           >
-            TECHNOLOGY<br />
-            SHOULD MAKE<br />
-            BUSINESS<br />
-            SIMPLER.
+            TECHNOLOGY SHOULD MAKE<br />BUSINESS SIMPLER.
           </h2>
         </div>
 

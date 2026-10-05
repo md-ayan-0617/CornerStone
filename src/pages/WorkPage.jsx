@@ -36,12 +36,11 @@ export const WorkPage = ({ onNavigate }) => {
           <h1
             className="display-mega"
             style={{
-              color: 'var(--color-warm-white)',
-              margin: '0 0 1.5rem 0',
-              maxWidth: '14ch'
+              margin: '0 0 1.25rem 0',
+              maxWidth: '18ch'
             }}
           >
-            SELECTED<br />WORK.
+            SELECTED WORK.
           </h1>
 
           <p
@@ -151,9 +150,34 @@ export const WorkPage = ({ onNavigate }) => {
                     </span>
                   </div>
 
-                  <span className="micro-label" style={{ color: 'var(--color-muted-gray)', display: 'block', marginBottom: '0.5rem' }}>
+                  <span className="micro-label" style={{ color: 'var(--color-muted-gray)', display: 'block', marginBottom: '0.75rem' }}>
                     {project.category} • {project.industry}
                   </span>
+
+                  {/* Project Image Showcase with Hover Effect */}
+                  <div
+                    className="img-hover-frame"
+                    style={{
+                      height: '210px',
+                      width: '100%',
+                      marginBottom: '1.25rem'
+                    }}
+                  >
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      className="img-hover-zoom"
+                      loading="lazy"
+                    />
+                    <div className="corner-bracket-tl" />
+                    <div className="corner-bracket-br" />
+                    <div className="img-overlay-badge">
+                      <span className="lime-dot" style={{ width: '5px', height: '5px' }} />
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--color-accent-lime)' }}>
+                        DEPLOYED SPECIFICATION
+                      </span>
+                    </div>
+                  </div>
 
                   <h3
                     style={{

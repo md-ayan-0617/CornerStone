@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import CornerstoneMotif from './CornerstoneMotif';
 import { ArrowUpRight, ArrowDown } from 'lucide-react';
+import TypewriterText from './TypewriterText';
 
 export const Hero = ({ onExploreWork, onStartProject }) => {
   const canvasRef = useRef(null);
@@ -134,18 +135,15 @@ export const Hero = ({ onExploreWork, onStartProject }) => {
           </div>
         </div>
 
-        {/* Main Massive Headline */}
+        {/* Main Headline with Typewriter Animation */}
         <h1
           className="display-mega"
           style={{
             margin: '0 0 clamp(1.5rem, 3.5vh, 2.5rem) 0',
-            maxWidth: '12ch',
-            color: 'var(--color-warm-white)'
+            maxWidth: '18ch'
           }}
         >
-          BUILD<br />
-          WHAT'S<br />
-          NEXT.
+          BUILD <TypewriterText words={["WHAT'S NEXT.", "INTELLIGENT SYSTEMS.", "THE FUTURE."]} />
         </h1>
 
         {/* Supporting Copy & Grid Intersect */}
