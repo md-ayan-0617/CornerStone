@@ -22,7 +22,7 @@ export const Footer = ({ onNavigate }) => {
         backgroundColor: '#070707',
         color: 'var(--color-warm-white)',
         paddingTop: 'clamp(4.5rem, 9vw, 7.5rem)',
-        paddingBottom: 'clamp(2.5rem, 5vw, 4rem)',
+        paddingBottom: 'clamp(5.5rem, 11vw, 7.5rem)',
         borderTop: '1px solid var(--color-border-gray)'
       }}
     >

@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import CornerstoneMotif from './CornerstoneMotif';
-import { ArrowUpRight, X, ChevronRight, Briefcase, Cpu, Info, MessageSquare } from 'lucide-react';
+import { ArrowUpRight, Home, Briefcase, Cpu, Info, MessageSquare } from 'lucide-react';
 
 export const Navbar = ({ currentPath = "/", onNavigate }) => {
   const [scrolled, setScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -14,27 +13,22 @@ export const Navbar = ({ currentPath = "/", onNavigate }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Prevent background scroll when mobile menu is open
-  useEffect(() => {
-    if (mobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [mobileMenuOpen]);
-
   const navLinks = [
-    { label: "WORK", path: "/work", number: "01", icon: Briefcase, desc: "Selected systems & case studies" },
-    { label: "SERVICES", path: "/services", number: "02", icon: Cpu, desc: "Four foundational disciplines" },
-    { label: "ABOUT", path: "/about", number: "03", icon: Info, desc: "Studio architecture & philosophy" },
-    { label: "CONTACT", path: "/contact", number: "04", icon: MessageSquare, desc: "Direct project consultation" }
+    { label: "WORK", path: "/work", number: "01", icon: Briefcase },
+    { label: "SERVICES", path: "/services", number: "02", icon: Cpu },
+    { label: "ABOUT", path: "/about", number: "03", icon: Info },
+    { label: "CONTACT", path: "/contact", number: "04", icon: MessageSquare }
+  ];
+
+  const mobileTabs = [
+    { label: "HOME", path: "/", icon: Home },
+    { label: "WORK", path: "/work", icon: Briefcase },
+    { label: "SERVICES", path: "/services", icon: Cpu },
+    { label: "ABOUT", path: "/about", icon: Info },
+    { label: "INQUIRE", path: "/contact", icon: MessageSquare, isHighlight: true }
   ];
 
   const handleLinkClick = (path) => {
-    setMobileMenuOpen(false);
     if (onNavigate) {
       onNavigate(path);
     }
@@ -42,6 +36,7 @@ export const Navbar = ({ currentPath = "/", onNavigate }) => {
 
   return (
     <>
+      {/* Top Header Bar */}
       <header
         style={{
           position: 'fixed',
@@ -50,7 +45,7 @@ export const Navbar = ({ currentPath = "/", onNavigate }) => {
           width: '100%',
           zIndex: 990,
           transition: 'background-color 0.25s ease, border-color 0.25s ease, backdrop-filter 0.25s ease',
-          backgroundColor: scrolled ? 'rgba(10, 10, 10, 0.88)' : 'transparent',
+          backgroundColor: scrolled ? 'rgba(10, 10, 10, 0.92)' : 'transparent',
           backdropFilter: scrolled ? 'blur(16px)' : 'none',
           WebkitBackdropFilter: scrolled ? 'blur(16px)' : 'none',
           borderBottom: scrolled ? '1px solid var(--color-border-gray)' : '1px solid rgba(255, 255, 255, 0.05)'
@@ -72,6 +67,7 @@ export const Navbar = ({ currentPath = "/", onNavigate }) => {
               padding: 0
             }}
             data-cursor="HOME"
+            aria-label="Cornerstone Home"
           >
             <CornerstoneMotif size={20} variant="mark" />
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
@@ -127,7 +123,7 @@ export const Navbar = ({ currentPath = "/", onNavigate }) => {
             })}
           </nav>
 
-          {/* Right Actions */}
+          {/* Right Header Content */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             {/* Live Status indicator (Desktop only) */}
             <div className="status-pill-desktop">
@@ -153,177 +149,44 @@ export const Navbar = ({ currentPath = "/", onNavigate }) => {
               <ArrowUpRight size={13} />
             </button>
 
-            {/* Modern Mobile Menu Pill Toggle (Mobile only) */}
-            <button
-              onClick={() => setMobileMenuOpen(true)}
-              className="mobile-pill-toggle"
-              aria-label="Open navigation menu"
-            >
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', width: '16px' }}>
-                <span style={{ display: 'block', height: '2px', width: '16px', backgroundColor: 'var(--color-accent-lime)' }} />
-                <span style={{ display: 'block', height: '2px', width: '10px', backgroundColor: 'var(--color-warm-white)' }} />
-              </div>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', fontWeight: 600, color: 'var(--color-warm-white)', letterSpacing: '0.08em' }}>
-                MENU
+            {/* Clean Mobile Header Status (Replaces Hamburger/Menu completely) */}
+            <div className="mobile-header-status">
+              <span className="lime-dot" style={{ width: '5px', height: '5px' }} />
+              <span className="micro-label" style={{ fontSize: '0.62rem', color: 'var(--color-accent-lime)', letterSpacing: '0.12em' }}>
+                ONLINE
               </span>
-            </button>
+            </div>
           </div>
 
         </div>
       </header>
 
-      {/* Modern High-End Mobile Navigation Overlay Sheet */}
-      {mobileMenuOpen && (
-        <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            zIndex: 1000,
-            backgroundColor: 'rgba(10, 10, 10, 0.98)',
-            backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            paddingTop: '1.25rem',
-            paddingLeft: '1.25rem',
-            paddingRight: '1.25rem',
-            paddingBottom: 'max(1.75rem, env(safe-area-inset-bottom, 24px))',
-            height: '100dvh',
-            overflowY: 'auto',
-            animation: 'mobileMenuFadeIn 0.22s ease-out'
-          }}
-        >
-          {/* Top Bar of Mobile Menu */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid var(--color-border-gray)', paddingBottom: '1rem', flexShrink: 0 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <CornerstoneMotif size={18} variant="mark" />
-              <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '0.95rem', color: 'var(--color-warm-white)' }}>
-                CORNERSTONE
-              </span>
-              <span className="lime-dot" style={{ width: '5px', height: '5px' }} />
-            </div>
+      {/* Floating Architectural Bottom Tab Bar for Mobile */}
+      <nav className="mobile-bottom-dock" aria-label="Mobile Navigation Dock">
+        <div className="mobile-dock-inner">
+          {mobileTabs.map((tab) => {
+            const isActive = currentPath === tab.path;
+            const Icon = tab.icon;
 
-            <button
-              onClick={() => setMobileMenuOpen(false)}
-              style={{
-                width: '38px',
-                height: '38px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                background: 'var(--color-charcoal)',
-                border: '1px solid var(--color-border-gray)',
-                borderRadius: '50%',
-                color: 'var(--color-warm-white)',
-                cursor: 'pointer'
-              }}
-              aria-label="Close menu"
-            >
-              <X size={18} color="var(--color-accent-lime)" />
-            </button>
-          </div>
-
-          {/* Middle: Clean Interactive Navigation List */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', margin: 'auto 0', padding: '1.5rem 0', flexShrink: 0 }}>
-            {navLinks.map((item) => {
-              const isActive = currentPath === item.path;
-              const Icon = item.icon;
-
-              return (
-                <button
-                  key={item.path}
-                  onClick={() => handleLinkClick(item.path)}
-                  style={{
-                    background: isActive ? 'rgba(184, 255, 61, 0.06)' : 'rgba(255, 255, 255, 0.02)',
-                    border: '1px solid',
-                    borderColor: isActive ? 'var(--color-accent-lime)' : 'var(--color-border-gray)',
-                    borderRadius: '8px',
-                    padding: '1rem 1.15rem',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    cursor: 'pointer',
-                    textAlign: 'left',
-                    transition: 'all 0.2s ease'
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                    <div
-                      style={{
-                        width: '36px',
-                        height: '36px',
-                        borderRadius: '6px',
-                        backgroundColor: isActive ? 'var(--color-accent-lime)' : 'var(--color-charcoal)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                      }}
-                    >
-                      <Icon size={16} color={isActive ? '#0A0A0A' : 'var(--color-warm-white)'} />
-                    </div>
-
-                    <div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--color-accent-lime)' }}>
-                          {item.number}
-                        </span>
-                        <span
-                          style={{
-                            fontFamily: 'var(--font-display)',
-                            fontSize: '1.25rem',
-                            fontWeight: 800,
-                            letterSpacing: '-0.02em',
-                            color: isActive ? 'var(--color-accent-lime)' : 'var(--color-warm-white)'
-                          }}
-                        >
-                          {item.label}
-                        </span>
-                      </div>
-                      <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', color: 'var(--color-muted-gray)' }}>
-                        {item.desc}
-                      </span>
-                    </div>
-                  </div>
-
-                  <ChevronRight size={16} color={isActive ? 'var(--color-accent-lime)' : 'var(--color-muted-gray)'} />
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Bottom Action Section */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', flexShrink: 0 }}>
-            <button
-              onClick={() => handleLinkClick('/contact')}
-              className="btn-cornerstone"
-              style={{
-                width: '100%',
-                padding: '1.1rem',
-                fontSize: '0.85rem',
-                borderRadius: '8px',
-                backgroundColor: 'var(--color-accent-lime)',
-                color: '#0A0A0A',
-                fontWeight: 700
-              }}
-            >
-              <span>START A PROJECT</span>
-              <ArrowUpRight size={16} color="#0A0A0A" />
-            </button>
-
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.4rem 0.25rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span className="lime-dot" style={{ width: '6px', height: '6px' }} />
-                <span className="micro-label-lime" style={{ fontSize: '0.62rem' }}>SYSTEM ONLINE</span>
-              </div>
-              <span className="micro-label" style={{ fontSize: '0.62rem' }}>CORNERSTONE STUDIO 2026</span>
-            </div>
-          </div>
-
+            return (
+              <button
+                key={tab.path}
+                onClick={() => handleLinkClick(tab.path)}
+                className={`mobile-tab-item ${isActive ? 'is-active' : ''} ${tab.isHighlight ? 'is-highlight' : ''}`}
+                aria-label={tab.label}
+              >
+                <div className="mobile-tab-icon-wrap">
+                  <Icon size={18} strokeWidth={isActive ? 2.3 : 1.75} />
+                </div>
+                <span className="mobile-tab-label">{tab.label}</span>
+                {isActive && !tab.isHighlight && <span className="mobile-tab-active-dot" />}
+              </button>
+            );
+          })}
         </div>
-      )}
+      </nav>
 
-      {/* Responsive Styles */}
+      {/* Responsive Styles & Dock Transitions */}
       <style>{`
         .desktop-nav-cluster {
           display: none;
@@ -341,19 +204,127 @@ export const Navbar = ({ currentPath = "/", onNavigate }) => {
         .header-cta-desktop {
           display: none;
         }
-        .mobile-pill-toggle {
+        .mobile-header-status {
           display: flex;
           align-items: center;
-          gap: 8px;
-          padding: 7px 12px;
-          background: var(--color-charcoal);
+          gap: 6px;
+          padding: 4px 10px;
           border: 1px solid var(--color-border-gray);
-          border-radius: 20px;
-          cursor: pointer;
-          transition: all 0.2s ease;
+          background-color: rgba(20, 20, 20, 0.7);
+          border-radius: 12px;
         }
-        .mobile-pill-toggle:hover {
+
+        /* Mobile Bottom Floating Glass Dock */
+        .mobile-bottom-dock {
+          position: fixed;
+          bottom: max(12px, env(safe-area-inset-bottom, 12px));
+          left: 50%;
+          transform: translateX(-50%);
+          width: calc(100% - 24px);
+          max-width: 440px;
+          z-index: 998;
+          pointer-events: auto;
+          animation: dockSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .mobile-dock-inner {
+          display: flex;
+          align-items: center;
+          justify-content: space-around;
+          padding: 6px 8px;
+          background: rgba(14, 14, 14, 0.88);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          border-radius: 20px;
+          box-shadow: 0 16px 40px rgba(0, 0, 0, 0.85), 0 0 20px rgba(184, 255, 61, 0.08);
+        }
+
+        .mobile-tab-item {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 6px 2px;
+          background: transparent;
+          border: 1px solid transparent;
+          color: var(--color-muted-gray);
+          cursor: pointer;
+          position: relative;
+          border-radius: 14px;
+          transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+          -webkit-tap-highlight-color: transparent;
+        }
+
+        .mobile-tab-item:active {
+          transform: scale(0.9);
+        }
+
+        .mobile-tab-icon-wrap {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 20px;
+          transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .mobile-tab-label {
+          font-family: var(--font-mono);
+          font-size: 0.58rem;
+          font-weight: 600;
+          letter-spacing: 0.08em;
+          margin-top: 3px;
+          line-height: 1;
+          transition: color 0.2s ease;
+        }
+
+        .mobile-tab-item.is-active {
+          color: var(--color-accent-lime);
+        }
+
+        .mobile-tab-item.is-active .mobile-tab-icon-wrap {
+          transform: translateY(-2px);
+        }
+
+        .mobile-tab-active-dot {
+          position: absolute;
+          bottom: 2px;
+          width: 3.5px;
+          height: 3.5px;
+          border-radius: 50%;
+          background-color: var(--color-accent-lime);
+          box-shadow: 0 0 6px var(--color-accent-lime-glow);
+        }
+
+        /* Distinct Highlight for Inquire Tab */
+        .mobile-tab-item.is-highlight {
+          background: rgba(184, 255, 61, 0.08);
+          border: 1px solid rgba(184, 255, 61, 0.24);
+          color: var(--color-warm-white);
+        }
+
+        .mobile-tab-item.is-highlight.is-active {
+          background: var(--color-accent-lime);
+          color: #0A0A0A;
           border-color: var(--color-accent-lime);
+          box-shadow: 0 0 14px rgba(184, 255, 61, 0.35);
+        }
+
+        .mobile-tab-item.is-highlight.is-active .mobile-tab-label {
+          color: #0A0A0A;
+          font-weight: 700;
+        }
+
+        @keyframes dockSlideUp {
+          from {
+            opacity: 0;
+            transform: translate(-50%, 16px);
+          }
+          to {
+            opacity: 1;
+            transform: translate(-50%, 0);
+          }
         }
 
         @media (min-width: 901px) {
@@ -366,14 +337,12 @@ export const Navbar = ({ currentPath = "/", onNavigate }) => {
           .header-cta-desktop {
             display: inline-flex !important;
           }
-          .mobile-pill-toggle {
+          .mobile-header-status {
             display: none !important;
           }
-        }
-
-        @keyframes mobileMenuFadeIn {
-          from { opacity: 0; transform: translateY(-8px); }
-          to { opacity: 1; transform: translateY(0); }
+          .mobile-bottom-dock {
+            display: none !important;
+          }
         }
       `}</style>
     </>
