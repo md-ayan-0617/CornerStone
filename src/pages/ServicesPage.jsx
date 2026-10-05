@@ -2,7 +2,6 @@ import React from 'react';
 import CornerstoneMotif from '../components/CornerstoneMotif';
 import FinalCTA from '../components/FinalCTA';
 import { ArrowUpRight, Cpu, Layout, Sparkles, Network, Eye } from 'lucide-react';
-
 import TypewriterText from '../components/TypewriterText';
 
 export const ServicesPage = ({ onNavigate }) => {
@@ -147,7 +146,8 @@ export const ServicesPage = ({ onNavigate }) => {
                 style={{
                   padding: 'clamp(1.5rem, 2.8vw, 2.25rem)',
                   backgroundColor: 'var(--color-charcoal)',
-                  position: 'relative'
+                  position: 'relative',
+                  borderRadius: '6px'
                 }}
               >
                 <div className="corner-bracket-tl" />
@@ -171,13 +171,14 @@ export const ServicesPage = ({ onNavigate }) => {
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'space-between',
-                          padding: '10px 12px',
+                          padding: '10px 14px',
                           backgroundColor: 'rgba(10, 10, 10, 0.6)',
                           border: '1px solid var(--color-border-gray)',
-                          transition: 'border-color 0.2s ease, transform 0.2s ease'
+                          borderRadius: '4px',
+                          transition: 'border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)'
                         }}
                         onMouseEnter={(e) => {
-                          e.currentTarget.style.borderColor = 'rgba(184, 255, 61, 0.4)';
+                          e.currentTarget.style.borderColor = 'rgba(184, 255, 61, 0.5)';
                           e.currentTarget.style.transform = 'translateX(4px)';
                         }}
                         onMouseLeave={(e) => {
@@ -210,36 +211,39 @@ export const ServicesPage = ({ onNavigate }) => {
         </div>
       </section>
 
-      {/* 4 Major Service Worlds - Unified Dark Architectural Theme */}
+      {/* 4 Major Service Worlds with Alternating Warm White Background for World 02 */}
       <div style={{ display: 'flex', flexDirection: 'column' }}>
-        {serviceWorlds.map((world) => {
+        {serviceWorlds.map((world, idx) => {
+          const isLight = idx === 1; // Alternating warm white section restored per user preference
           const IconComp = world.icon;
 
           return (
             <section
               key={world.id}
+              className={isLight ? "section-light" : ""}
               style={{
                 paddingTop: 'clamp(5rem, 10vw, 8rem)',
                 paddingBottom: 'clamp(5rem, 10vw, 8rem)',
-                backgroundColor: 'var(--color-charcoal)',
-                color: 'var(--color-warm-white)',
-                borderBottom: '1px solid var(--color-border-gray)',
+                backgroundColor: isLight ? 'var(--color-warm-white)' : 'var(--color-charcoal)',
+                color: isLight ? 'var(--color-near-black)' : 'var(--color-warm-white)',
+                borderBottom: '1px solid',
+                borderColor: isLight ? '#D6D4CC' : 'var(--color-border-gray)',
                 position: 'relative'
               }}
             >
               <div className="site-container">
                 
                 {/* World Header */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'clamp(2rem, 4vw, 3.5rem)', borderBottom: '1px solid var(--color-border-gray)', paddingBottom: '1rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'clamp(2rem, 4vw, 3.5rem)', borderBottom: '1px solid', borderColor: isLight ? '#D6D4CC' : 'var(--color-border-gray)', paddingBottom: '1rem' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <span className="micro-label-lime" style={{ fontWeight: 700 }}>
+                    <span className="micro-label" style={{ color: isLight ? '#6A6965' : 'var(--color-accent-lime)', fontWeight: 700 }}>
                       WORLD {world.id} / 04
                     </span>
-                    <span className="micro-label" style={{ color: 'var(--color-muted-gray)' }}>
+                    <span className="micro-label" style={{ color: isLight ? '#888' : 'var(--color-muted-gray)' }}>
                       • {world.code}
                     </span>
                   </div>
-                  <IconComp size={20} color="var(--color-accent-lime)" />
+                  <IconComp size={20} color={isLight ? '#0A0A0A' : 'var(--color-accent-lime)'} />
                 </div>
 
                 {/* World Title & Headline */}
@@ -249,7 +253,7 @@ export const ServicesPage = ({ onNavigate }) => {
                       className="display-large"
                       style={{
                         margin: '0 0 1rem 0',
-                        color: 'var(--color-warm-white)'
+                        color: isLight ? 'var(--color-near-black)' : 'var(--color-warm-white)'
                       }}
                     >
                       {world.title}
@@ -259,7 +263,7 @@ export const ServicesPage = ({ onNavigate }) => {
                         fontFamily: 'var(--font-display)',
                         fontSize: 'clamp(1.3rem, 2.2vw, 1.8rem)',
                         fontWeight: 600,
-                        color: 'var(--color-accent-lime)',
+                        color: isLight ? '#333' : 'var(--color-accent-lime)',
                         margin: '0 0 1rem 0'
                       }}
                     >
@@ -273,31 +277,32 @@ export const ServicesPage = ({ onNavigate }) => {
                         fontFamily: 'var(--font-body)',
                         fontSize: '1.05rem',
                         lineHeight: 1.6,
-                        color: 'var(--color-muted-gray)',
+                        color: isLight ? '#444' : 'var(--color-muted-gray)',
                         marginBottom: '1.5rem'
                       }}
                     >
                       {world.description}
                     </p>
-                    <div style={{ padding: '1rem', border: '1px solid var(--color-border-gray)', backgroundColor: 'var(--color-near-black)' }}>
-                      <span className="micro-label" style={{ display: 'block', marginBottom: '4px', color: 'var(--color-muted-gray)' }}>
+                    <div style={{ padding: '1rem', border: '1px solid', borderColor: isLight ? '#D6D4CC' : 'var(--color-border-gray)', backgroundColor: isLight ? '#EAE8E2' : 'var(--color-near-black)', borderRadius: '4px' }}>
+                      <span className="micro-label" style={{ display: 'block', marginBottom: '4px', color: isLight ? '#666' : 'var(--color-muted-gray)' }}>
                         DELIVERABLE SPECIFICATION:
                       </span>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--color-warm-white)' }}>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: isLight ? '#0A0A0A' : 'var(--color-warm-white)' }}>
                         {world.deliverableSummary}
                       </span>
                     </div>
                   </div>
                 </div>
 
-                {/* World Visual Showcase with Hover Effect */}
+                {/* World Visual Showcase with Smooth Hover Effect */}
                 <div style={{ marginBottom: 'clamp(2.5rem, 5vw, 4rem)' }}>
                   <div
                     className="img-hover-frame"
                     style={{
                       height: 'clamp(260px, 45vh, 480px)',
                       width: '100%',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
+                      borderRadius: '6px'
                     }}
                     data-cursor="EXPAND"
                   >
@@ -329,20 +334,22 @@ export const ServicesPage = ({ onNavigate }) => {
                       <span
                         className="micro-label"
                         style={{
-                          background: 'rgba(10, 10, 10, 0.85)',
+                          background: 'rgba(10, 10, 10, 0.88)',
                           padding: '4px 10px',
                           border: '1px solid rgba(255, 255, 255, 0.15)',
+                          borderRadius: '4px',
                           backdropFilter: 'blur(8px)',
-                          color: 'var(--color-warm-white)'
+                          color: '#FFFFFF'
                         }}
                       >
                         {world.imageTag}
                       </span>
                       <div
                         style={{
-                          background: 'rgba(10, 10, 10, 0.85)',
+                          background: 'rgba(10, 10, 10, 0.88)',
                           padding: '4px 10px',
                           border: '1px solid rgba(184, 255, 61, 0.3)',
+                          borderRadius: '4px',
                           backdropFilter: 'blur(8px)',
                           display: 'flex',
                           alignItems: 'center',
@@ -357,9 +364,9 @@ export const ServicesPage = ({ onNavigate }) => {
                     </div>
 
                     {/* Image Bottom Specs Badge */}
-                    <div className="img-overlay-badge">
+                    <div className="img-overlay-badge" style={{ borderRadius: '4px' }}>
                       <Eye size={12} color="var(--color-accent-lime)" />
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--color-warm-white)' }}>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: '#FFFFFF' }}>
                         {world.metrics}
                       </span>
                     </div>
@@ -372,9 +379,12 @@ export const ServicesPage = ({ onNavigate }) => {
                     display: 'grid',
                     gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
                     gap: '1px',
-                    backgroundColor: 'var(--color-border-gray)',
-                    border: '1px solid var(--color-border-gray)',
-                    marginBottom: '2.5rem'
+                    backgroundColor: isLight ? '#D6D4CC' : 'var(--color-border-gray)',
+                    border: '1px solid',
+                    borderColor: isLight ? '#D6D4CC' : 'var(--color-border-gray)',
+                    marginBottom: '2.5rem',
+                    borderRadius: '6px',
+                    overflow: 'hidden'
                   }}
                 >
                   {world.services.map((srv, sIdx) => (
@@ -382,29 +392,29 @@ export const ServicesPage = ({ onNavigate }) => {
                       key={srv.name}
                       style={{
                         padding: '1.5rem',
-                        backgroundColor: 'var(--color-near-black)',
+                        backgroundColor: isLight ? '#FAF9F6' : 'var(--color-near-black)',
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'space-between',
                         minHeight: '160px',
-                        transition: 'background-color 0.2s ease'
+                        transition: 'background-color 0.25s ease'
                       }}
-                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#181818'}
-                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--color-near-black)'}
+                      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = isLight ? '#F0EEE6' : '#181818')}
+                      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = isLight ? '#FAF9F6' : 'var(--color-near-black)')}
                     >
                       <div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-                          <span className="micro-label" style={{ color: 'var(--color-accent-lime)' }}>
+                          <span className="micro-label" style={{ color: isLight ? '#666' : 'var(--color-accent-lime)' }}>
                             {world.id}.{sIdx + 1}
                           </span>
-                          <span style={{ width: '4px', height: '4px', backgroundColor: '#B8FF3D' }} />
+                          <span style={{ width: '4px', height: '4px', backgroundColor: isLight ? '#0A0A0A' : '#B8FF3D' }} />
                         </div>
                         <h4
                           style={{
                             fontFamily: 'var(--font-display)',
                             fontSize: '1.15rem',
                             fontWeight: 700,
-                            color: '#F4F3EF',
+                            color: isLight ? '#0A0A0A' : '#F4F3EF',
                             marginBottom: '0.5rem'
                           }}
                         >
@@ -414,7 +424,7 @@ export const ServicesPage = ({ onNavigate }) => {
                           style={{
                             fontFamily: 'var(--font-body)',
                             fontSize: '0.84rem',
-                            color: 'var(--color-muted-gray)',
+                            color: isLight ? '#555' : 'var(--color-muted-gray)',
                             lineHeight: 1.5,
                             margin: 0
                           }}
@@ -431,6 +441,11 @@ export const ServicesPage = ({ onNavigate }) => {
                   <button
                     onClick={() => onNavigate('/contact')}
                     className="btn-cornerstone"
+                    style={{
+                      backgroundColor: isLight ? 'var(--color-near-black)' : 'var(--color-warm-white)',
+                      color: isLight ? 'var(--color-warm-white)' : 'var(--color-near-black)',
+                      borderRadius: '4px'
+                    }}
                   >
                     <span>COMMISSION {world.title}</span>
                     <ArrowUpRight size={14} />

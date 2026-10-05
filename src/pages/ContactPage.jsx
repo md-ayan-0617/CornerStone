@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import CornerstoneMotif from '../components/CornerstoneMotif';
+import TypewriterText from '../components/TypewriterText';
 import { CONTACT_BUDGETS, CONTACT_TIMELINES, CONTACT_SERVICES } from '../data/siteContent';
 import { ArrowUpRight, CheckCircle2, ShieldCheck, Mail, MapPin } from 'lucide-react';
 
@@ -61,10 +62,11 @@ export const ContactPage = () => {
             className="display-mega"
             style={{
               margin: '0 0 1.5rem 0',
-              maxWidth: '20ch'
+              maxWidth: '22ch'
             }}
           >
-            HAVE SOMETHING<br />WORTH BUILDING?
+            HAVE SOMETHING WORTH{' '}
+            <TypewriterText words={["BUILDING?", "SCALING?", "AUTOMATING?", "LAUNCHING?"]} />
           </h1>
 
           <div style={{ borderTop: '1px solid var(--color-border-gray)', paddingTop: '1.75rem', maxWidth: '48ch' }}>

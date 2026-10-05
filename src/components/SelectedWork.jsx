@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FEATURED_PROJECTS } from '../data/siteContent';
 import { ArrowUpRight, Phone, MessageSquare, Laptop, Layers, Eye, Code } from 'lucide-react';
 import CornerstoneMotif from './CornerstoneMotif';
+import TypewriterText from './TypewriterText';
 
 export const SelectedWork = ({ onSelectProject }) => {
   const [hoveredProject, setHoveredProject] = useState(null);
@@ -188,7 +189,8 @@ export const SelectedWork = ({ onSelectProject }) => {
                 margin: 0
               }}
             >
-              THINGS WE'VE BUILT.
+              THINGS WE'VE{' '}
+              <TypewriterText words={["BUILT.", "DEPLOYED.", "ENGINEERED.", "SCALED."]} />
             </h2>
           </div>
 

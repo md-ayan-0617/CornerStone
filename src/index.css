@@ -490,3 +490,64 @@ body {
   }
 }
 
+/* ==========================================================================
+   GLOBAL SMOOTH UI & UX SYSTEM
+   ========================================================================== */
+
+/* Remove mobile tap highlight and improve touch responsiveness */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button, a {
+  touch-action: manipulation;
+}
+
+/* Accessible & Sleek Global Focus-Visible Rings */
+:focus-visible {
+  outline: 2px solid var(--color-accent-lime);
+  outline-offset: 3px;
+  transition: outline-offset 0.15s ease;
+}
+
+/* Global Form Controls Smooth Focus */
+input, textarea, select {
+  font-family: inherit;
+  transition: border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--color-accent-lime) !important;
+  box-shadow: 0 0 0 1px var(--color-accent-lime), 0 0 16px rgba(184, 255, 61, 0.12) !important;
+  outline: none !important;
+}
+
+/* Tactile Active States on Buttons and Interactive Elements */
+.btn-cornerstone:active,
+.btn-cornerstone-secondary:active,
+.mobile-pill-toggle:active {
+  transform: scale(0.97) translateY(0);
+  transition-duration: 0.08s;
+}
+
+/* Architectural Box Smooth Transition & Elevation */
+.arch-box {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.arch-box:hover {
+  border-color: rgba(184, 255, 61, 0.32);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45);
+}
+
+/* Smooth Image Loading Blur-in */
+img {
+  transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+

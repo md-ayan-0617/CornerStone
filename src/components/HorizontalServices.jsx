@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { CAPABILITIES } from '../data/siteContent';
 import { ArrowLeft, ArrowRight, CheckCircle2 } from 'lucide-react';
 import CornerstoneMotif from './CornerstoneMotif';
+import TypewriterText from './TypewriterText';
 
 export const HorizontalServices = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -48,7 +49,8 @@ export const HorizontalServices = () => {
               <span className="lime-dot" style={{ width: '4px', height: '4px' }} />
             </div>
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.4rem, 2.5vw, 2.2rem)', fontWeight: 800, color: 'var(--color-warm-white)', margin: 0, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>
-              DEEP DIVE BY DOMAIN
+              EXPLORE OUR{' '}
+              <TypewriterText words={["AI SYSTEMS.", "AUTOMATION PIPELINES.", "DIGITAL FLAGGSHIPS.", "CREATIVE SUITE."]} />
             </h2>
           </div>
 

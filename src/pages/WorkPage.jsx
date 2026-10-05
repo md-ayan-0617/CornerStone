@@ -3,6 +3,7 @@ import { FEATURED_PROJECTS } from '../data/siteContent';
 import ProjectModal from '../components/ProjectModal';
 import FinalCTA from '../components/FinalCTA';
 import CornerstoneMotif from '../components/CornerstoneMotif';
+import TypewriterText from '../components/TypewriterText';
 import { ArrowUpRight, Filter } from 'lucide-react';
 
 export const WorkPage = ({ onNavigate }) => {
@@ -37,10 +38,11 @@ export const WorkPage = ({ onNavigate }) => {
             className="display-mega"
             style={{
               margin: '0 0 1.25rem 0',
-              maxWidth: '18ch'
+              maxWidth: '22ch'
             }}
           >
-            SELECTED WORK.
+            SELECTED WORK IN{' '}
+            <TypewriterText words={["AI SYSTEMS.", "AUTOMATION.", "DIGITAL FLAGGSHIPS.", "CREATIVE TECH."]} />
           </h1>
 
           <p

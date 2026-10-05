@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { SYSTEM_NODES } from '../data/siteContent';
 import CornerstoneMotif from './CornerstoneMotif';
+import TypewriterText from './TypewriterText';
 
 export const SystemDiagram = () => {
   const [selectedNode, setSelectedNode] = useState(SYSTEM_NODES[0]);
@@ -32,8 +33,8 @@ export const SystemDiagram = () => {
                 margin: 0
               }}
             >
-              THE PIECES<br />
-              WORK BETTER TOGETHER.
+              THE PIECES WORK{' '}
+              <TypewriterText words={["BETTER TOGETHER.", "AS ONE SYSTEM.", "AUTONOMOUSLY."]} />
             </h2>
           </div>
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import CornerstoneMotif from './CornerstoneMotif';
-import { ArrowUpRight, Menu, X } from 'lucide-react';
+import { ArrowUpRight, X, ChevronRight, Briefcase, Cpu, Info, MessageSquare } from 'lucide-react';
 
 export const Navbar = ({ currentPath = "/", onNavigate }) => {
   const [scrolled, setScrolled] = useState(false);
@@ -8,7 +8,7 @@ export const Navbar = ({ currentPath = "/", onNavigate }) => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 40);
+      setScrolled(window.scrollY > 25);
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
@@ -27,10 +27,10 @@ export const Navbar = ({ currentPath = "/", onNavigate }) => {
   }, [mobileMenuOpen]);
 
   const navLinks = [
-    { label: "WORK", path: "/work" },
-    { label: "SERVICES", path: "/services" },
-    { label: "ABOUT", path: "/about" },
-    { label: "CONTACT", path: "/contact" }
+    { label: "WORK", path: "/work", number: "01", icon: Briefcase, desc: "Selected systems & case studies" },
+    { label: "SERVICES", path: "/services", number: "02", icon: Cpu, desc: "Four foundational disciplines" },
+    { label: "ABOUT", path: "/about", number: "03", icon: Info, desc: "Studio architecture & philosophy" },
+    { label: "CONTACT", path: "/contact", number: "04", icon: MessageSquare, desc: "Direct project consultation" }
   ];
 
   const handleLinkClick = (path) => {
@@ -48,23 +48,23 @@ export const Navbar = ({ currentPath = "/", onNavigate }) => {
           top: 0,
           left: 0,
           width: '100%',
-          zIndex: 900,
-          transition: 'background-color 0.3s ease, border-color 0.3s ease, backdrop-filter 0.3s ease',
+          zIndex: 990,
+          transition: 'background-color 0.25s ease, border-color 0.25s ease, backdrop-filter 0.25s ease',
           backgroundColor: scrolled ? 'rgba(10, 10, 10, 0.88)' : 'transparent',
           backdropFilter: scrolled ? 'blur(16px)' : 'none',
           WebkitBackdropFilter: scrolled ? 'blur(16px)' : 'none',
           borderBottom: scrolled ? '1px solid var(--color-border-gray)' : '1px solid rgba(255, 255, 255, 0.05)'
         }}
       >
-        <div className="site-container-fluid" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '76px' }}>
-
+        <div className="site-container-fluid" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '68px' }}>
+          
           {/* Brand Logo & Architectural Mark */}
           <button
             onClick={() => handleLinkClick('/')}
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '12px',
+              gap: '10px',
               background: 'none',
               border: 'none',
               cursor: 'pointer',
@@ -73,34 +73,28 @@ export const Navbar = ({ currentPath = "/", onNavigate }) => {
             }}
             data-cursor="HOME"
           >
-            <CornerstoneMotif size={22} variant="mark" />
+            <CornerstoneMotif size={20} variant="mark" />
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
               <span
                 style={{
                   fontFamily: 'var(--font-display)',
                   fontWeight: 800,
-                  fontSize: '1.05rem',
+                  fontSize: 'clamp(0.95rem, 3.2vw, 1.08rem)',
                   letterSpacing: '0.04em',
-                  color: 'var(--color-warm-white)'
+                  color: 'var(--color-warm-white)',
+                  lineHeight: 1.15
                 }}
               >
                 CORNERSTONE
               </span>
-              <span className="micro-label" style={{ fontSize: '0.58rem', letterSpacing: '0.18em', color: 'var(--color-muted-gray)' }}>
-                SYSTEMS & CREATIVE
+              <span className="micro-label" style={{ fontSize: '0.52rem', letterSpacing: '0.16em', color: 'var(--color-muted-gray)' }}>
+                SYSTEMS &amp; CREATIVE
               </span>
             </div>
           </button>
 
-          {/* Center Navigation Links (Desktop) */}
-          <nav
-            style={{
-              display: 'none',
-              alignItems: 'center',
-              gap: '2.5rem'
-            }}
-            className="desktop-nav-cluster"
-          >
+          {/* Center Navigation Links (Desktop only) */}
+          <nav className="desktop-nav-cluster">
             {navLinks.map((item) => {
               const isActive = currentPath === item.path;
               return (
@@ -133,21 +127,10 @@ export const Navbar = ({ currentPath = "/", onNavigate }) => {
             })}
           </nav>
 
-          {/* Right Actions: Telemetry + Primary CTA */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+          {/* Right Actions */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             {/* Live Status indicator (Desktop only) */}
-            <div
-              className="status-pill-desktop"
-              style={{
-                display: 'none',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '6px 12px',
-                border: '1px solid var(--color-border-gray)',
-                borderRadius: '0px',
-                backgroundColor: 'rgba(20, 20, 20, 0.6)'
-              }}
-            >
+            <div className="status-pill-desktop">
               <span className="pulse-indicator">
                 <span className="lime-dot" style={{ width: '6px', height: '6px' }} />
               </span>
@@ -156,139 +139,239 @@ export const Navbar = ({ currentPath = "/", onNavigate }) => {
               </span>
             </div>
 
-            {/* Primary CTA: START A PROJECT */}
+            {/* Primary CTA (Desktop only) */}
             <button
               onClick={() => handleLinkClick('/contact')}
-              className="btn-cornerstone"
+              className="btn-cornerstone header-cta-desktop"
               style={{
-                padding: '0.75rem 1.35rem',
-                fontSize: '0.75rem'
+                padding: '0.7rem 1.25rem',
+                fontSize: '0.72rem'
               }}
               data-cursor="BUILD"
             >
               <span>START A PROJECT</span>
-              <ArrowUpRight size={14} />
+              <ArrowUpRight size={13} />
             </button>
 
-            {/* Mobile Hamburger Toggle */}
+            {/* Modern Mobile Menu Pill Toggle (Mobile only) */}
             <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="mobile-menu-toggle"
-              style={{
-                display: 'none',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '42px',
-                height: '42px',
-                background: 'var(--color-charcoal)',
-                border: '1px solid var(--color-border-gray)',
-                color: 'var(--color-warm-white)',
-                cursor: 'pointer'
-              }}
-              aria-label="Toggle navigation menu"
+              onClick={() => setMobileMenuOpen(true)}
+              className="mobile-pill-toggle"
+              aria-label="Open navigation menu"
             >
-              {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', width: '16px' }}>
+                <span style={{ display: 'block', height: '2px', width: '16px', backgroundColor: 'var(--color-accent-lime)' }} />
+                <span style={{ display: 'block', height: '2px', width: '10px', backgroundColor: 'var(--color-warm-white)' }} />
+              </div>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', fontWeight: 600, color: 'var(--color-warm-white)', letterSpacing: '0.08em' }}>
+                MENU
+              </span>
             </button>
           </div>
 
         </div>
       </header>
 
-      {/* Full-Screen Mobile Architectural Overlay Menu */}
+      {/* Modern High-End Mobile Navigation Overlay Sheet */}
       {mobileMenuOpen && (
         <div
           style={{
             position: 'fixed',
             inset: 0,
-            zIndex: 890,
-            backgroundColor: 'var(--color-near-black)',
+            zIndex: 1000,
+            backgroundColor: 'rgba(10, 10, 10, 0.98)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
-            padding: '6.5rem 1.5rem 2.5rem 1.5rem',
-            animation: 'fadeIn 0.25s ease-out'
+            paddingTop: '1.25rem',
+            paddingLeft: '1.25rem',
+            paddingRight: '1.25rem',
+            paddingBottom: 'max(1.75rem, env(safe-area-inset-bottom, 24px))',
+            height: '100dvh',
+            overflowY: 'auto',
+            animation: 'mobileMenuFadeIn 0.22s ease-out'
           }}
         >
-          {/* Top Architectural Grid Info */}
-          <div style={{ borderBottom: '1px solid var(--color-border-gray)', paddingBottom: '1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span className="micro-label">NAVIGATION MATRIX</span>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span className="lime-dot" style={{ width: '6px', height: '6px' }} />
-              <span className="micro-label-lime">LIVE</span>
+          {/* Top Bar of Mobile Menu */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid var(--color-border-gray)', paddingBottom: '1rem', flexShrink: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <CornerstoneMotif size={18} variant="mark" />
+              <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '0.95rem', color: 'var(--color-warm-white)' }}>
+                CORNERSTONE
+              </span>
+              <span className="lime-dot" style={{ width: '5px', height: '5px' }} />
             </div>
+
+            <button
+              onClick={() => setMobileMenuOpen(false)}
+              style={{
+                width: '38px',
+                height: '38px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'var(--color-charcoal)',
+                border: '1px solid var(--color-border-gray)',
+                borderRadius: '50%',
+                color: 'var(--color-warm-white)',
+                cursor: 'pointer'
+              }}
+              aria-label="Close menu"
+            >
+              <X size={18} color="var(--color-accent-lime)" />
+            </button>
           </div>
 
-          {/* Navigation Links in Massive Typography */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', margin: 'auto 0' }}>
-            {navLinks.map((item, idx) => (
-              <button
-                key={item.path}
-                onClick={() => handleLinkClick(item.path)}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  textAlign: 'left',
-                  display: 'flex',
-                  alignItems: 'baseline',
-                  justifyContent: 'space-between',
-                  cursor: 'pointer',
-                  padding: '0.6rem 0',
-                  borderBottom: '1px solid rgba(255, 255, 255, 0.06)'
-                }}
-              >
-                <span
+          {/* Middle: Clean Interactive Navigation List */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', margin: 'auto 0', padding: '1.5rem 0', flexShrink: 0 }}>
+            {navLinks.map((item) => {
+              const isActive = currentPath === item.path;
+              const Icon = item.icon;
+
+              return (
+                <button
+                  key={item.path}
+                  onClick={() => handleLinkClick(item.path)}
                   style={{
-                    fontFamily: 'var(--font-display)',
-                    fontSize: '2.5rem',
-                    fontWeight: 800,
-                    letterSpacing: '-0.03em',
-                    color: currentPath === item.path ? 'var(--color-accent-lime)' : 'var(--color-warm-white)'
+                    background: isActive ? 'rgba(184, 255, 61, 0.06)' : 'rgba(255, 255, 255, 0.02)',
+                    border: '1px solid',
+                    borderColor: isActive ? 'var(--color-accent-lime)' : 'var(--color-border-gray)',
+                    borderRadius: '8px',
+                    padding: '1rem 1.15rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                    transition: 'all 0.2s ease'
                   }}
                 >
-                  {item.label}
-                </span>
-                <span className="micro-label">0{idx + 1}</span>
-              </button>
-            ))}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                    <div
+                      style={{
+                        width: '36px',
+                        height: '36px',
+                        borderRadius: '6px',
+                        backgroundColor: isActive ? 'var(--color-accent-lime)' : 'var(--color-charcoal)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}
+                    >
+                      <Icon size={16} color={isActive ? '#0A0A0A' : 'var(--color-warm-white)'} />
+                    </div>
+
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--color-accent-lime)' }}>
+                          {item.number}
+                        </span>
+                        <span
+                          style={{
+                            fontFamily: 'var(--font-display)',
+                            fontSize: '1.25rem',
+                            fontWeight: 800,
+                            letterSpacing: '-0.02em',
+                            color: isActive ? 'var(--color-accent-lime)' : 'var(--color-warm-white)'
+                          }}
+                        >
+                          {item.label}
+                        </span>
+                      </div>
+                      <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', color: 'var(--color-muted-gray)' }}>
+                        {item.desc}
+                      </span>
+                    </div>
+                  </div>
+
+                  <ChevronRight size={16} color={isActive ? 'var(--color-accent-lime)' : 'var(--color-muted-gray)'} />
+                </button>
+              );
+            })}
           </div>
 
-          {/* Bottom Actions */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          {/* Bottom Action Section */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', flexShrink: 0 }}>
             <button
               onClick={() => handleLinkClick('/contact')}
               className="btn-cornerstone"
-              style={{ width: '100%', justifyContent: 'center', padding: '1.15rem' }}
+              style={{
+                width: '100%',
+                padding: '1.1rem',
+                fontSize: '0.85rem',
+                borderRadius: '8px',
+                backgroundColor: 'var(--color-accent-lime)',
+                color: '#0A0A0A',
+                fontWeight: 700
+              }}
             >
               <span>START A PROJECT</span>
-              <ArrowUpRight size={16} />
+              <ArrowUpRight size={16} color="#0A0A0A" />
             </button>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '0.75rem' }}>
-              <span className="micro-label">CORNERSTONE DIGITAL</span>
-              <span className="micro-label">© 2026</span>
+
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.4rem 0.25rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span className="lime-dot" style={{ width: '6px', height: '6px' }} />
+                <span className="micro-label-lime" style={{ fontSize: '0.62rem' }}>SYSTEM ONLINE</span>
+              </div>
+              <span className="micro-label" style={{ fontSize: '0.62rem' }}>CORNERSTONE STUDIO 2026</span>
             </div>
           </div>
+
         </div>
       )}
 
-      {/* Responsive Media Query Styles */}
+      {/* Responsive Styles */}
       <style>{`
-        @media (min-width: 900px) {
+        .desktop-nav-cluster {
+          display: none;
+          align-items: center;
+          gap: 2.5rem;
+        }
+        .status-pill-desktop {
+          display: none;
+          align-items: center;
+          gap: 8px;
+          padding: 6px 12px;
+          border: 1px solid var(--color-border-gray);
+          background-color: rgba(20, 20, 20, 0.6);
+        }
+        .header-cta-desktop {
+          display: none;
+        }
+        .mobile-pill-toggle {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 7px 12px;
+          background: var(--color-charcoal);
+          border: 1px solid var(--color-border-gray);
+          border-radius: 20px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+        .mobile-pill-toggle:hover {
+          border-color: var(--color-accent-lime);
+        }
+
+        @media (min-width: 901px) {
           .desktop-nav-cluster {
             display: flex !important;
           }
           .status-pill-desktop {
             display: inline-flex !important;
           }
-          .mobile-menu-toggle {
+          .header-cta-desktop {
+            display: inline-flex !important;
+          }
+          .mobile-pill-toggle {
             display: none !important;
           }
         }
-        @media (max-width: 899px) {
-          .mobile-menu-toggle {
-            display: flex !important;
-          }
-        }
-        @keyframes fadeIn {
+
+        @keyframes mobileMenuFadeIn {
           from { opacity: 0; transform: translateY(-8px); }
           to { opacity: 1; transform: translateY(0); }
         }

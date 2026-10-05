@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { CAPABILITIES } from '../data/siteContent';
 import { ArrowUpRight, CheckSquare } from 'lucide-react';
+import TypewriterText from './TypewriterText';
 
 export const CapabilitySection = ({ onSelectCapability }) => {
   const [activeId, setActiveId] = useState("01");
@@ -26,14 +27,15 @@ export const CapabilitySection = ({ onSelectCapability }) => {
           <span className="micro-label">SYSTEM ARCHITECTURE</span>
         </div>
 
-        <div style={{ marginBottom: 'clamp(2rem, 4vw, 3.5rem)', maxWidth: '36ch' }}>
+        <div style={{ marginBottom: 'clamp(2rem, 4vw, 3.5rem)', maxWidth: '42ch' }}>
           <h2
             className="display-large"
             style={{
               margin: 0
             }}
           >
-            WE BUILD THE SYSTEM<br />BEHIND THE BUSINESS.
+            WE BUILD THE SYSTEM BEHIND{' '}
+            <TypewriterText words={["THE BUSINESS.", "CUSTOMER ACQUISITION.", "AUTONOMOUS GROWTH."]} />
           </h2>
         </div>
 

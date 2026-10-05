@@ -1,6 +1,7 @@
 import React from 'react';
 import CornerstoneMotif from '../components/CornerstoneMotif';
 import FinalCTA from '../components/FinalCTA';
+import TypewriterText from '../components/TypewriterText';
 import { APPROACH_STAGES, PHILOSOPHY } from '../data/siteContent';
 import { ArrowUpRight } from 'lucide-react';
 
@@ -30,8 +31,8 @@ export const AboutPage = ({ onNavigate }) => {
               maxWidth: '22ch'
             }}
           >
-            A DIGITAL FOUNDATION<br />
-            FOR MODERN BUSINESS.
+            A DIGITAL FOUNDATION FOR{' '}
+            <TypewriterText words={["MODERN BUSINESS.", "AUTONOMOUS SCALE.", "ENTERPRISE VELOCITY."]} />
           </h1>
 
           <div style={{ borderTop: '1px solid var(--color-border-gray)', paddingTop: '2rem', maxWidth: '48ch', marginBottom: '2.5rem' }}>
