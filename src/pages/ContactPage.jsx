@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import CornerstoneMotif from '../components/CornerstoneMotif';
 import TypewriterText from '../components/TypewriterText';
 import { CONTACT_BUDGETS, CONTACT_TIMELINES, CONTACT_SERVICES } from '../data/siteContent';
+import { GOOGLE_SHEET_URL } from '../config/sheetConfig';
 import { 
   ArrowUpRight, 
   CheckCircle2, 
@@ -33,6 +34,7 @@ export const ContactPage = () => {
 
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
   const [openFaq, setOpenFaq] = useState(0); // first FAQ open by default
 
   const toggleFaq = (idx) => {
@@ -49,14 +51,46 @@ export const ContactPage = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
+    setSubmitError(null);
+
+    const payload = {
+      timestamp: new Date().toLocaleString(),
+      name: formData.name,
+      company: formData.company,
+      email: formData.email,
+      phone: formData.phone,
+      website: formData.website || 'N/A',
+      budget: formData.budget,
+      timeline: formData.timeline,
+      services: formData.services.length > 0 ? formData.services.join(', ') : 'None selected',
+      details: formData.details || ''
+    };
+
+    try {
+      if (GOOGLE_SHEET_URL) {
+        await fetch(GOOGLE_SHEET_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {
+            'Content-Type': 'text/plain;charset=utf-8'
+          },
+          body: JSON.stringify(payload)
+        });
+      } else {
+        console.warn('Google Sheet URL is not configured yet. Set VITE_GOOGLE_SHEET_URL in .env or src/config/sheetConfig.js');
+      }
+
       setSubmitted(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 900);
+    } catch (err) {
+      console.error('Error submitting inquiry to Google Sheets:', err);
+      setSubmitError('An error occurred while submitting. Please try again or reach out directly.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -358,7 +392,7 @@ export const ContactPage = () => {
 
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))', gap: '1.25rem' }}>
                     <div>
-                      <label className="micro-label" style={{ display: 'block', marginBottom: '0.5rem' }}>BUSINESS EMAIL *</label>
+                      <label className="micro-label" style={{ display: 'block', marginBottom: '0.5rem' }}>   EMAIL *</label>
                       <input
                         type="email"
                         required
@@ -531,6 +565,21 @@ export const ContactPage = () => {
                       }}
                     />
                   </div>
+
+                  {submitError && (
+                    <div
+                      style={{
+                        padding: '0.85rem 1rem',
+                        backgroundColor: 'rgba(255, 77, 77, 0.1)',
+                        border: '1px solid #FF4D4D',
+                        color: '#FF6B6B',
+                        fontSize: '0.82rem',
+                        fontFamily: 'var(--font-mono)'
+                      }}
+                    >
+                      {submitError}
+                    </div>
+                  )}
 
                   {/* Primary Form CTA */}
                   <button

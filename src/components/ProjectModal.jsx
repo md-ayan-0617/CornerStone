@@ -54,36 +54,62 @@ export const ProjectModal = ({ project, onClose, onStartProject }) => {
         <div className="corner-bracket-br" />
 
         {/* Top Header Bar */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--color-border-gray)', paddingBottom: '1.25rem', marginBottom: '2rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--color-border-gray)', paddingBottom: '1.25rem', marginBottom: '2rem', gap: '1rem', flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <CornerstoneMotif size={20} variant="mark" />
             <span className="micro-label-lime">{project.badge}</span>
             <span className="micro-label" style={{ color: 'var(--color-muted-gray)' }}>• {project.category}</span>
           </div>
 
-          <button
-            onClick={onClose}
-            style={{
-              background: 'var(--color-near-black)',
-              border: '1px solid var(--color-border-gray)',
-              color: 'var(--color-warm-white)',
-              width: '36px',
-              height: '36px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer'
-            }}
-            aria-label="Close project modal"
-          >
-            <X size={18} />
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            {project.liveUrl && (
+              <a
+                href={project.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  backgroundColor: project.accentColor || 'var(--color-accent-lime)',
+                  color: '#0A0A0A',
+                  padding: '6px 14px',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.72rem',
+                  fontWeight: 700,
+                  textDecoration: 'none',
+                  letterSpacing: '0.06em'
+                }}
+              >
+                <span>LAUNCH LIVE DEMO</span>
+                <ArrowUpRight size={13} />
+              </a>
+            )}
+
+            <button
+              onClick={onClose}
+              style={{
+                background: 'var(--color-near-black)',
+                border: '1px solid var(--color-border-gray)',
+                color: 'var(--color-warm-white)',
+                width: '36px',
+                height: '36px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer'
+              }}
+              aria-label="Close project modal"
+            >
+              <X size={18} />
+            </button>
+          </div>
         </div>
 
         {/* Project Title & Industry */}
         <div style={{ marginBottom: '2.5rem' }}>
           <span className="micro-label" style={{ display: 'block', marginBottom: '0.5rem' }}>
-            SYSTEM SPECIFICATION 0{project.number}
+            SYSTEM SPECIFICATION 0{project.number} {project.domain ? `// ${project.domain}` : ''}
           </span>
           <h2
             style={{
@@ -198,23 +224,64 @@ export const ProjectModal = ({ project, onClose, onStartProject }) => {
             </div>
           </div>
 
+          {/* 06 TECH STACK & ARCHITECTURE (If available) */}
+          {project.techStack && (
+            <div>
+              <span className="micro-label-lime" style={{ display: 'block', marginBottom: '0.75rem' }}>06 / TECHNOLOGY STACK &amp; CORE MODULES</span>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                {project.techStack.map((tech, idx) => (
+                  <span
+                    key={idx}
+                    style={{
+                      backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                      border: '1px solid var(--color-border-gray)',
+                      padding: '6px 12px',
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.75rem',
+                      color: 'var(--color-warm-white)',
+                      letterSpacing: '0.04em'
+                    }}
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
         </div>
 
         {/* Modal Bottom CTAs */}
         <div style={{ marginTop: '2.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--color-border-gray)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
           <span className="micro-label" style={{ color: 'var(--color-muted-gray)' }}>
-            REPLACEABLE CASE SPECIFICATION • CORNERSTONE ARCHITECTURE
+            {project.liveUrl ? `LIVE PRODUCTION DOMAIN • https://${project.domain}` : 'REPLACEABLE CASE SPECIFICATION • CORNERSTONE ARCHITECTURE'}
           </span>
 
-          <div style={{ display: 'flex', gap: '1rem' }}>
+          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+            {project.liveUrl && (
+              <a
+                href={project.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-cornerstone"
+                style={{
+                  backgroundColor: project.accentColor || 'var(--color-accent-lime)',
+                  color: '#0A0A0A'
+                }}
+              >
+                <span>OPEN LIVE WEBSITE</span>
+                <ArrowUpRight size={14} />
+              </a>
+            )}
+
             <button
               onClick={() => {
                 onClose();
                 if (onStartProject) onStartProject();
               }}
-              className="btn-cornerstone"
+              className={project.liveUrl ? "btn-cornerstone-secondary" : "btn-cornerstone"}
             >
-              <span>BUILD SIMILAR SYSTEM</span>
+              <span>COMMISSION SIMILAR PROJECT</span>
               <ArrowUpRight size={14} />
             </button>
           </div>

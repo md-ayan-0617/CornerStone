@@ -294,3 +294,211 @@ export const CONTACT_SERVICES = [
   "Creative & AI Ad Production",
   "End-to-End Growth Architecture"
 ];
+
+// 7 Flagship Live Website Projects deployed on Vercel
+export const LIVE_WEBSITE_PROJECTS = [
+  {
+    id: "live-vale-selvatico",
+    number: "01",
+    title: "Vale Selvatico",
+    brand: "Vale Selvatico",
+    tagline: "Mediterranean Botanical Estate & Small-Batch Apothecary",
+    category: "LUXURY & BOTANICAL",
+    categoryFilter: "LUXURY & E-COMMERCE",
+    industry: "Artisanal Agriculture & Botanical Apothecary",
+    liveUrl: "https://vale-selvatico.vercel.app/",
+    domain: "vale-selvatico.vercel.app",
+    image: "/images/projects/vale-selvatico.jpg",
+    accentColor: "#C6923C", // Sunlit Sicilian Amber & Olive
+    badge: "LIVE PRODUCTION",
+    status: "ONLINE // VERIFIED",
+    shortDescription: "An editorial Mediterranean estate in Sicily cultivating bergamot, olives, and wild botanicals, transformed through patient craftsmanship into small-batch culinary oils and apothecary preserves.",
+    overview: "Vale Selvatico is an editorial digital sanctuary conceived to reflect generations of patient cultivation beneath the Sicilian sun. The experience combines evocative land storytelling, seasonal solar harvest timelines, and a sensory e-commerce catalog featuring cold-pressed extra virgin oils and small-batch infusions.",
+    challenge: "Artisanal heritage estates often struggle to convey tactile sensory authenticity online without falling into generic e-commerce templates that dilute brand prestige.",
+    system: "Bespoke editorial typography engine utilizing Instrument Serif and Azeret Mono, earthy organic tonal grading, fluid parallax image treatments, and frictionless direct-to-consumer order workflows.",
+    deliverables: [
+      "Editorial Brand Identity & Typography System",
+      "Seasonal Harvest Timeline & Archive Explorer",
+      "Small-Batch Apothecary E-Commerce Storefront",
+      "Mobile-Optimized Botanical Tasting Dossier"
+    ],
+    techStack: ["React 19", "Vite", "Instrument Serif", "Azeret Mono", "Vercel Edge"],
+    metricsHighlight: "100% Organic Sourcing • Sub-500ms TTFB",
+    layoutSpan: "span-2" // Bento grid hint
+  },
+  {
+    id: "live-aurenne",
+    number: "02",
+    title: "Aurenne",
+    brand: "Aurenne Maison de Joaillerie",
+    tagline: "Objects of Light — Sculptural Fine Jewellery",
+    category: "HAUTE JOAILLERIE",
+    categoryFilter: "LUXURY & E-COMMERCE",
+    industry: "Contemporary European Fine Jewellery & Rare Gemstones",
+    liveUrl: "https://aurenne-six.vercel.app/",
+    domain: "aurenne-six.vercel.app",
+    image: "/images/projects/aurenne.jpg",
+    accentColor: "#D4AF37", // Imperial Gold
+    badge: "LIVE PRODUCTION",
+    status: "ONLINE // VERIFIED",
+    shortDescription: "A contemporary Parisian high-jewellery maison digital flagship showcasing sculptural 18k gold creations, rare Colombian emeralds, and limited-edition high jewellery emerging from architectural darkness.",
+    overview: "Aurenne creates an immersive digital salon where fine jewellery is experienced as wearable sculpture. Emerging from obsidian darkness, 3D interactive gold rings and gemstone facets respond to user motion, accompanied by editorial exhibition essays and private salon appointment booking.",
+    challenge: "Conveying the physical luster, depth, and prestige of high-end precious gemstones and polished metals in a browser environment.",
+    system: "Hardware-accelerated Three.js WebGL lighting pipeline, tactile luxury cursor dynamics, Bodoni Moda and Italiana typography hierarchy, and private salon concierge scheduling.",
+    deliverables: [
+      "Interactive 3D WebGL Gemstone Lighting Engine",
+      "Editorial Exhibition Chapters & Archive Essays",
+      "Private Salon Consultation Booking Pipeline",
+      "High-Net-Worth VIP Collector Experience"
+    ],
+    techStack: ["Three.js", "WebGL", "Framer Motion", "Bodoni Moda", "React 19"],
+    metricsHighlight: "60FPS WebGL • Zero Commission VIP Gateway",
+    layoutSpan: "span-1"
+  },
+  {
+    id: "live-paloma-house",
+    number: "03",
+    title: "Paloma Social House",
+    brand: "Paloma Social House",
+    tagline: "Lunch Turns Into Late — One Place. Four Moods. All Day.",
+    category: "HOSPITALITY & DINING",
+    categoryFilter: "HOSPITALITY & DINING",
+    industry: "All-Day Restaurant, Cocktail Bar & Music-Led Social Club",
+    liveUrl: "https://paloma-socail-house.vercel.app/",
+    domain: "paloma-socail-house.vercel.app",
+    image: "/images/projects/paloma-house.jpg",
+    accentColor: "#D9492F", // Terracotta Red
+    badge: "LIVE PRODUCTION",
+    status: "ONLINE // VERIFIED",
+    shortDescription: "An energetic, multi-mood Mediterranean hospitality flagship spanning all-day wood-fired dining, golden-hour rooftop spritzes, and a late-night music-led social club.",
+    overview: "Paloma Social House bridges morning espresso culture, golden-hour rooftop drinks, and late-night vinyl disco into one seamless digital destination. An interactive time-of-day selector dynamically transforms the aesthetic and menu offerings based on the venue's active mood.",
+    challenge: "Hospitality websites often feel static and fail to communicate the shifting day-to-night ambiance of high-energy urban dining venues.",
+    system: "Dynamic diurnal theme shifts, interactive 3D culinary hearth showcases, instant table reservation engine with party size filtering, and integrated live vinyl programming schedule.",
+    deliverables: [
+      "Diurnal Time-Shift Ambiance Engine",
+      "Interactive Wood-Fired Menu & Cocktails Portal",
+      "Seamless Direct Table Reservation Integration",
+      "Rooftop DJ & Live Music Event Schedule"
+    ],
+    techStack: ["React", "Syne & Fraunces Type System", "Tailwind CSS", "Vercel"],
+    metricsHighlight: "Instant Table Reservation • 4 Dynamic Moods",
+    layoutSpan: "span-1"
+  },
+  {
+    id: "live-noise-dept",
+    number: "04",
+    title: "Noise Dept.",
+    brand: "Noise Dept.",
+    tagline: "Independent Digital Studio // Controlled Disorder",
+    category: "CREATIVE STUDIO",
+    categoryFilter: "CREATIVE STUDIOS",
+    industry: "Independent Design, Creative Technology & Development",
+    liveUrl: "https://noise-dept-six.vercel.app/",
+    domain: "noise-dept-six.vercel.app",
+    image: "/images/projects/noise-dept.jpg",
+    accentColor: "#EC3D31", // Kinetic Signal Red
+    badge: "LIVE PRODUCTION",
+    status: "ONLINE // VERIFIED",
+    shortDescription: "An unapologetically bold, experimental digital studio platform building high-impact digital systems for brands that refuse to blend in.",
+    overview: "Noise Dept champions controlled disorder—rejecting sterile corporate conventions in favor of raw editorial brutalism, kinetic typography, and tactile digital artifacts. Built for creative leaders and disruptor brands seeking cultural resonance.",
+    challenge: "Breaking away from ubiquitous minimalist templates while preserving razor-sharp readability, accessibility, and high conversion for client inquiries.",
+    system: "Variable-width Anybody and Space Mono typography, dynamic audio-visual feedback, glitch-resilient CSS grid compositions, and interactive case study exploration.",
+    deliverables: [
+      "Brutalist Kinetic Studio Design System",
+      "Interactive Audio & Dynamic Micro-Interactions",
+      "High-Conversion Client Pitch Project Ingestion",
+      "Experimental Monospace Brand Grid System"
+    ],
+    techStack: ["React", "Anybody Variable Font", "Space Mono", "CSS Grid", "Vercel"],
+    metricsHighlight: "0% Generic Templates • Maximum Cultural Impact",
+    layoutSpan: "span-2"
+  },
+  {
+    id: "live-spinform",
+    number: "05",
+    title: "Spinform™",
+    brand: "Spinform Studio",
+    tagline: "3D Identity + Motion Studio — Turn Flat Into Form",
+    category: "3D & CREATIVE TOOLS",
+    categoryFilter: "3D & WEB TECH",
+    industry: "Browser-Based 3D Brand Extruder & Motion Application",
+    liveUrl: "https://spinform-eight.vercel.app/",
+    domain: "spinform-eight.vercel.app",
+    image: "/images/projects/spinform.jpg",
+    accentColor: "#3B82F6", // High-Tech Cobalt Blue
+    badge: "LIVE PRODUCTION",
+    status: "ONLINE // VERIFIED",
+    shortDescription: "A browser-based 3D motion application enabling designers to extrude flat vector logos, icons, and wordmarks into tactile 3D objects, animated brand loops, and GLB exports.",
+    overview: "Spinform transforms 2D brand assets into tangible, interactive 3D models directly in WebGL. Users can assign ceramic, chrome, clay, glass, and rubber materials, animate camera paths, and export transparent video loops or 3D embeds in real time.",
+    challenge: "3D software like Blender and Cinema 4D has an immense learning curve; designers needed an immediate, browser-native tool for instant 3D brand asset production.",
+    system: "Real-time Three.js SVG extrusion engine, custom PBR material shaders, browser-side canvas recording pipeline, and responsive multi-viewport layout.",
+    deliverables: [
+      "Real-time Browser SVG Vector Extrusion Engine",
+      "5 PBR Material Shaders (Ceramic, Chrome, Clay, Glass, Rubber)",
+      "Interactive Camera Orbit & Brand Loop Controller",
+      "One-Click GLB & Transparent MP4 Export Pipeline"
+    ],
+    techStack: ["Three.js", "WebGL", "React 19", "Bricolage Grotesque", "Chivo Mono"],
+    metricsHighlight: "Zero Install • Real-time WebGL PBR Engine",
+    layoutSpan: "span-1"
+  },
+  {
+    id: "live-mosaic",
+    number: "06",
+    title: "Mosaic / State",
+    brand: "Mosaic / State",
+    tagline: "Interactive Systems & Digital Experiences — Structured Wonder",
+    category: "INTERACTIVE SYSTEMS",
+    categoryFilter: "CREATIVE STUDIOS",
+    industry: "Digital Platforms, Spatial Exhibits & Data Visualization",
+    liveUrl: "https://mosaic-state.vercel.app/",
+    domain: "mosaic-state.vercel.app",
+    image: "/images/projects/mosaic.jpg",
+    accentColor: "#2454FF", // Electric Cobalt
+    badge: "LIVE PRODUCTION",
+    status: "ONLINE // VERIFIED",
+    shortDescription: "An independent digital engineering and design practice turning complex data, stories, and organizational platforms into intuitive, structured experiences.",
+    overview: "Mosaic / State operates at the intersection of technical architecture and visual clarity under the philosophy that 'Complex doesn't have to feel complicated.' The platform showcases interactive node networks, museum installations, and cartographic data visualization.",
+    challenge: "Displaying multi-dimensional organizational data and complex technical concepts without overwhelming prospective enterprise clients.",
+    system: "Architectural coordinate grid system, interactive node graph connecting concept points, precision typographic scales, and dynamic case study dossiers.",
+    deliverables: [
+      "Interactive Node Graph Visualization Engine",
+      "Architectural Technical Dossier Architecture",
+      "Spatial Exhibit & Digital Platform Showcase",
+      "Modular Studio Capabilities Matrix"
+    ],
+    techStack: ["React", "Schibsted Grotesk", "Fragment Mono", "Canvas API", "Vercel"],
+    metricsHighlight: "Complex Systems Simplified • Interactive Node Engine",
+    layoutSpan: "span-1"
+  },
+  {
+    id: "live-auto-mobile",
+    number: "07",
+    title: "Aurelis Motors",
+    brand: "Aurelis Motor Company",
+    tagline: "Engineered to be Remembered — Flagship Grand Tourer AML-09GT",
+    category: "AUTOMOTIVE & TECH",
+    categoryFilter: "AUTOMOTIVE",
+    industry: "Luxury Automotive Showroom, Grand Tourers & Performance Vehicles",
+    liveUrl: "https://auto-mobile-black.vercel.app/",
+    domain: "auto-mobile-black.vercel.app",
+    image: "/images/projects/auto-mobile.jpg",
+    accentColor: "#60A5FA", // Aero Vector Metallic Blue
+    badge: "LIVE PRODUCTION",
+    status: "ONLINE // VERIFIED",
+    shortDescription: "A high-performance digital automotive showroom and vehicle configurator engineered with tactile chassis telemetry, aerodynamic optics, and bespoke specification tools.",
+    overview: "Aurelis Motors presents an automotive flagship combining visceral vehicle photography, aerodynamic simulation data, and a live 3D paint and interior specification customizer for modern grand tourers and electric hyper-vehicles.",
+    challenge: "Automotive configurators often suffer from sluggish loading and fragmented multi-step flows that disengage luxury car buyers.",
+    system: "Sub-second reactive vehicle spec customizer (Profile, Optics, Circuit, Cabin), telemetry metrics displays, DM Serif Display typography, and integrated VIP test-drive booking portal.",
+    deliverables: [
+      "Multi-Finish Real-time Vehicle Configurator",
+      "Chassis Aerodynamics & Powertrain Telemetry HUD",
+      "Bespoke Grand Tourer Specification Builder",
+      "Direct VIP Test Drive Concierge Pipeline"
+    ],
+    techStack: ["React 19", "DM Serif Display", "Space Grotesk", "Tailwind CSS", "Vercel"],
+    metricsHighlight: "420 HP AWD Vectoring • Real-time Configurator",
+    layoutSpan: "span-2"
+  }
+];
+

@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import Lenis from 'lenis';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import CustomCursor from './components/CustomCursor';
 import CornerstoneMotif from './components/CornerstoneMotif';
+
+// Register GSAP plugins
+gsap.registerPlugin(ScrollTrigger);
 
 // Dedicated Pages
 import HomePage from './pages/HomePage';
@@ -15,6 +21,34 @@ export function App() {
   const [currentPath, setCurrentPath] = useState(window.location.pathname || "/");
   const [loading, setLoading] = useState(true);
   const [isTransitioning, setIsTransitioning] = useState(false);
+
+  // Initialize Lenis Smooth Scroll tied into GSAP ticker
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.1,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      wheelMultiplier: 1.0,
+      touchMultiplier: 1.5,
+    });
+
+    lenis.on('scroll', ScrollTrigger.update);
+
+    const tickerCallback = (time) => {
+      lenis.raf(time * 1000);
+    };
+
+    gsap.ticker.add(tickerCallback);
+    gsap.ticker.lagSmoothing(0);
+
+    window.__lenis = lenis;
+
+    return () => {
+      gsap.ticker.remove(tickerCallback);
+      lenis.destroy();
+      window.__lenis = null;
+    };
+  }, []);
 
   // Minimal refined loader per Section 43
   useEffect(() => {
@@ -35,7 +69,11 @@ export function App() {
 
   const navigate = (path) => {
     if (path === currentPath) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (window.__lenis) {
+        window.__lenis.scrollTo(0, { immediate: false });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
       return;
     }
 
@@ -44,9 +82,14 @@ export function App() {
 
     setTimeout(() => {
       setCurrentPath(path);
-      window.scrollTo(0, 0);
+      if (window.__lenis) {
+        window.__lenis.scrollTo(0, { immediate: true });
+      } else {
+        window.scrollTo(0, 0);
+      }
       setTimeout(() => {
         setIsTransitioning(false);
+        ScrollTrigger.refresh();
       }, 50);
     }, 220);
   };

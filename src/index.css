@@ -550,4 +550,154 @@ img {
   transition: opacity 0.3s ease, filter 0.3s ease;
 }
 
+/* ==========================================================================
+   LIVE WEBSITES SHOWCASE & BENTO GRID SYSTEM
+   ========================================================================== */
+.live-projects-bento {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  width: 100%;
+}
+
+@media (min-width: 960px) {
+  .live-projects-bento {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .live-card-span-2 {
+    grid-column: 1 / -1 !important;
+  }
+  .live-card-span-1 {
+    grid-column: span 1 !important;
+  }
+}
+
+.live-projects-uniform {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 390px), 1fr));
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  width: 100%;
+}
+
+@media (max-width: 959px) {
+  .live-card-span-2,
+  .live-card-span-1 {
+    grid-column: 1 / -1 !important;
+  }
+  .live-card-split {
+    grid-template-columns: 1fr !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  .live-card-split > div:first-child {
+    border-right: none !important;
+    border-bottom: 1px solid var(--color-border-gray) !important;
+  }
+}
+
+.live-demo-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* ==========================================================================
+   GSAP & LENIS SCROLL EXPERIENCE ENHANCEMENTS
+   ========================================================================== */
+html.lenis, html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* GSAP Global Scroll Progress Bar */
+.gsap-scroll-progress-line {
+  position: fixed;
+  top: 76px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #B8FF3D, #00FF87, #B8FF3D);
+  box-shadow: 0 0 12px rgba(184, 255, 61, 0.65);
+  transform-origin: left center;
+  transform: scaleX(0);
+  z-index: 998;
+  pointer-events: none;
+}
+
+/* Pulse Dot */
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(184, 255, 61, 0.7);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+    box-shadow: 0 0 0 6px rgba(184, 255, 61, 0);
+  }
+}
+.pulse-dot-lime {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--color-accent-lime);
+  display: inline-block;
+  animation: pulseGlow 2s infinite ease-in-out;
+}
+
+/* Work Telemetry Strip */
+.work-telemetry-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  background-color: transparent;
+  border: none;
+  margin-bottom: 2.25rem;
+}
+@media (min-width: 768px) {
+  .work-telemetry-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+.work-telemetry-item {
+  background-color: var(--color-charcoal);
+  border: 1px solid var(--color-border-gray);
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  position: relative;
+  transition: border-color 0.25s ease, background-color 0.25s ease, transform 0.2s ease;
+}
+.work-telemetry-item:hover {
+  background-color: #181818;
+  border-color: rgba(184, 255, 61, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Parallax Inner Container */
+.live-parallax-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+.live-parallax-inner {
+  position: absolute;
+  top: -8%;
+  left: 0;
+  width: 100%;
+  height: 116%;
+  will-change: transform;
+}
+
+
 
