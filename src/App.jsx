@@ -67,6 +67,15 @@ export function App() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
+  // Auto-redirect invalid or unknown paths back to home without error
+  useEffect(() => {
+    const validPaths = ["/", "/work", "/services", "/about", "/contact"];
+    if (!validPaths.includes(currentPath)) {
+      window.history.replaceState({}, '', '/');
+      setCurrentPath('/');
+    }
+  }, [currentPath]);
+
   const navigate = (path) => {
     if (path === currentPath) {
       if (window.__lenis) {

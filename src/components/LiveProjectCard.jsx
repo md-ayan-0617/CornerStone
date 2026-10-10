@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ArrowUpRight, ExternalLink, Maximize2, Sparkles, Layers, CheckCircle2 } from 'lucide-react';
+import { ArrowUpRight, Layers } from 'lucide-react';
+import WebsitePreviewFrame from './WebsitePreviewFrame';
 
 export const LiveProjectCard = ({
   project,
@@ -10,23 +10,22 @@ export const LiveProjectCard = ({
   layoutMode = 'bento' // 'bento' | 'grid'
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [isHoveringPreview, setIsHoveringPreview] = useState(false);
   const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0, glareX: 50, glareY: 50 });
   const cardRef = useRef(null);
-  const imageWrapperRef = useRef(null);
-  const imageRef = useRef(null);
 
-  // GSAP ScrollTrigger entrance reveal & parallax image scrub
+  // GSAP ScrollTrigger entrance reveal
   useEffect(() => {
     if (!cardRef.current) return;
     const ctx = gsap.context(() => {
       // Reveal on scroll into viewport
       gsap.fromTo(cardRef.current,
-        { opacity: 0, y: 40, scale: 0.98 },
+        { opacity: 0, y: 35, scale: 0.985 },
         {
           opacity: 1,
           y: 0,
           scale: 1,
-          duration: 0.8,
+          duration: 0.7,
           ease: 'power3.out',
           scrollTrigger: {
             trigger: cardRef.current,
@@ -38,39 +37,22 @@ export const LiveProjectCard = ({
           }
         }
       );
-
-      // Silky parallax scrub on the preview image
-      if (imageWrapperRef.current) {
-        gsap.fromTo(imageWrapperRef.current,
-          { yPercent: -5 },
-          {
-            yPercent: 5,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: cardRef.current,
-              start: 'top bottom',
-              end: 'bottom top',
-              scrub: 1.2
-            }
-          }
-        );
-      }
     }, cardRef);
 
     return () => ctx.revert();
   }, []);
 
   const handleMouseMove = (e) => {
-    if (!cardRef.current) return;
+    if (!cardRef.current || isHoveringPreview) return;
     const rect = cardRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
     
-    // Subtle, elegant 3D tilt capped at 3.5 degrees
-    const rotateX = ((y - centerY) / centerY) * -3.5;
-    const rotateY = ((x - centerX) / centerX) * 3.5;
+    // Subtle, elegant 3D tilt capped at 2.5 degrees when not interacting with iframe
+    const rotateX = ((y - centerY) / centerY) * -2.5;
+    const rotateY = ((x - centerX) / centerX) * 2.5;
     
     setTilt({
       rotateX,
@@ -82,6 +64,7 @@ export const LiveProjectCard = ({
 
   const handleMouseLeave = () => {
     setIsHovered(false);
+    setIsHoveringPreview(false);
     setTilt({ rotateX: 0, rotateY: 0, glareX: 50, glareY: 50 });
   };
 
@@ -99,7 +82,7 @@ export const LiveProjectCard = ({
         backgroundColor: 'var(--color-charcoal)',
         border: '1px solid',
         borderColor: isHovered ? project.accentColor : 'var(--color-border-gray)',
-        transform: isHovered
+        transform: isHovered && !isHoveringPreview
           ? `perspective(1000px) rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg) translateY(-4px)`
           : 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)',
         transition: isHovered ? 'transform 0.12s ease-out, border-color 0.25s ease, box-shadow 0.25s ease' : 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
@@ -110,7 +93,7 @@ export const LiveProjectCard = ({
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',
-        minHeight: isWide ? '480px' : '520px',
+        minHeight: isWide ? '520px' : '560px',
         willChange: 'transform'
       }}
       className={`live-project-card ${isWide ? 'live-card-span-2' : 'live-card-span-1'}`}
@@ -126,15 +109,15 @@ export const LiveProjectCard = ({
         style={{ borderColor: isHovered ? project.accentColor : 'var(--color-accent-lime)' }}
       />
 
-      {/* Subtle Dynamic Glare Overlay */}
-      {isHovered && (
+      {/* Subtle Dynamic Glare Overlay (disabled when over preview) */}
+      {isHovered && !isHoveringPreview && (
         <div
           style={{
             position: 'absolute',
             inset: 0,
             pointerEvents: 'none',
             zIndex: 10,
-            background: `radial-gradient(circle at ${tilt.glareX}% ${tilt.glareY}%, rgba(255, 255, 255, 0.05) 0%, transparent 60%)`
+            background: `radial-gradient(circle at ${tilt.glareX}% ${tilt.glareY}%, rgba(255, 255, 255, 0.04) 0%, transparent 60%)`
           }}
         />
       )}
@@ -142,7 +125,7 @@ export const LiveProjectCard = ({
       {/* Card Header Bar */}
       <div
         style={{
-          padding: '1rem 1.25rem',
+          padding: '0.85rem 1.25rem',
           borderBottom: '1px solid var(--color-border-gray)',
           backgroundColor: '#0E0E0E',
           display: 'flex',
@@ -218,122 +201,40 @@ export const LiveProjectCard = ({
         className={isWide ? 'live-card-split' : ''}
         style={{
           display: isWide ? 'grid' : 'flex',
-          gridTemplateColumns: isWide ? '1.15fr 0.85fr' : 'none',
+          gridTemplateColumns: isWide ? '1.2fr 0.8fr' : 'none',
           flexDirection: isWide ? 'row' : 'column',
           flex: 1
         }}
       >
-        {/* Preview Frame with Authentic Screenshot & GSAP Parallax */}
+        {/* Preview Frame with Interactive Website & Browser Chrome */}
         <div
+          onMouseEnter={() => {
+            setIsHoveringPreview(true);
+            setTilt({ rotateX: 0, rotateY: 0, glareX: 50, glareY: 50 });
+          }}
+          onMouseLeave={() => setIsHoveringPreview(false)}
+          onClick={(e) => e.stopPropagation()}
           style={{
             position: 'relative',
-            height: isWide ? '100%' : '260px',
-            minHeight: '260px',
-            overflow: 'hidden',
-            backgroundColor: '#0A0A0A',
+            height: isWide ? '100%' : 'auto',
+            minHeight: isWide ? '460px' : '390px',
+            backgroundColor: '#070707',
             borderBottom: isWide ? 'none' : '1px solid var(--color-border-gray)',
-            borderRight: isWide ? '1px solid var(--color-border-gray)' : 'none'
+            borderRight: isWide ? '1px solid var(--color-border-gray)' : 'none',
+            padding: 'clamp(8px, 1.2vw, 12px)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            boxSizing: 'border-box'
           }}
-          className="img-hover-frame live-parallax-container"
+          className="live-preview-container"
         >
-          <div
-            ref={imageWrapperRef}
-            className="live-parallax-inner"
-          >
-            <img
-              ref={imageRef}
-              src={project.image}
-              alt={`${project.title} live preview`}
-              className="img-hover-zoom"
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                objectPosition: 'top center',
-                transition: 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease',
-                transform: isHovered ? 'scale(1.05)' : 'scale(1)',
-                display: 'block'
-              }}
-              loading="lazy"
-            />
-          </div>
-
-          {/* Website Identity Accent Glow Strip */}
-          <div
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              height: '3px',
-              backgroundColor: project.accentColor
-            }}
+          <WebsitePreviewFrame
+            project={project}
+            height={isWide ? '100%' : '390px'}
+            minHeight={isWide ? '450px' : '380px'}
+            onOpenFullscreen={onOpenZoom}
           />
-
-          {/* Quick Zoom Action Icon */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              if (onOpenZoom) onOpenZoom(project);
-            }}
-            style={{
-              position: 'absolute',
-              top: '12px',
-              right: '12px',
-              background: 'rgba(10, 10, 10, 0.75)',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
-              backdropFilter: 'blur(8px)',
-              color: 'var(--color-warm-white)',
-              padding: '6px',
-              borderRadius: '2px',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              transition: 'all 0.2s ease',
-              opacity: isHovered ? 1 : 0.6
-            }}
-            title="Inspect full-resolution capture"
-            aria-label="Inspect capture"
-          >
-            <Maximize2 size={13} />
-          </button>
-
-          {/* Bottom badge on preview image */}
-          <div
-            style={{
-              position: 'absolute',
-              bottom: '12px',
-              left: '12px',
-              background: 'rgba(10, 10, 10, 0.88)',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
-              backdropFilter: 'blur(8px)',
-              padding: '4px 10px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              borderRadius: '2px'
-            }}
-          >
-            <span
-              style={{
-                width: '5px',
-                height: '5px',
-                borderRadius: '50%',
-                backgroundColor: project.accentColor
-              }}
-            />
-            <span
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.62rem',
-                color: 'var(--color-warm-white)',
-                letterSpacing: '0.06em'
-              }}
-            >
-              {project.metricsHighlight}
-            </span>
-          </div>
         </div>
 
         {/* Content Body */}
@@ -487,7 +388,7 @@ export const LiveProjectCard = ({
               <Layers size={13} />
             </button>
 
-            {/* Prominent View Live Demo Anchor */}
+            {/* Prominent View Live Demo / Open Full Website Anchor */}
             <a
               href={project.liveUrl}
               target="_blank"

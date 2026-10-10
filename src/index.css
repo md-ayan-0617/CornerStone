@@ -699,5 +699,58 @@ html.lenis, html.lenis body {
   will-change: transform;
 }
 
+/* ==========================================================================
+   INTERACTIVE WEBSITE PREVIEW FRAME SYSTEM
+   ========================================================================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spin-anim {
+  animation: spin 0.9s linear infinite;
+}
+
+.website-preview-chassis {
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.website-preview-chassis:hover {
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(184, 255, 61, 0.08);
+}
+
+.preview-viewport iframe {
+  border: none;
+  width: 100%;
+  height: 100%;
+  display: block;
+  background-color: #0A0A0A;
+}
+
+@media (max-width: 640px) {
+  .hide-on-mobile {
+    display: none !important;
+  }
+  .website-preview-chassis {
+    padding: 6px !important;
+  }
+}
+
 
 

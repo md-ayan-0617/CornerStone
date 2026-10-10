@@ -3,6 +3,7 @@ import { FEATURED_PROJECTS, LIVE_WEBSITE_PROJECTS } from '../data/siteContent';
 import { ArrowUpRight, Phone, MessageSquare, Laptop, Layers, Eye, Code, Globe } from 'lucide-react';
 import TypewriterText from './TypewriterText';
 import PreviewLightboxModal from './PreviewLightboxModal';
+import WebsitePreviewFrame from './WebsitePreviewFrame';
 
 export const SelectedWork = ({ onSelectProject }) => {
   const [activeTab, setActiveTab] = useState('live'); // 'live' | 'concepts'
@@ -402,50 +403,22 @@ export const SelectedWork = ({ onSelectProject }) => {
                       </div>
                     </div>
 
-                    {/* Right: Authentic Preview Frame */}
+                    {/* Right: Authentic Interactive Live Website Preview */}
                     <div
-                      className="img-hover-frame"
+                      onClick={(e) => e.stopPropagation()}
                       style={{
-                        height: '320px',
                         width: '100%',
-                        position: 'relative'
+                        position: 'relative',
+                        display: 'flex',
+                        flexDirection: 'column'
                       }}
                     >
-                      <img
-                        src={project.image}
-                        alt={project.title}
-                        className="img-hover-zoom"
-                        loading="lazy"
-                        style={{
-                          objectPosition: 'top center'
-                        }}
+                      <WebsitePreviewFrame
+                        project={project}
+                        height="410px"
+                        minHeight="380px"
+                        onOpenFullscreen={(p) => setZoomedProject(p)}
                       />
-                      <div className="corner-bracket-tl" style={{ borderColor: project.accentColor }} />
-                      <div className="corner-bracket-br" style={{ borderColor: project.accentColor }} />
-
-                      <div
-                        style={{
-                          position: 'absolute',
-                          top: '12px',
-                          left: '12px',
-                          background: 'rgba(10, 10, 10, 0.88)',
-                          padding: '3px 8px',
-                          border: '1px solid rgba(255, 255, 255, 0.15)',
-                          backdropFilter: 'blur(6px)',
-                          fontFamily: 'var(--font-mono)',
-                          fontSize: '0.62rem',
-                          color: 'var(--color-warm-white)'
-                        }}
-                      >
-                        {project.domain}
-                      </div>
-
-                      <div className="img-overlay-badge">
-                        <span className="lime-dot" style={{ width: '5px', height: '5px', backgroundColor: project.accentColor }} />
-                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--color-warm-white)' }}>
-                          {project.metricsHighlight}
-                        </span>
-                      </div>
                     </div>
                   </div>
                 </div>

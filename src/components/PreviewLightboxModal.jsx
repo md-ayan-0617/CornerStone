@@ -1,8 +1,12 @@
-import React, { useEffect } from 'react';
-import { X, ArrowUpRight, ExternalLink, Globe, ShieldCheck } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { X, ArrowUpRight, Monitor, Tablet, Smartphone } from 'lucide-react';
 import CornerstoneMotif from './CornerstoneMotif';
+import WebsitePreviewFrame from './WebsitePreviewFrame';
 
 export const PreviewLightboxModal = ({ project, onClose }) => {
+  const [deviceMode, setDeviceMode] = useState('desktop'); // 'desktop' | 'tablet' | 'mobile'
+
   useEffect(() => {
     if (!project) return;
     const handleKeyDown = (e) => {
@@ -18,7 +22,9 @@ export const PreviewLightboxModal = ({ project, onClose }) => {
 
   if (!project) return null;
 
-  return (
+  const accentColor = project.accentColor || 'var(--color-accent-lime)';
+
+  return createPortal(
     <div
       style={{
         position: 'fixed',
@@ -31,7 +37,7 @@ export const PreviewLightboxModal = ({ project, onClose }) => {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 'clamp(1rem, 3vw, 2.5rem)',
+        padding: 'clamp(0.75rem, 2.5vw, 2rem)',
         animation: 'fadeIn 0.25s ease-out'
       }}
       onClick={onClose}
@@ -41,33 +47,36 @@ export const PreviewLightboxModal = ({ project, onClose }) => {
         style={{
           position: 'relative',
           width: '100%',
-          maxWidth: '1240px',
+          maxWidth: '1280px',
+          height: '92vh',
           maxHeight: '92vh',
           backgroundColor: '#0D0D0D',
           border: '1px solid var(--color-border-gray)',
-          boxShadow: `0 30px 80px rgba(0, 0, 0, 0.9), 0 0 50px ${project.accentColor}22`,
+          boxShadow: `0 30px 80px rgba(0, 0, 0, 0.9), 0 0 50px ${accentColor}22`,
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden'
         }}
       >
         {/* Corner Brackets */}
-        <div className="corner-bracket-tl" style={{ borderColor: project.accentColor }} />
-        <div className="corner-bracket-br" style={{ borderColor: project.accentColor }} />
+        <div className="corner-bracket-tl" style={{ borderColor: accentColor }} />
+        <div className="corner-bracket-br" style={{ borderColor: accentColor }} />
 
         {/* Modal Topbar */}
         <div
           style={{
-            padding: '1rem 1.5rem',
+            padding: '0.85rem 1.5rem',
             borderBottom: '1px solid var(--color-border-gray)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
             backgroundColor: '#121212',
             gap: '1rem',
-            flexWrap: 'wrap'
+            flexWrap: 'wrap',
+            zIndex: 10
           }}
         >
+          {/* Project Details */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <CornerstoneMotif size={18} variant="mark" />
             <div>
@@ -87,9 +96,9 @@ export const PreviewLightboxModal = ({ project, onClose }) => {
                   style={{
                     fontFamily: 'var(--font-mono)',
                     fontSize: '0.65rem',
-                    color: project.accentColor,
-                    backgroundColor: `${project.accentColor}18`,
-                    border: `1px solid ${project.accentColor}44`,
+                    color: accentColor,
+                    backgroundColor: `${accentColor}18`,
+                    border: `1px solid ${accentColor}44`,
                     padding: '2px 6px'
                   }}
                 >
@@ -102,21 +111,100 @@ export const PreviewLightboxModal = ({ project, onClose }) => {
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          {/* Center: Device Viewport Mode Switcher */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              backgroundColor: '#0A0A0A',
+              border: '1px solid rgba(255, 255, 255, 0.12)',
+              borderRadius: '3px',
+              padding: '2px'
+            }}
+          >
+            <button
+              onClick={() => setDeviceMode('desktop')}
+              title="Desktop viewport (100% width)"
+              style={{
+                background: deviceMode === 'desktop' ? 'rgba(255, 255, 255, 0.12)' : 'transparent',
+                color: deviceMode === 'desktop' ? accentColor : 'var(--color-muted-gray)',
+                border: 'none',
+                padding: '5px 10px',
+                borderRadius: '2px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '5px',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.68rem',
+                transition: 'all 0.15s ease'
+              }}
+            >
+              <Monitor size={12} />
+              <span className="hide-on-mobile">DESKTOP</span>
+            </button>
+
+            <button
+              onClick={() => setDeviceMode('tablet')}
+              title="Tablet viewport (768px)"
+              style={{
+                background: deviceMode === 'tablet' ? 'rgba(255, 255, 255, 0.12)' : 'transparent',
+                color: deviceMode === 'tablet' ? accentColor : 'var(--color-muted-gray)',
+                border: 'none',
+                padding: '5px 10px',
+                borderRadius: '2px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '5px',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.68rem',
+                transition: 'all 0.15s ease'
+              }}
+            >
+              <Tablet size={12} />
+              <span className="hide-on-mobile">TABLET</span>
+            </button>
+
+            <button
+              onClick={() => setDeviceMode('mobile')}
+              title="Mobile viewport (390px)"
+              style={{
+                background: deviceMode === 'mobile' ? 'rgba(255, 255, 255, 0.12)' : 'transparent',
+                color: deviceMode === 'mobile' ? accentColor : 'var(--color-muted-gray)',
+                border: 'none',
+                padding: '5px 10px',
+                borderRadius: '2px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '5px',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.68rem',
+                transition: 'all 0.15s ease'
+              }}
+            >
+              <Smartphone size={12} />
+              <span className="hide-on-mobile">MOBILE</span>
+            </button>
+          </div>
+
+          {/* Right Actions: Open Live Demo + Close */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <a
               href={project.liveUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-cornerstone"
               style={{
-                backgroundColor: project.accentColor,
+                backgroundColor: accentColor,
                 color: '#0A0A0A',
-                padding: '0.65rem 1.25rem',
+                padding: '0.55rem 1.15rem',
                 fontSize: '0.72rem'
               }}
             >
-              <span>OPEN LIVE DEMO</span>
-              <ArrowUpRight size={14} />
+              <span>OPEN FULL WEBSITE</span>
+              <ArrowUpRight size={13} />
             </a>
 
             <button
@@ -125,90 +213,51 @@ export const PreviewLightboxModal = ({ project, onClose }) => {
                 background: '#1A1A1A',
                 border: '1px solid var(--color-border-gray)',
                 color: 'var(--color-warm-white)',
-                width: '36px',
-                height: '36px',
+                width: '34px',
+                height: '34px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                transition: 'border-color 0.2s ease'
               }}
               aria-label="Close preview"
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = 'var(--color-border-gray)';
+              }}
             >
               <X size={16} />
             </button>
           </div>
         </div>
 
-        {/* Image Scrollable View */}
+        {/* Modal Interactive Viewport */}
         <div
           style={{
             flex: 1,
-            overflowY: 'auto',
+            overflow: 'hidden',
             backgroundColor: '#050505',
             display: 'flex',
             justifyContent: 'center',
-            alignItems: 'flex-start',
-            padding: '1.5rem'
+            alignItems: 'stretch',
+            padding: 'clamp(0.75rem, 1.5vw, 1.25rem)'
           }}
         >
-          <div
-            style={{
-              width: '100%',
-              maxWidth: '1160px',
-              border: '1px solid var(--color-border-gray)',
-              boxShadow: '0 10px 40px rgba(0,0,0,0.6)',
-              overflow: 'hidden'
-            }}
-          >
-            {/* Browser chrome simulation */}
-            <div
-              style={{
-                backgroundColor: '#1E1E1E',
-                borderBottom: '1px solid #333',
-                padding: '8px 14px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px'
-              }}
-            >
-              <div style={{ display: 'flex', gap: '6px' }}>
-                <span style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#FF5F56' }} />
-                <span style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#FFBD2E' }} />
-                <span style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#27C93F' }} />
-              </div>
-              <div
-                style={{
-                  flex: 1,
-                  maxWidth: '480px',
-                  backgroundColor: '#121212',
-                  border: '1px solid #333',
-                  borderRadius: '3px',
-                  padding: '3px 10px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px'
-                }}
-              >
-                <Globe size={11} color="#888" />
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: '#AAA' }}>
-                  {project.liveUrl}
-                </span>
-              </div>
-            </div>
-
-            <img
-              src={project.image}
-              alt={project.title}
-              style={{
-                width: '100%',
-                height: 'auto',
-                display: 'block'
-              }}
-            />
-          </div>
+          <WebsitePreviewFrame
+            project={project}
+            mode="modal"
+            deviceMode={deviceMode}
+            height="100%"
+            minHeight="100%"
+            showExpandButton={false}
+          />
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
