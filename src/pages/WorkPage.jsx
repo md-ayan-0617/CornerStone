@@ -24,15 +24,6 @@ export const WorkPage = ({ onNavigate }) => {
   // GSAP ScrollTrigger Animations & Hero Entrance
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Hero entrance snappy fromTo animation (0.6s total duration)
-      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-      tl.fromTo('.hero-anim-kicker', { y: 15, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35 })
-        .fromTo('.hero-anim-title', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45 }, '-=0.2')
-        .fromTo('.hero-anim-sub', { y: 10, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35 }, '-=0.25')
-        .fromTo('.hero-anim-desc', { y: 10, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35 }, '-=0.2')
-        .fromTo('.work-telemetry-item', { y: 15, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, stagger: 0.04 }, '-=0.2')
-        .fromTo('.hero-anim-actions', { y: 15, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, clearProps: 'all' }, '-=0.2');
-
       // Global Scroll Progress Bar
       if (progressRef.current) {
         gsap.fromTo(progressRef.current,
@@ -89,192 +80,6 @@ export const WorkPage = ({ onNavigate }) => {
       {/* GSAP Global Scroll Progress Bar */}
       <div ref={progressRef} className="gsap-scroll-progress-line" />
 
-      {/* 1. Work Page Architectural Master Hero */}
-      <section
-        style={{
-          paddingTop: 'clamp(7rem, 14vh, 9.5rem)',
-          paddingBottom: 'clamp(3.5rem, 7vh, 5rem)',
-          backgroundColor: 'var(--color-near-black)',
-          borderBottom: '1px solid var(--color-border-gray)',
-          position: 'relative'
-        }}
-      >
-        <div className="site-container">
-          {/* Architectural Kicker */}
-          <div
-            className="hero-anim-kicker"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
-              flexWrap: 'wrap',
-              marginBottom: '1.25rem'
-            }}
-          >
-            <CornerstoneMotif size={16} variant="bracket" />
-            <span className="micro-label-lime">
-              PRODUCTION DEPLOYMENTS // 7 LIVE CLIENT SITES
-            </span>
-            <div
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                padding: '3px 8px',
-                backgroundColor: 'rgba(184, 255, 61, 0.08)',
-                border: '1px solid rgba(184, 255, 61, 0.25)',
-                borderRadius: '2px'
-              }}
-            >
-              <span className="pulse-dot-lime" />
-              <span
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.65rem',
-                  color: 'var(--color-accent-lime)',
-                  fontWeight: 700,
-                  letterSpacing: '0.06em'
-                }}
-              >
-                SYSTEM ACTIVE
-              </span>
-            </div>
-          </div>
-
-          {/* Master Headline - Clean, Editorial, Monumental */}
-          <h1
-            className="display-mega hero-anim-title"
-            style={{
-              margin: '0 0 0.5rem 0',
-              maxWidth: '22ch'
-            }}
-          >
-            SELECTED WORK.
-          </h1>
-
-          {/* Editorial Subtitle */}
-          <div
-            className="hero-anim-sub"
-            style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: 'clamp(0.82rem, 1.3vw, 0.95rem)',
-              color: 'var(--color-accent-lime)',
-              letterSpacing: '0.1em',
-              fontWeight: 700,
-              textTransform: 'uppercase',
-              marginBottom: '1.25rem'
-            }}
-          >
-            // PRODUCTION DIGITAL FLAGSHIPS &amp; SYSTEM ARCHITECTURES
-          </div>
-
-          <p
-            className="hero-anim-desc"
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: 'clamp(1.05rem, 1.7vw, 1.25rem)',
-              lineHeight: 1.55,
-              color: 'var(--color-muted-gray)',
-              maxWidth: '56ch',
-              margin: '0 0 2rem 0'
-            }}
-          >
-            A curated showcase of 7 live production websites and digital flagships deployed for clients across luxury commerce, creative culture, hospitality, and automotive — followed by our benchmark architecture demonstrators.
-          </p>
-
-          {/* Live Telemetry Spec Strip */}
-          <div className="work-telemetry-grid">
-            <div className="work-telemetry-item">
-              <span className="micro-label" style={{ fontSize: '0.62rem', color: 'var(--color-muted-gray)' }}>
-                01 / LIVE DEPLOYMENTS
-              </span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', fontWeight: 700, color: 'var(--color-warm-white)' }}>
-                7 CLIENT SITES ONLINE
-              </span>
-            </div>
-            <div className="work-telemetry-item">
-              <span className="micro-label" style={{ fontSize: '0.62rem', color: 'var(--color-muted-gray)' }}>
-                02 / GLOBAL LATENCY
-              </span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', fontWeight: 700, color: 'var(--color-accent-lime)' }}>
-                &lt; 450MS TTFB / EDGE CDN
-              </span>
-            </div>
-            <div className="work-telemetry-item">
-              <span className="micro-label" style={{ fontSize: '0.62rem', color: 'var(--color-muted-gray)' }}>
-                03 / MOTION ENGINE
-              </span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', fontWeight: 700, color: 'var(--color-warm-white)' }}>
-                60FPS GSAP + HARDWARE ACCEL
-              </span>
-            </div>
-            <div className="work-telemetry-item">
-              <span className="micro-label" style={{ fontSize: '0.62rem', color: 'var(--color-muted-gray)' }}>
-                04 / CRAFT STANDARDS
-              </span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', fontWeight: 700, color: 'var(--color-warm-white)' }}>
-                AWWWARDS &amp; FWA CALIBER
-              </span>
-            </div>
-          </div>
-
-          {/* Quick Jump Bar */}
-          <div className="hero-anim-actions" style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-            <a
-              href="#live-websites"
-              onClick={(e) => handleScrollTo(e, '#live-websites')}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '9px 18px',
-                backgroundColor: 'var(--color-accent-lime)',
-                color: 'var(--color-near-black)',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.75rem',
-                fontWeight: 700,
-                letterSpacing: '0.08em',
-                textDecoration: 'none',
-                transition: 'transform 0.15s ease'
-              }}
-              className="live-demo-btn"
-            >
-              <Globe size={14} />
-              <span>EXPLORE 7 LIVE WEBSITES (SECTION 01)</span>
-            </a>
-
-            <a
-              href="#concept-systems"
-              onClick={(e) => handleScrollTo(e, '#concept-systems')}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '9px 18px',
-                backgroundColor: 'transparent',
-                color: 'var(--color-warm-white)',
-                border: '1px solid var(--color-border-gray)',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.75rem',
-                fontWeight: 600,
-                letterSpacing: '0.08em',
-                textDecoration: 'none',
-                transition: 'border-color 0.2s ease, color 0.2s ease'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = 'var(--color-accent-lime)';
-                e.currentTarget.style.color = 'var(--color-accent-lime)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = 'var(--color-border-gray)';
-                e.currentTarget.style.color = 'var(--color-warm-white)';
-              }}
-            >
-              <span>CONCEPT BENCHMARKS (SECTION 02)</span>
-            </a>
-          </div>
-        </div>
-      </section>
 
       {/* 2. Top of Work Page: 7 Live Website Projects */}
       <LiveWebsitesSection
@@ -289,7 +94,7 @@ export const WorkPage = ({ onNavigate }) => {
           paddingTop: 'clamp(4rem, 8vh, 6.5rem)',
           paddingBottom: 'clamp(2rem, 4vh, 3.5rem)',
           backgroundColor: '#0C0C0C',
-          borderBottom: '1px solid var(--color-border-gray)'
+          borderBottom: '1px solid var(--color-border-gray)',
         }}
       >
         <div className="site-container">

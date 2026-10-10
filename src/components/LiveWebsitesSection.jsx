@@ -59,7 +59,7 @@ export const LiveWebsitesSection = ({ onSelectProject, onStartProject }) => {
         maxWidth: '100vw',
         overflowX: 'hidden',
         backgroundColor: 'var(--color-near-black)',
-        paddingTop: 'clamp(3.5rem, 7vh, 5.5rem)',
+        paddingTop: 'clamp(7.5rem, 15vh, 10rem)',
         paddingBottom: 'clamp(4rem, 9vh, 7rem)',
         borderBottom: '1px solid var(--color-border-gray)'
       }}
