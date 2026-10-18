@@ -1,13 +1,58 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { CAPABILITIES } from '../data/siteContent';
-import { ArrowUpRight, CheckSquare } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import TypewriterText from './TypewriterText';
 
 export const CapabilitySection = ({ onSelectCapability }) => {
   const [activeId, setActiveId] = useState("01");
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Header reveal
+      gsap.fromTo('.capability-header-elem',
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          stagger: 0.1,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 85%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+
+      // 3 Cards staggered entrance
+      gsap.fromTo('.capability-card-item',
+        { opacity: 0, y: 45, scale: 0.98 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.8,
+          stagger: 0.15,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: '.capability-cards-grid',
+            start: 'top 85%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
     <section
+      ref={sectionRef}
       style={{
         position: 'relative',
         width: '100%',
@@ -22,28 +67,29 @@ export const CapabilitySection = ({ onSelectCapability }) => {
       <div className="site-container">
         
         {/* Section Header */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'clamp(1.5rem, 3vw, 2.5rem)', borderBottom: '1px solid var(--color-border-gray)', paddingBottom: '1rem' }}>
-          <span className="micro-label-lime">02 / CORE CAPABILITIES</span>
-          <span className="micro-label">SYSTEM ARCHITECTURE</span>
+        <div className="capability-header-elem" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'clamp(1.5rem, 3vw, 2.5rem)', borderBottom: '1px solid var(--color-border-gray)', paddingBottom: '1rem' }}>
+          <span className="micro-label-lime">02 / THREE CORE DISCIPLINES</span>
+          <span className="micro-label">SERVICE ARCHITECTURE</span>
         </div>
 
-        <div style={{ marginBottom: 'clamp(2rem, 4vw, 3.5rem)', maxWidth: '42ch' }}>
+        <div className="capability-header-elem" style={{ marginBottom: 'clamp(2rem, 4vw, 3.5rem)', maxWidth: '44ch' }}>
           <h2
             className="display-large"
             style={{
               margin: 0
             }}
           >
-            WE BUILD THE SYSTEM BEHIND{' '}
-            <TypewriterText words={["THE BUSINESS.", "CUSTOMER ACQUISITION.", "AUTONOMOUS GROWTH."]} />
+            WE BUILD THE FOUNDATION BEHIND{' '}
+            <TypewriterText words={["AI AUTOMATION.", "BUSINESS WEBSITES.", "CREATIVE PRODUCTION."]} />
           </h2>
         </div>
 
-        {/* 4 Interactive Capability Panels */}
+        {/* 3 Interactive Capability Panels */}
         <div
+          className="capability-cards-grid"
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))',
             gap: '1px',
             backgroundColor: 'var(--color-border-gray)',
             border: '1px solid var(--color-border-gray)'
@@ -59,7 +105,7 @@ export const CapabilitySection = ({ onSelectCapability }) => {
                   setActiveId(cap.id);
                   if (onSelectCapability) onSelectCapability(cap);
                 }}
-                className="capability-card"
+                className="capability-card capability-card-item"
                 style={{
                   position: 'relative',
                   backgroundColor: isActive ? '#141414' : '#0E0E0E',
@@ -82,7 +128,8 @@ export const CapabilitySection = ({ onSelectCapability }) => {
                       left: 0,
                       width: '100%',
                       height: '3px',
-                      backgroundColor: 'var(--color-accent-lime)'
+                      backgroundColor: 'var(--color-accent-lime)',
+                      boxShadow: '0 0 10px rgba(184, 255, 61, 0.6)'
                     }}
                   />
                 )}
@@ -132,11 +179,22 @@ export const CapabilitySection = ({ onSelectCapability }) => {
                       fontSize: '0.88rem',
                       color: 'var(--color-muted-gray)',
                       lineHeight: 1.5,
-                      marginBottom: '1.5rem'
+                      marginBottom: '1rem'
                     }}
                   >
                     {cap.description}
                   </p>
+
+                  {cap.targetAudience && (
+                    <div style={{ marginBottom: '1.25rem', padding: '6px 10px', backgroundColor: isActive ? 'rgba(184, 255, 61, 0.08)' : 'rgba(255, 255, 255, 0.03)', border: '1px solid', borderColor: isActive ? 'rgba(184, 255, 61, 0.25)' : 'rgba(255, 255, 255, 0.08)', borderRadius: '3px' }}>
+                      <span className="micro-label" style={{ fontSize: '0.62rem', color: isActive ? 'var(--color-accent-lime)' : 'var(--color-muted-gray)', display: 'block', marginBottom: '2px' }}>
+                        TARGET AUDIENCE:
+                      </span>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: isActive ? 'var(--color-warm-white)' : 'var(--color-muted-gray)', lineHeight: 1.4, display: 'block' }}>
+                        {cap.targetAudience}
+                      </span>
+                    </div>
+                  )}
                 </div>
 
                 {/* Services List inside card */}

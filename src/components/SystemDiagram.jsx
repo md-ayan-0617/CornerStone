@@ -1,13 +1,57 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SYSTEM_NODES } from '../data/siteContent';
 import CornerstoneMotif from './CornerstoneMotif';
 import TypewriterText from './TypewriterText';
 
 export const SystemDiagram = () => {
   const [selectedNode, setSelectedNode] = useState(SYSTEM_NODES[0]);
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Header reveal
+      gsap.fromTo('.system-diagram-header',
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 85%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+
+      // 8 Nodes Staggered Entrance
+      gsap.fromTo('.system-node-item',
+        { opacity: 0, y: 30, scale: 0.95 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.65,
+          stagger: 0.07,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: '.system-nodes-grid',
+            start: 'top 85%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
     <section
+      ref={sectionRef}
       style={{
         position: 'relative',
         width: '100%',
@@ -22,7 +66,7 @@ export const SystemDiagram = () => {
       <div className="site-container">
         
         {/* Section Header */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'clamp(2rem, 4vw, 3.5rem)', borderBottom: '1px solid var(--color-border-gray)', paddingBottom: '1rem' }}>
+        <div className="system-diagram-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'clamp(2rem, 4vw, 3.5rem)', borderBottom: '1px solid var(--color-border-gray)', paddingBottom: '1rem' }}>
           <div>
             <span className="micro-label-lime">06 / ARCHITECTURAL TOPOLOGY</span>
             <h2
@@ -62,6 +106,7 @@ export const SystemDiagram = () => {
 
           {/* Node Grid Layout */}
           <div
+            className="system-nodes-grid"
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 230px), 1fr))',
@@ -76,6 +121,7 @@ export const SystemDiagram = () => {
                   key={node.id}
                   onClick={() => setSelectedNode(node)}
                   onMouseEnter={() => setSelectedNode(node)}
+                  className="system-node-item"
                   style={{
                     position: 'relative',
                     backgroundColor: isActive ? 'var(--color-near-black)' : 'rgba(10, 10, 10, 0.45)',
@@ -154,7 +200,7 @@ export const SystemDiagram = () => {
           </div>
         </div>
 
-        {/* Final Visually Dominant Statement from Section 15 */}
+        {/* Final Visually Dominant Statement */}
         <div style={{ maxWidth: '28ch', borderLeft: '3px solid var(--color-accent-lime)', paddingLeft: 'clamp(1rem, 3vw, 2rem)' }}>
           <p
             style={{

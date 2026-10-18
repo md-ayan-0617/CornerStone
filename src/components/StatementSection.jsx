@@ -1,20 +1,92 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import CornerstoneMotif from './CornerstoneMotif';
 import TypewriterText from './TypewriterText';
 import { Zap, ShieldCheck, Cpu, ArrowUpRight } from 'lucide-react';
 
 export const StatementSection = () => {
   const [activePillar, setActivePillar] = useState(0);
+  const sectionRef = useRef(null);
 
   const pillars = [
-    { title: "AI", detail: "Self-training agents that triage, converse, and understand intent with sub-second latency." },
-    { title: "AUTOMATION", detail: "Invisible pipes connecting WhatsApp, voice synthesis, CRMs, and real-time scheduling." },
-    { title: "DIGITAL", detail: "Architectural, fast, bespoke web platforms that signal uncompromising credibility." },
-    { title: "CREATIVE", detail: "Cinematic commercial hooks and modular UGC that convert attention into transaction." }
+    {
+      title: "AI AUTOMATION",
+      subtitle: "AI Receptionist & WhatsApp",
+      detail: "Answer incoming calls, handle FAQs, capture enquiries, book appointments, route calls and automate replies 24/7."
+    },
+    {
+      title: "WEBSITES",
+      subtitle: "Business Websites & Landing Pages",
+      detail: "Professional websites with enquiry forms and booking integrations, plus focused high-converting landing pages."
+    },
+    {
+      title: "CREATIVE PRODUCTION",
+      subtitle: "AI Photography, Video Ads & Design",
+      detail: "AI product & model photography, scripted UGC-style video ads, static ads, and multi-placement campaign creatives."
+    }
   ];
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Heading & text reveal
+      gsap.fromTo('.statement-heading-elem',
+        { opacity: 0, y: 35 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          stagger: 0.1,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 85%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+
+      // Telemetry Card reveal
+      gsap.fromTo('.statement-telemetry-card',
+        { opacity: 0, x: 30 },
+        {
+          opacity: 1,
+          x: 0,
+          duration: 0.85,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 85%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+
+      // 3 Pillar cards staggered reveal
+      gsap.fromTo('.statement-pillar-card',
+        { opacity: 0, y: 40, scale: 0.98 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.75,
+          stagger: 0.15,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: '.statement-pillars-grid',
+            start: 'top 88%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
     <section
+      ref={sectionRef}
       style={{
         position: 'relative',
         width: '100%',
@@ -28,7 +100,7 @@ export const StatementSection = () => {
     >
       <div className="site-container">
         {/* Section Index & Eyebrow */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'clamp(2rem, 4vw, 3rem)', borderBottom: '1px solid var(--color-border-gray)', paddingBottom: '1rem' }}>
+        <div className="statement-heading-elem" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'clamp(2rem, 4vw, 3rem)', borderBottom: '1px solid var(--color-border-gray)', paddingBottom: '1rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span className="micro-label-lime">01 / THE PHILOSOPHY</span>
           </div>
@@ -48,7 +120,7 @@ export const StatementSection = () => {
           {/* Left Column: Heading + Typewriter + Philosophy Subtext */}
           <div>
             <h2
-              className="display-large"
+              className="display-large statement-heading-elem"
               style={{
                 margin: '0 0 1.25rem 0',
                 lineHeight: 1.12
@@ -58,6 +130,7 @@ export const StatementSection = () => {
               <TypewriterText words={["SIMPLER.", "AUTONOMOUS.", "SCALABLE.", "FRICTIONLESS."]} />
             </h2>
             <p
+              className="statement-heading-elem"
               style={{
                 fontFamily: 'var(--font-body)',
                 fontSize: 'clamp(0.95rem, 1.2vw, 1.1rem)',
@@ -67,13 +140,13 @@ export const StatementSection = () => {
                 margin: 0
               }}
             >
-              Siloed SaaS stacks, manual data entry, and slow response times waste customer attention. We engineer cohesive digital pipelines that unite autonomous capture, AI triage, and bespoke web platforms into a continuous revenue engine.
+              Siloed systems, missed phone calls, and slow response times lose customers. We deliver three cohesive disciplines—24/7 AI automation, modern business websites, and commercial creative production—designed around how modern businesses attract, convert, and scale.
             </p>
           </div>
 
           {/* Right Column: Architectural Telemetry Card */}
           <div
-            className="arch-box"
+            className="arch-box statement-telemetry-card"
             style={{
               position: 'relative',
               backgroundColor: 'rgba(10, 10, 10, 0.75)',
@@ -88,51 +161,43 @@ export const StatementSection = () => {
             }}
           >
             <div className="corner-bracket-tl" />
-            <div className="corner-bracket-tr" />
-            <div className="corner-bracket-bl" />
             <div className="corner-bracket-br" />
 
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '0.85rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span className="lime-dot" />
-                <span className="micro-label" style={{ color: 'var(--color-warm-white)', fontWeight: 600 }}>
-                  SYSTEM BENCHMARK MATRIX
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--color-border-gray)', paddingBottom: '0.75rem' }}>
+              <span className="micro-label" style={{ color: 'var(--color-accent-lime)' }}>FOUNDATIONAL METRIC MATRIX</span>
+              <span className="micro-label">TELEMETRY LIVE</span>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
+              <div style={{ borderLeft: '2px solid var(--color-accent-lime)', paddingLeft: '10px' }}>
+                <span className="micro-label" style={{ fontSize: '0.62rem' }}>LATENCY REDUCTION</span>
+                <span style={{ display: 'block', fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 800, color: 'var(--color-warm-white)' }}>
+                  &lt; 600ms
                 </span>
+                <span style={{ fontSize: '0.65rem', color: 'var(--color-muted-gray)', fontFamily: 'var(--font-mono)' }}>Instant Voice Triage</span>
               </div>
-              <span className="micro-label-lime">AUTONOMOUS</span>
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.65rem 0.85rem', backgroundColor: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
-                <span className="micro-label" style={{ color: 'var(--color-muted-gray)' }}>LEAD RESPONSE LATENCY</span>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--color-accent-lime)', fontWeight: 700 }}>&lt; 800MS (REAL-TIME)</span>
-              </div>
-
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.65rem 0.85rem', backgroundColor: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
-                <span className="micro-label" style={{ color: 'var(--color-muted-gray)' }}>CONVERSION CHANNEL</span>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--color-warm-white)', fontWeight: 600 }}>WHATSAPP + VOICE + WEB</span>
-              </div>
-
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.65rem 0.85rem', backgroundColor: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
-                <span className="micro-label" style={{ color: 'var(--color-muted-gray)' }}>COMMUNICATION COVERAGE</span>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--color-warm-white)', fontWeight: 600 }}>24/7/365 ZERO-DROP</span>
+              <div style={{ borderLeft: '2px solid var(--color-accent-lime)', paddingLeft: '10px' }}>
+                <span className="micro-label" style={{ fontSize: '0.62rem' }}>COVERAGE WINDOW</span>
+                <span style={{ display: 'block', fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 800, color: 'var(--color-warm-white)' }}>
+                  24/7/365
+                </span>
+                <span style={{ fontSize: '0.65rem', color: 'var(--color-muted-gray)', fontFamily: 'var(--font-mono)' }}>Zero Missed Calls</span>
               </div>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '0.5rem' }}>
-              <span className="micro-label" style={{ fontSize: '0.68rem', color: 'var(--color-muted-gray)' }}>
-                ARCHITECTURAL SPECIFICATION V2.6
-              </span>
-              <CornerstoneMotif size={18} variant="bracket" />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingTop: '0.5rem', borderTop: '1px solid var(--color-border-gray)' }}>
+              <ShieldCheck size={14} color="var(--color-accent-lime)" />
+              <span className="micro-label" style={{ fontSize: '0.65rem' }}>PRODUCTION SLA • DIRECT DISPATCH PROTOCOL</span>
             </div>
           </div>
         </div>
 
-        {/* 4 Pillars Grid: AI, AUTOMATION, DIGITAL, CREATIVE */}
+        {/* 3 Pillars Grid with Micro-Animations & Staggered Reveal */}
         <div
+          className="statement-pillars-grid"
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))',
             gap: '1px',
             backgroundColor: 'var(--color-border-gray)',
             border: '1px solid var(--color-border-gray)',
@@ -146,6 +211,7 @@ export const StatementSection = () => {
                 key={pillar.title}
                 onClick={() => setActivePillar(index)}
                 onMouseEnter={() => setActivePillar(index)}
+                className="statement-pillar-card"
                 style={{
                   position: 'relative',
                   backgroundColor: isSelected ? 'var(--color-near-black)' : 'var(--color-charcoal)',

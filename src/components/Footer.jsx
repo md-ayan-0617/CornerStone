@@ -64,13 +64,20 @@ export const Footer = ({ onNavigate }) => {
             marginBottom: 'clamp(3rem, 6vw, 5rem)'
           }}
         >
-          {/* Col 1: Capabilities */}
+          {/* Col 1: Services */}
           <div>
             <span className="micro-label" style={{ display: 'block', marginBottom: '1.25rem' }}>
-              01 / CAPABILITIES
+              01 / SERVICES
             </span>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
-              {["AI SYSTEMS", "DIGITAL EXPERIENCES", "CREATIVE INFRASTRUCTURE", "GROWTH AUTOMATION"].map((item) => (
+              {[
+                "AI AUTOMATION",
+                "WEBSITES",
+                "CREATIVE PRODUCTION",
+                "AI VOICE RECEPTIONISTS",
+                "WHATSAPP AUTOMATION",
+                "AI PRODUCT & VIDEO ADS"
+              ].map((item) => (
                 <li key={item} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--color-warm-white)' }}>
                   {item}
                 </li>

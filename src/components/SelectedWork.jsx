@@ -22,22 +22,22 @@ export const SelectedWork = ({ onSelectProject }) => {
   // Realistic UI Mockup renderer for concept projects
   const renderProjectVisual = (project) => {
     switch (project.id) {
-      case "proj-01": // AI Receptionist - Healthcare
+      case "proj-01": // AI Receptionist & Voice Assistant
         return (
           <div style={{ width: '100%', height: '100%', minHeight: '320px', backgroundColor: '#0D1117', border: '1px solid #21262D', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '1.5rem', position: 'relative', overflow: 'hidden' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #21262D', paddingBottom: '0.75rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Phone size={16} color="#B8FF3D" />
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: '#F4F3EF' }}>CLINICAL VOICE DISPATCH AGENT</span>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: '#F4F3EF' }}>AI RECEPTIONIST &amp; VOICE ASSISTANT</span>
               </div>
-              <span className="micro-label-lime" style={{ fontSize: '0.62rem' }}>HIPAA READY</span>
+              <span className="micro-label-lime" style={{ fontSize: '0.62rem' }}>24/7 CALL DISPATCH</span>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', margin: 'auto 0' }}>
               <div style={{ backgroundColor: '#161B22', padding: '1rem', borderLeft: '3px solid #B8FF3D' }}>
                 <span className="micro-label" style={{ fontSize: '0.6rem' }}>VOICE TRIAGE INTERACTION:</span>
                 <p style={{ margin: '4px 0 0 0', fontFamily: 'var(--font-body)', fontSize: '0.85rem', color: '#F4F3EF' }}>
-                  "Hello, Dr. Vane's practice. I can schedule your orthopaedic evaluation or check MRI availability today."
+                  "Hello, thanks for calling. I can answer your questions, book your appointment or route your call directly."
                 </p>
               </div>
 
@@ -57,18 +57,18 @@ export const SelectedWork = ({ onSelectProject }) => {
 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '0.75rem', borderTop: '1px solid #21262D' }}>
               <span className="micro-label" style={{ fontSize: '0.62rem' }}>LATENCY: 540MS</span>
-              <span className="micro-label" style={{ fontSize: '0.62rem', color: '#B8FF3D' }}>DIRECT EHR INTEGRATION</span>
+              <span className="micro-label" style={{ fontSize: '0.62rem', color: '#B8FF3D' }}>CALENDAR &amp; CALL ROUTING</span>
             </div>
           </div>
         );
 
-      case "proj-02": // WhatsApp Lead System - Education
+      case "proj-02": // WhatsApp Automation
         return (
           <div style={{ width: '100%', height: '100%', minHeight: '320px', backgroundColor: '#0B141A', border: '1px solid #1F2C34', padding: '1.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #1F2C34', paddingBottom: '0.75rem' }}>
-              <div style={{ display: 'center', alignItems: 'center', gap: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <MessageSquare size={16} color="#B8FF3D" />
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: '#E9EDEF' }}>EXECUTIVE ADMISSIONS BOT</span>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: '#E9EDEF' }}>WHATSAPP AUTOMATION ENGINE</span>
               </div>
               <span className="micro-label" style={{ color: '#25D366' }}>WHATSAPP VERIFIED</span>
             </div>
@@ -76,64 +76,64 @@ export const SelectedWork = ({ onSelectProject }) => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', margin: 'auto 0' }}>
               <div style={{ alignSelf: 'flex-start', backgroundColor: '#202C33', padding: '8px 12px', borderRadius: '4px', maxWidth: '85%' }}>
                 <span style={{ fontSize: '0.75rem', color: '#E9EDEF', fontFamily: 'var(--font-body)' }}>
-                  "Which specialization aligns with your career target: FinTech or AI Architecture?"
+                  "Hello! How can we assist with your enquiry or booking today?"
                 </span>
               </div>
               <div style={{ alignSelf: 'flex-end', backgroundColor: '#005C4B', padding: '8px 12px', borderRadius: '4px', maxWidth: '85%' }}>
                 <span style={{ fontSize: '0.75rem', color: '#FFF', fontFamily: 'var(--font-body)' }}>
-                  "AI Architecture. Please send the curriculum PDF and faculty roster."
+                  "I'd like to check appointment availability and order details."
                 </span>
               </div>
               <div style={{ alignSelf: 'flex-start', backgroundColor: '#202C33', padding: '8px 12px', borderRadius: '4px', maxWidth: '85%' }}>
                 <span style={{ fontSize: '0.75rem', color: '#B8FF3D', fontFamily: 'monospace' }}>
-                  ✓ [PDF Generated: 2026_Executive_AI.pdf]
+                  ✓ [Enquiry Captured • Schedule Synchronized]
                 </span>
               </div>
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '0.75rem', borderTop: '1px solid #1F2C34' }}>
-              <span className="micro-label" style={{ fontSize: '0.62rem' }}>AUTOMATED HUBSPOT ROUTING</span>
+              <span className="micro-label" style={{ fontSize: '0.62rem' }}>AUTOMATED LEAD COLLECTION</span>
               <span className="micro-label" style={{ fontSize: '0.62rem', color: '#B8FF3D' }}>ZERO LATENCY</span>
             </div>
           </div>
         );
 
-      case "proj-03": // Digital Experience - Hospitality
+      case "proj-03": // Business Websites & Landing Pages
         return (
           <div style={{ width: '100%', height: '100%', minHeight: '320px', backgroundColor: '#121212', border: '1px solid #282828', padding: '1.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #282828', paddingBottom: '0.75rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Laptop size={16} color="#B8FF3D" />
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: '#F4F3EF' }}>BOUTIQUE RESIDENCE FLAGSHIP</span>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: '#F4F3EF' }}>BUSINESS WEBSITES &amp; BOOKING</span>
               </div>
-              <span className="micro-label" style={{ color: '#B8FF3D' }}>DIRECT BOOKING</span>
+              <span className="micro-label" style={{ color: '#B8FF3D' }}>ENQUIRY INTEGRATED</span>
             </div>
 
             <div style={{ margin: 'auto 0', border: '1px solid #333', padding: '1rem', backgroundColor: '#181818' }}>
-              <span className="micro-label" style={{ color: '#9B9A96' }}>PRIVATE SANCTUARY</span>
+              <span className="micro-label" style={{ color: '#9B9A96' }}>PROFESSIONAL PLATFORM</span>
               <h4 style={{ fontFamily: 'var(--font-display)', fontSize: '1.35rem', fontWeight: 700, color: '#F4F3EF', margin: '4px 0 8px 0' }}>
-                THE ALPINE SUITE
+                BESPOKE BUSINESS WEBSITE
               </h4>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #282828', paddingTop: '0.5rem' }}>
-                <span style={{ fontFamily: 'monospace', fontSize: '11px', color: '#F4F3EF' }}>€1,250 / NIGHT</span>
-                <span style={{ fontFamily: 'monospace', fontSize: '10px', color: '#B8FF3D' }}>DIRECT STRIPE CHECKOUT</span>
+                <span style={{ fontFamily: 'monospace', fontSize: '11px', color: '#F4F3EF' }}>ENQUIRY &amp; SCHEDULING FORM</span>
+                <span style={{ fontFamily: 'monospace', fontSize: '10px', color: '#B8FF3D' }}>SUB-SECOND LOAD</span>
               </div>
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '0.75rem', borderTop: '1px solid #282828' }}>
-              <span className="micro-label" style={{ fontSize: '0.62rem' }}>ZERO OTA COMMISSION</span>
-              <span className="micro-label" style={{ fontSize: '0.62rem' }}>380MS FIRST CONTENTFUL PAINT</span>
+              <span className="micro-label" style={{ fontSize: '0.62rem' }}>BOOKING INTEGRATION</span>
+              <span className="micro-label" style={{ fontSize: '0.62rem' }}>99+ CORE WEB VITALS</span>
             </div>
           </div>
         );
 
-      case "proj-04": // Modular AI Creative - Consumer Brand
+      case "proj-04": // Creative Production
         return (
           <div style={{ width: '100%', height: '100%', minHeight: '320px', backgroundColor: '#121212', border: '1px solid #282828', padding: '1.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #282828', paddingBottom: '0.75rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Layers size={16} color="#B8FF3D" />
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: '#F4F3EF' }}>MODULAR CREATIVE PIPELINE</span>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: '#F4F3EF' }}>AI CREATIVE PRODUCTION SUITE</span>
               </div>
               <span className="micro-label-lime" style={{ fontSize: '0.62rem' }}>10X ASSET VELOCITY</span>
             </div>

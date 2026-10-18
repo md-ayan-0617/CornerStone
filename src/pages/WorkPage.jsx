@@ -15,7 +15,7 @@ export const WorkPage = ({ onNavigate }) => {
   const heroRef = useRef(null);
   const progressRef = useRef(null);
 
-  const categories = ["ALL", "AI + AUTOMATION", "DIGITAL", "CREATIVE", "GROWTH"];
+  const categories = ["ALL", "AI AUTOMATION", "WEBSITES", "CREATIVE PRODUCTION"];
 
   const filteredProjects = filter === "ALL" 
     ? FEATURED_PROJECTS 

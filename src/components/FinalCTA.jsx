@@ -1,11 +1,53 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowUpRight, ShieldCheck, Clock, Layers } from 'lucide-react';
 import CornerstoneMotif from './CornerstoneMotif';
 import TypewriterText from './TypewriterText';
 
 export const FinalCTA = ({ onStartProject }) => {
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.fromTo('.final-cta-left',
+        { opacity: 0, x: -30 },
+        {
+          opacity: 1,
+          x: 0,
+          duration: 0.85,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 85%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+
+      gsap.fromTo('.final-cta-card',
+        { opacity: 0, x: 35, scale: 0.98 },
+        {
+          opacity: 1,
+          x: 0,
+          scale: 1,
+          duration: 0.85,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 85%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <section
+      ref={sectionRef}
       style={{
         position: 'relative',
         width: '100%',
@@ -41,7 +83,7 @@ export const FinalCTA = ({ onStartProject }) => {
           }}
         >
           {/* Left Column: Heading + Typing Animation + Primary CTA */}
-          <div>
+          <div className="final-cta-left">
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1.5rem' }}>
               <CornerstoneMotif size={16} variant="bracket" />
               <span className="micro-label" style={{ letterSpacing: '0.18em', color: 'var(--color-warm-white)' }}>
@@ -69,7 +111,7 @@ export const FinalCTA = ({ onStartProject }) => {
                   style={{ padding: '1.15rem 2.25rem', fontSize: '0.9rem' }}
                   data-cursor="LET'S TALK"
                 >
-                  <span>START A PROJECT</span>
+                  <span>DISCUSS YOUR PROJECT</span>
                   <ArrowUpRight size={18} />
                 </button>
               </div>
@@ -81,7 +123,7 @@ export const FinalCTA = ({ onStartProject }) => {
           </div>
 
           {/* Right Column: Architectural Advisory Dossier Card */}
-          <div>
+          <div className="final-cta-card">
             <div
               className="arch-box"
               style={{

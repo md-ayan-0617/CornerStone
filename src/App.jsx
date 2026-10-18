@@ -50,6 +50,32 @@ export function App() {
     };
   }, []);
 
+  const progressRef = React.useRef(null);
+
+  // Global GSAP Scroll Progress Indicator across all pages
+  useEffect(() => {
+    if (!progressRef.current) return;
+    const progressTween = gsap.fromTo(
+      progressRef.current,
+      { scaleX: 0 },
+      {
+        scaleX: 1,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: document.body,
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: 0.2
+        }
+      }
+    );
+
+    return () => {
+      progressTween.scrollTrigger?.kill();
+      progressTween.kill();
+    };
+  }, [currentPath]);
+
   // Minimal refined loader per Section 43
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -186,6 +212,9 @@ export function App() {
         flexDirection: 'column'
       }}
     >
+      {/* Global GSAP Scroll Progress Line */}
+      <div ref={progressRef} className="gsap-scroll-progress-line" />
+
       {/* Subtle Noise Texture Overlay */}
       <div className="noise-overlay" />
 

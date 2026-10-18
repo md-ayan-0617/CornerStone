@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import CornerstoneMotif from '../components/CornerstoneMotif';
 import FinalCTA from '../components/FinalCTA';
 import TypewriterText from '../components/TypewriterText';
@@ -6,8 +8,80 @@ import { APPROACH_STAGES, PHILOSOPHY } from '../data/siteContent';
 import { ArrowUpRight } from 'lucide-react';
 
 export const AboutPage = ({ onNavigate }) => {
+  const pageRef = useRef(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // 1. Hero Reveal
+      gsap.fromTo('.about-hero-elem',
+        { opacity: 0, y: 35 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.85,
+          stagger: 0.12,
+          ease: 'power3.out'
+        }
+      );
+
+      // 2. Monolith Studio Photo Scroll Parallax Scrub
+      gsap.fromTo('.about-monolith-img',
+        { scale: 1.08, y: -25 },
+        {
+          scale: 1.0,
+          y: 25,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: '.about-monolith-frame',
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 0.5
+          }
+        }
+      );
+
+      // 3. Four Beliefs Cards Staggered Reveal
+      gsap.fromTo('.about-belief-card',
+        { opacity: 0, y: 40, scale: 0.98 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.75,
+          stagger: 0.12,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: '.about-beliefs-grid',
+            start: 'top 85%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+
+      // 4. Approach Stages Staggered Reveal
+      gsap.fromTo('.about-approach-stage',
+        { opacity: 0, y: 45, scale: 0.98 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.8,
+          stagger: 0.16,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: '.about-approach-container',
+            start: 'top 85%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+    }, pageRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <div style={{ width: '100%', maxWidth: '100vw', overflowX: 'hidden' }}>
+    <div ref={pageRef} style={{ width: '100%', maxWidth: '100vw', overflowX: 'hidden' }}>
       
       {/* About Hero */}
       <section
@@ -19,13 +93,13 @@ export const AboutPage = ({ onNavigate }) => {
         }}
       >
         <div className="site-container">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1.5rem' }}>
+          <div className="about-hero-elem" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1.5rem' }}>
             <CornerstoneMotif size={16} variant="bracket" />
             <span className="micro-label-lime">ABOUT THE STUDIO</span>
           </div>
 
           <h1
-            className="display-mega"
+            className="display-mega about-hero-elem"
             style={{
               margin: '0 0 1.75rem 0',
               maxWidth: '22ch'
@@ -35,7 +109,7 @@ export const AboutPage = ({ onNavigate }) => {
             <TypewriterText words={["MODERN BUSINESS.", "AUTONOMOUS SCALE.", "ENTERPRISE VELOCITY."]} />
           </h1>
 
-          <div style={{ borderTop: '1px solid var(--color-border-gray)', paddingTop: '2rem', maxWidth: '48ch', marginBottom: '2.5rem' }}>
+          <div className="about-hero-elem" style={{ borderTop: '1px solid var(--color-border-gray)', paddingTop: '2rem', maxWidth: '48ch', marginBottom: '2.5rem' }}>
             <p
               style={{
                 fontFamily: 'var(--font-body)',
@@ -45,23 +119,24 @@ export const AboutPage = ({ onNavigate }) => {
                 margin: 0
               }}
             >
-              Cornerstone combines technology, design and creativity to help businesses build better ways to attract, communicate with and serve their customers.
+              Cornerstone unites 24/7 AI automation, modern business websites, and commercial creative production to help businesses attract, convert, and serve customers.
             </p>
           </div>
 
-          {/* Architectural Studio Showcase with Hover Effect */}
+          {/* Architectural Studio Showcase with Hover Effect & Parallax Scrub */}
           <div
-            className="img-hover-frame"
+            className="img-hover-frame about-monolith-frame about-hero-elem"
             style={{
               height: 'clamp(280px, 48vh, 500px)',
               width: '100%',
-              marginTop: '1rem'
+              marginTop: '1rem',
+              overflow: 'hidden'
             }}
           >
             <img
               src="/images/about-monolith.jpg"
               alt="Cornerstone Studio Monolith"
-              className="img-hover-zoom"
+              className="img-hover-zoom about-monolith-img"
               loading="lazy"
             />
             <div className="corner-bracket-tl" />
@@ -92,6 +167,7 @@ export const AboutPage = ({ onNavigate }) => {
           </div>
 
           <div
+            className="about-beliefs-grid"
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
@@ -103,13 +179,21 @@ export const AboutPage = ({ onNavigate }) => {
             {PHILOSOPHY.map((item, idx) => (
               <div
                 key={idx}
+                className="about-belief-card"
                 style={{
                   backgroundColor: 'var(--color-near-black)',
                   padding: 'clamp(1.75rem, 3.5vw, 3rem)',
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
-                  minHeight: '260px'
+                  minHeight: '260px',
+                  transition: 'background-color 0.25s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#111111';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'var(--color-near-black)';
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
@@ -174,11 +258,11 @@ export const AboutPage = ({ onNavigate }) => {
             <CornerstoneMotif size={24} variant="foundation" />
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          <div className="about-approach-container" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             {APPROACH_STAGES.map((stage) => (
               <div
                 key={stage.number}
-                className="arch-box"
+                className="arch-box about-approach-stage"
                 style={{
                   padding: 'clamp(1.75rem, 3.5vw, 2.75rem)',
                   backgroundColor: 'var(--color-charcoal)'
@@ -239,7 +323,7 @@ export const AboutPage = ({ onNavigate }) => {
             ))}
           </div>
 
-          {/* Bottom Philosophy Statement from Section 17 */}
+          {/* Bottom Philosophy Statement */}
           <div style={{ marginTop: 'clamp(4rem, 8vw, 6rem)', paddingTop: '2.5rem', borderTop: '1px solid var(--color-border-gray)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>
             <h3
               className="display-large"

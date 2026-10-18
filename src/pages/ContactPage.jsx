@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import CornerstoneMotif from '../components/CornerstoneMotif';
 import TypewriterText from '../components/TypewriterText';
 import { CONTACT_BUDGETS, CONTACT_TIMELINES, CONTACT_SERVICES } from '../data/siteContent';
@@ -20,6 +22,7 @@ import {
 } from 'lucide-react';
 
 export const ContactPage = () => {
+  const pageRef = useRef(null);
   const [formData, setFormData] = useState({
     name: '',
     company: '',
@@ -36,6 +39,76 @@ export const ContactPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
   const [openFaq, setOpenFaq] = useState(0); // first FAQ open by default
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // 1. Hero Reveal
+      gsap.fromTo('.contact-hero-elem',
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          stagger: 0.1,
+          ease: 'power3.out'
+        }
+      );
+
+      // 2. Intake Form Columns Reveal
+      gsap.fromTo('.contact-anim-col',
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.85,
+          stagger: 0.15,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: '.contact-form-grid',
+            start: 'top 85%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+
+      // 3. Intake Protocol Steps Stagger
+      gsap.fromTo('.contact-protocol-step',
+        { opacity: 0, y: 35, scale: 0.98 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.75,
+          stagger: 0.14,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: '.contact-protocol-grid',
+            start: 'top 85%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+
+      // 4. FAQ items stagger
+      gsap.fromTo('.contact-faq-item',
+        { opacity: 0, y: 25 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.65,
+          stagger: 0.08,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: '.contact-faq-list',
+            start: 'top 85%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+    }, pageRef);
+
+    return () => ctx.revert();
+  }, []);
 
   const toggleFaq = (idx) => {
     setOpenFaq(openFaq === idx ? null : idx);
@@ -94,7 +167,7 @@ export const ContactPage = () => {
   };
 
   return (
-    <div style={{ width: '100%', maxWidth: '100vw', overflowX: 'hidden' }}>
+    <div ref={pageRef} style={{ width: '100%', maxWidth: '100vw', overflowX: 'hidden' }}>
       
       {/* Contact Header */}
       <section
@@ -106,13 +179,13 @@ export const ContactPage = () => {
         }}
       >
         <div className="site-container">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1.5rem' }}>
+          <div className="contact-hero-elem" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1.5rem' }}>
             <CornerstoneMotif size={16} variant="bracket" />
             <span className="micro-label-lime">PROJECT INQUIRY &amp; ARCHITECTURAL INTAKE</span>
           </div>
 
           <h1
-            className="display-mega"
+            className="display-mega contact-hero-elem"
             style={{
               margin: '0 0 1.5rem 0',
               maxWidth: '22ch'
@@ -122,7 +195,7 @@ export const ContactPage = () => {
             <TypewriterText words={["BUILDING?", "SCALING?", "AUTOMATING?", "LAUNCHING?"]} />
           </h1>
 
-          <div style={{ borderTop: '1px solid var(--color-border-gray)', paddingTop: '1.75rem', maxWidth: '48ch' }}>
+          <div className="contact-hero-elem" style={{ borderTop: '1px solid var(--color-border-gray)', paddingTop: '1.75rem', maxWidth: '48ch' }}>
             <p
               style={{
                 fontFamily: 'var(--font-body)',
@@ -148,6 +221,7 @@ export const ContactPage = () => {
       >
         <div className="site-container">
           <div
+            className="contact-form-grid"
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 340px), 1fr))',
@@ -156,7 +230,7 @@ export const ContactPage = () => {
           >
             
             {/* Left: Contact Information & Expectations */}
-            <div>
+            <div className="contact-anim-col">
               <div style={{ marginBottom: '2.5rem' }}>
                 <span className="micro-label" style={{ display: 'block', marginBottom: '1rem' }}>
                   DIRECT ADVISORY CHANNEL
@@ -267,7 +341,7 @@ export const ContactPage = () => {
             </div>
 
             {/* Right: Architectural Intake Form */}
-            <div>
+            <div className="contact-anim-col">
               {submitted ? (
                 <div
                   style={{
@@ -631,6 +705,7 @@ export const ContactPage = () => {
           </div>
 
           <div
+            className="contact-protocol-grid"
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))',
@@ -639,7 +714,7 @@ export const ContactPage = () => {
           >
             {/* Step 1 */}
             <div
-              className="arch-box"
+              className="arch-box contact-protocol-step"
               style={{
                 padding: 'clamp(1.75rem, 3vw, 2.5rem)',
                 backgroundColor: 'var(--color-charcoal)',
@@ -673,7 +748,7 @@ export const ContactPage = () => {
 
             {/* Step 2 */}
             <div
-              className="arch-box"
+              className="arch-box contact-protocol-step"
               style={{
                 padding: 'clamp(1.75rem, 3vw, 2.5rem)',
                 backgroundColor: 'var(--color-charcoal)',
@@ -707,7 +782,7 @@ export const ContactPage = () => {
 
             {/* Step 3 */}
             <div
-              className="arch-box"
+              className="arch-box contact-protocol-step"
               style={{
                 padding: 'clamp(1.75rem, 3vw, 2.5rem)',
                 backgroundColor: 'var(--color-charcoal)',
@@ -795,27 +870,27 @@ export const ContactPage = () => {
             </div>
 
             {/* Right Column: Expandable FAQ List */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+            <div className="contact-faq-list" style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
               {[
                 {
-                  q: "How quickly can an AI receptionist or WhatsApp workflow go live?",
-                  a: "Standard conversational pipelines, clinical voice triage, and WhatsApp Cloud API agents typically deploy to staging within 7 to 14 business days. Custom enterprise flagships and multi-funnel growth telemetry stacks launch in 3 to 5 weeks with full unit tests."
+                  q: "How quickly can an AI receptionist or WhatsApp automation system go live?",
+                  a: "Standard AI receptionist voice assistants and WhatsApp automation workflows typically deploy to staging within 7 to 14 business days. We configure your incoming call handling, FAQ responses, enquiry capture, and appointment booking flows directly into your calendar and CRM."
                 },
                 {
-                  q: "Do you build custom solutions or use off-the-shelf templates?",
-                  a: "Every Cornerstone system is built from scratch. We write bespoke codebases on modern React/Vite, train domain-specific AI agents on your proprietary SOPs and knowledge bases, and configure low-latency webhooks directly into your CRM, EHR, or booking engines."
+                  q: "What is included with Business Websites and Landing Pages?",
+                  a: "Every business website and landing page is custom engineered for maximum performance, with modern typography, mobile responsiveness, and integrated enquiry forms and appointment booking calendars. We build from scratch for sub-second load times and high conversion."
                 },
                 {
-                  q: "Who owns the code, intellectual property, and model prompts?",
-                  a: "You own 100% of all intellectual property, source repositories, prompt definitions, and customer databases upon final deployment. We never lock clients into proprietary black boxes or closed platforms."
+                  q: "How does Creative Production (AI photography, UGC video ads & ad creative) work?",
+                  a: "We produce commercial-grade AI product & model photography (jewellery, fashion, beauty, and product visuals), scripted vertical 9:16 UGC-style video ads with natural AI spokespersons, and coordinated multi-placement static ad designs and carousels ready for digital ad campaigns."
                 },
                 {
-                  q: "How does Cornerstone handle enterprise compliance & data privacy?",
-                  a: "We adhere strictly to HIPAA, GDPR, and enterprise SOC-2 guidelines. Audio streams, patient inquiries, and customer transactions are encrypted in transit and at rest with zero unauthorized model training on your data."
+                  q: "Which businesses do you typically work with?",
+                  a: "Our AI automation serves salons, clinics, restaurants, real estate, and service businesses. Our websites support new businesses and companies with outdated websites. Our creative production is calibrated for jewellery, fashion, beauty and ecommerce brands running digital ads."
                 },
                 {
-                  q: "What ongoing maintenance and monitoring do you provide after launch?",
-                  a: "Every deployment includes 30 days of complimentary hypercare. Following launch, our Retainer Protocol provides 24/7 uptime monitoring, latency tracking, prompt drift calibration, and scheduled system upgrades to ensure zero degradation."
+                  q: "Who owns the code, assets, model shoots, and model prompts?",
+                  a: "You own 100% of all intellectual property, source repositories, generated photography and video assets, prompt definitions, and customer databases upon deployment. We never lock clients into closed proprietary systems."
                 }
               ].map((faq, index) => {
                 const isOpen = openFaq === index;
@@ -823,7 +898,7 @@ export const ContactPage = () => {
                   <div
                     key={index}
                     onClick={() => toggleFaq(index)}
-                    className="arch-box"
+                    className="arch-box contact-faq-item"
                     style={{
                       backgroundColor: isOpen ? '#141414' : '#0D0D0D',
                       border: '1px solid',

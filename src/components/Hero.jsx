@@ -1,10 +1,13 @@
 import React, { useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import CornerstoneMotif from './CornerstoneMotif';
 import { ArrowUpRight, ArrowDown } from 'lucide-react';
 import TypewriterText from './TypewriterText';
 
-export const Hero = ({ onExploreWork, onStartProject }) => {
+export const Hero = ({ onExploreWork, onStartProject, onExploreServices }) => {
   const canvasRef = useRef(null);
+  const heroRef = useRef(null);
 
   // Cinematic architectural background canvas: subtle structural grid, subtle moving beam, precision coordinates
   useEffect(() => {
@@ -86,8 +89,54 @@ export const Hero = ({ onExploreWork, onStartProject }) => {
     };
   }, []);
 
+  // GSAP Entrance Timeline & ScrollTrigger Parallax
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // 1. Staggered Hero Elements Entrance
+      gsap.fromTo('.hero-anim-elem',
+        { opacity: 0, y: 35 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.9,
+          stagger: 0.12,
+          ease: 'power3.out'
+        }
+      );
+
+      // 2. Scroll Parallax Scrub as user scrolls down
+      if (heroRef.current) {
+        gsap.to('.hero-content-layer', {
+          y: 70,
+          opacity: 0.35,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: heroRef.current,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 0.4
+          }
+        });
+
+        gsap.to(canvasRef.current, {
+          y: 100,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: heroRef.current,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 0.2
+          }
+        });
+      }
+    }, heroRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <section
+      ref={heroRef}
       style={{
         position: 'relative',
         minHeight: '100svh',
@@ -117,19 +166,19 @@ export const Hero = ({ onExploreWork, onStartProject }) => {
       />
 
       {/* Hero Content Layer */}
-      <div className="site-container" style={{ position: 'relative', zIndex: 2, width: '100%', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+      <div className="site-container hero-content-layer" style={{ position: 'relative', zIndex: 2, width: '100%', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         
         {/* Top Eyebrow / Architectural Coordinate */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem', marginBottom: 'clamp(1.5rem, 3.5vh, 2.5rem)' }}>
+        <div className="hero-anim-elem" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem', marginBottom: 'clamp(1.5rem, 3.5vh, 2.5rem)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <CornerstoneMotif size={16} variant="bracket" />
             <span className="micro-label" style={{ letterSpacing: '0.16em', color: 'var(--color-warm-white)' }}>
-              CORNERSTONE / DIGITAL SYSTEMS + CREATIVE
+              CORNERSTONE / AI AUTOMATION • WEBSITES • CREATIVE PRODUCTION
             </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <span className="micro-label" style={{ color: 'var(--color-muted-gray)' }}>
-              EST. 2026 • ARCHITECTURAL AI
+              EST. 2026 • THREE CORE DISCIPLINES
             </span>
             <span className="lime-dot" style={{ width: '5px', height: '5px' }} />
           </div>
@@ -137,17 +186,18 @@ export const Hero = ({ onExploreWork, onStartProject }) => {
 
         {/* Main Headline with Typewriter Animation */}
         <h1
-          className="display-mega"
+          className="display-mega hero-anim-elem"
           style={{
             margin: '0 0 clamp(1.5rem, 3.5vh, 2.5rem) 0',
             maxWidth: '18ch'
           }}
         >
-          BUILD <TypewriterText words={["WHAT'S NEXT.", "INTELLIGENT SYSTEMS.", "THE FUTURE."]} />
+          BUILD <TypewriterText words={["WHAT'S NEXT.", "AI AUTOMATION.", "BUSINESS WEBSITES.", "CREATIVE PRODUCTION."]} />
         </h1>
 
         {/* Supporting Copy & Grid Intersect */}
         <div
+          className="hero-anim-elem"
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 340px), 1fr))',
@@ -164,11 +214,12 @@ export const Hero = ({ onExploreWork, onStartProject }) => {
                 fontSize: 'clamp(1.05rem, 1.6vw, 1.35rem)',
                 lineHeight: 1.45,
                 color: 'var(--color-warm-white)',
-                maxWidth: '38ch',
-                margin: 0
+                maxWidth: '42ch',
+                margin: 0,
+                fontWeight: 600
               }}
             >
-              AI systems, digital experiences and creative built for modern businesses.
+              AI automation, modern websites, and commercial creative production for forward-thinking businesses.
             </p>
             <p
               style={{
@@ -176,11 +227,11 @@ export const Hero = ({ onExploreWork, onStartProject }) => {
                 fontSize: 'clamp(0.85rem, 1.1vw, 0.95rem)',
                 lineHeight: 1.6,
                 color: 'var(--color-muted-gray)',
-                maxWidth: '44ch',
+                maxWidth: '46ch',
                 marginTop: '0.75rem'
               }}
             >
-              We engineer the digital foundation behind customer acquisition, 24/7 autonomous communication, and business scale.
+              We engineer 24/7 AI voice receptionists, WhatsApp messaging workflows, high-converting business websites, and studio-grade AI creative to help you attract, convert and serve customers.
             </p>
           </div>
 
@@ -192,16 +243,16 @@ export const Hero = ({ onExploreWork, onStartProject }) => {
               style={{ padding: '1rem 1.85rem' }}
               data-cursor="CONTACT"
             >
-              <span>START A PROJECT</span>
+              <span>DISCUSS YOUR PROJECT</span>
               <ArrowUpRight size={16} />
             </button>
             <button
-              onClick={onExploreWork}
+              onClick={onExploreServices || onExploreWork}
               className="btn-cornerstone-secondary"
               style={{ padding: '1rem 1.85rem' }}
-              data-cursor="PORTFOLIO"
+              data-cursor="SERVICES"
             >
-              <span>EXPLORE WORK</span>
+              <span>EXPLORE OUR SERVICES</span>
             </button>
           </div>
         </div>
@@ -209,7 +260,7 @@ export const Hero = ({ onExploreWork, onStartProject }) => {
       </div>
 
       {/* Bottom Technical Telemetry Bar */}
-      <div className="site-container" style={{ position: 'relative', zIndex: 2, width: '100%', paddingTop: '1.5rem' }}>
+      <div className="site-container hero-anim-elem" style={{ position: 'relative', zIndex: 2, width: '100%', paddingTop: '1.5rem' }}>
         <div
           style={{
             display: 'flex',
@@ -222,9 +273,9 @@ export const Hero = ({ onExploreWork, onStartProject }) => {
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
-            <span className="micro-label">LATENCY &lt; 600MS</span>
-            <span className="micro-label">FULL-FUNNEL SYNCHRONIZATION</span>
-            <span className="micro-label">ENTERPRISE COMPLIANT</span>
+            <span className="micro-label">SERVICE 01 // AI AUTOMATION</span>
+            <span className="micro-label">SERVICE 02 // WEBSITES</span>
+            <span className="micro-label">SERVICE 03 // CREATIVE PRODUCTION</span>
           </div>
 
           <button

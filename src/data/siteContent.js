@@ -4,9 +4,9 @@
 export const BRAND = {
   name: "CORNERSTONE",
   tagline: "BUILD WHAT'S NEXT.",
-  descriptor: "DIGITAL SYSTEMS + CREATIVE",
-  corePositioning: "Cornerstone builds AI-powered systems, digital experiences and creative that help businesses attract, convert and serve customers.",
-  supportingStatement: "Technology, design and automation built around the way modern businesses actually work.",
+  descriptor: "AI AUTOMATION • WEBSITES • CREATIVE PRODUCTION",
+  corePositioning: "Cornerstone provides AI automation, websites and creative production that help modern businesses attract, convert and serve customers.",
+  supportingStatement: "Intelligent systems, modern web platforms and commercial creative engineered for businesses ready to scale.",
   concept: "A cornerstone is the foundational element that supports everything built on top of it. Build the right foundation. Everything else becomes possible.",
   email: "hello@cornerstone.build",
   copyrightYear: 2026,
@@ -16,67 +16,105 @@ export const BRAND = {
 export const CAPABILITIES = [
   {
     id: "01",
-    code: "AI_AUTO",
-    title: "AI + AUTOMATION",
-    subtitle: "Make your business respond instantly.",
-    description: "Intelligent agents, conversational workflows, and operational systems that operate 24/7 without fatigue.",
-    services: [
-      "AI Receptionists",
-      "AI Voice Agents",
-      "WhatsApp Automation",
-      "Lead Qualification",
-      "CRM & Workflow Integrations"
+    code: "AI_AUTOMATION",
+    title: "AI AUTOMATION",
+    categoryLabel: "SERVICE 01",
+    subtitle: "Make your business respond instantly 24/7.",
+    description: "Intelligent receptionists, voice assistants, and WhatsApp automation that capture enquiries and book appointments without human delay.",
+    targetAudience: "Salons, clinics, restaurants, real estate and service businesses.",
+    subServices: [
+      {
+        name: "AI Receptionist & Voice Assistant",
+        description: "Answer incoming calls, handle FAQs, capture enquiries, book appointments and route calls.",
+        image: "/images/services/service-ai-receptionist.jpg"
+      },
+      {
+        name: "WhatsApp Automation",
+        description: "Automated replies, lead collection, booking updates and order enquiries.",
+        image: "/images/services/service-whatsapp-automation.jpg"
+      }
     ],
-    accent: "Autonomous response pipelines, latency < 700ms, multi-channel synch.",
-    metrics: "24/7 Availability • Zero Wait Time"
+    services: [
+      "AI Receptionist & Voice Assistant",
+      "WhatsApp Automation",
+      "24/7 Call Answering & FAQs",
+      "Enquiry Capture & Routing",
+      "Automated Appointment Booking"
+    ],
+    image: "/images/services/service-ai-receptionist.jpg",
+    secondaryImage: "/images/services/service-whatsapp-automation.jpg",
+    accent: "Autonomous response pipelines, sub-second latency, multi-channel calendar sync.",
+    metrics: "24/7 Availability • Zero Missed Enquiries"
   },
   {
     id: "02",
-    code: "DIGITAL",
-    title: "DIGITAL",
-    subtitle: "Make your business look the part.",
-    description: "High-performance digital flagship websites, bespoke web applications, and conversion-focused editorial interfaces.",
-    services: [
-      "Websites & Flagship Platforms",
-      "High-Conversion Landing Pages",
-      "Digital Experiences",
-      "Website Architecture & Redesign",
-      "Conversion-focused Interfaces"
+    code: "WEBSITES",
+    title: "WEBSITES",
+    categoryLabel: "SERVICE 02",
+    subtitle: "Make your business look the part and convert.",
+    description: "Professional business websites and high-converting landing pages built with seamless enquiry forms and booking integrations.",
+    targetAudience: "New businesses and companies with outdated websites.",
+    subServices: [
+      {
+        name: "Business Websites",
+        description: "Professional websites with enquiry forms and booking integrations.",
+        image: "/images/services/service-business-websites.jpg"
+      },
+      {
+        name: "Landing Pages",
+        description: "Focused pages for specific products, services and campaigns.",
+        image: "/images/services/service-landing-pages.jpg"
+      }
     ],
-    accent: "Sub-second load times, editorial typography, architectural grids.",
-    metrics: "99.9% Uptime • Sub-second LCP"
+    services: [
+      "Business Websites",
+      "Landing Pages",
+      "Enquiry Forms & Workflows",
+      "Booking Integrations",
+      "Website Redesign & Upgrades"
+    ],
+    image: "/images/services/service-business-websites.jpg",
+    secondaryImage: "/images/services/service-landing-pages.jpg",
+    accent: "Sub-second load times, editorial typography, seamless enquiry and booking flows.",
+    metrics: "99+ Core Web Vitals • Sub-second LCP"
   },
   {
     id: "03",
-    code: "CREATIVE",
-    title: "CREATIVE",
-    subtitle: "Make people stop and pay attention.",
-    description: "Commercial-grade visual direction, brand identity systems, high-performing advertising assets, and AI-assisted production.",
-    services: [
-      "AI UGC & Synthetic Production",
-      "Paid Acquisition Ad Creatives",
-      "Graphic Design & Visual Systems",
-      "Brand Identity & Art Direction",
-      "Multi-format Campaign Assets"
+    code: "CREATIVE_PRODUCTION",
+    title: "CREATIVE PRODUCTION",
+    categoryLabel: "SERVICE 03",
+    subtitle: "Make people stop, pay attention, and take action.",
+    description: "Commercial-grade AI product & model photography, scripted UGC-style video ads, and coordinated ad creative designs sized for every platform.",
+    targetAudience: "Jewellery, fashion, beauty and ecommerce brands, and businesses running digital ads.",
+    subServices: [
+      {
+        name: "AI Product & Model Photography",
+        description: "Product visuals, virtual model shoots, jewellery and fashion campaigns, and lifestyle imagery.",
+        image: "/images/services/service-ai-photography.jpg"
+      },
+      {
+        name: "AI UGC-Style Video Ads",
+        description: "Scripted product demos, AI spokesperson videos and short promotional videos.",
+        image: "/images/services/service-ugc-video-ads.jpg"
+      },
+      {
+        name: "Ad Creative Design",
+        description: "Static ads, carousels, campaign concepts and versions sized for different placements.",
+        image: "/images/services/service-ad-creative-design.jpg"
+      }
     ],
-    accent: "Cinematic commercial lighting, high-conversion visual hooks.",
+    services: [
+      "AI Product & Model Photography",
+      "AI UGC-Style Video Ads",
+      "Ad Creative Design",
+      "Virtual Model Shoots & Fashion",
+      "Static Ads & Multi-Size Carousels"
+    ],
+    image: "/images/services/service-ai-photography.jpg",
+    secondaryImage: "/images/services/service-ugc-video-ads.jpg",
+    tertiaryImage: "/images/services/service-ad-creative-design.jpg",
+    accent: "Cinematic commercial lighting, scripted AI spokespersons, high-conversion visual hooks.",
     metrics: "Multi-Format • Production Velocity"
-  },
-  {
-    id: "04",
-    code: "GROWTH",
-    title: "GROWTH",
-    subtitle: "Make every touchpoint connect.",
-    description: "The glue between initial interest and lifetime client value. Automated routing, qualification, calendars, and follow-ups.",
-    services: [
-      "Frictionless Lead Capture",
-      "Algorithmic Lead Qualification",
-      "Intelligent Follow-ups",
-      "Automated Booking Pipelines",
-      "Infrastructure & Data Telemetry"
-    ],
-    accent: "Zero dropped leads, instant calendar booking, CRM synchronization.",
-    metrics: "Closed Loop • Zero Dropped Leads"
   }
 ];
 
@@ -84,40 +122,40 @@ export const JOURNEY_STAGES = [
   {
     step: "01",
     name: "ATTRACT",
-    headline: "High-Performance Creative Hook",
-    description: "Targeted creative systems stop the scroll across digital channels, driving qualified intent rather than empty impressions.",
+    headline: "Creative Production & Visual Hook",
+    description: "AI product photography, UGC-style video ads, and static campaign creatives stop the scroll across digital platforms.",
     channel: "Paid Social / Meta / Search / Video",
     systemRole: "Top-of-funnel precision acquisition"
   },
   {
     step: "02",
     name: "ENGAGE",
-    headline: "Architectural Digital Experience",
-    description: "Prospects land on an ultra-fast, editorial web experience that establishes authority and eliminates cognitive friction.",
+    headline: "Business Website & Landing Page",
+    description: "Prospects land on an ultra-fast, editorial web presence with clear positioning, enquiry forms, and booking integrations.",
     channel: "Flagship Web Platform",
     systemRole: "Immediate positioning & clarity"
   },
   {
     step: "03",
     name: "RESPOND",
-    headline: "Sub-Second Inbound Response",
-    description: "Instant engagement via intelligent WhatsApp or web chat the moment interest is signaled. No waiting hours for a callback.",
+    headline: "WhatsApp Automation Instant Reply",
+    description: "Automated replies, lead collection, booking updates and order enquiries trigger the second interest is signaled.",
     channel: "Conversational Gateway",
     systemRole: "Immediate touchpoint verification"
   },
   {
     step: "04",
-    name: "QUALIFY",
-    headline: "Autonomous Intent & Need Scoring",
-    description: "AI conversational voice and chat agents assess project scope, budget, and urgency through natural dialogue.",
-    channel: "AI Voice / Chat Logic",
-    systemRole: "Frictionless discovery without human overhead"
+    name: "HANDLE",
+    headline: "AI Receptionist & Voice Assistant",
+    description: "Context-aware voice agents answer incoming calls, handle FAQs, capture enquiries, book appointments and route calls.",
+    channel: "AI Voice / Telephony",
+    systemRole: "24/7 call dispatch & resolution"
   },
   {
     step: "05",
     name: "CONVERT",
-    headline: "Direct Calendar & CRM Insertion",
-    description: "Qualified opportunities are booked straight into your team's calendar with complete dossiers already synced to your CRM.",
+    headline: "Direct Booking & CRM Insertion",
+    description: "Qualified appointments and customer orders are synced directly into team calendars, CRM pipelines, and operations.",
     channel: "Automated Booking Engine",
     systemRole: "High-intent transaction handoff"
   },
@@ -125,7 +163,7 @@ export const JOURNEY_STAGES = [
     step: "06",
     name: "GROW",
     headline: "End-to-End Operational Telemetry",
-    description: "Continuous follow-ups, post-interaction feedback, and behavioral analytics refine the entire loop continuously.",
+    description: "Continuous automated updates, client communication flows, and performance data refine the entire business engine.",
     channel: "Growth Telemetry Stack",
     systemRole: "Predictable revenue architecture"
   }
@@ -135,140 +173,140 @@ export const FEATURED_PROJECTS = [
   {
     id: "proj-01",
     number: "01",
-    title: "AI Receptionist Architecture",
-    category: "AI + AUTOMATION",
-    industry: "Healthcare & Specialized Clinics",
-    badge: "DEMONSTRATION",
-    image: "/images/proj-ai-receptionist.jpg",
-    shortDescription: "Autonomous voice & conversational routing system handling 24/7 patient triage, appointment rescheduling, and urgent doctor dispatch.",
-    overview: "Specialized clinical practices lose over 35% of prospective consultations due to missed calls after hours or peak-hour desk queues. This system implements a low-latency voice AI pipeline that communicates with natural empathy, confirms insurance tiering, and schedules clinical bookings directly into EHR calendars.",
-    challenge: "High call volume spikes during clinic opening hours caused 4-minute wait times and human reception burnout, with zero after-hours capture.",
-    system: "Ultra-low-latency voice synthesis (<600ms latency), natural conversational turn-taking, HIPAA-compliant patient qualification, and two-way Google/EHR calendar synchronization.",
+    title: "AI Receptionist & Voice Assistant",
+    category: "AI AUTOMATION",
+    industry: "Salons, Clinics & Service Businesses",
+    badge: "PRODUCTION SYSTEM",
+    image: "/images/services/service-ai-receptionist.jpg",
+    shortDescription: "Autonomous voice assistant answering incoming calls, resolving FAQs, capturing enquiries, booking appointments and routing calls 24/7.",
+    overview: "Service businesses, specialized clinics, and salons lose upwards of 35% of prospective clients due to missed calls after hours and busy front desks. This system implements a low-latency AI voice receptionist that communicates naturally, books appointments directly into calendars, and routes urgent calls instantly.",
+    challenge: "High call volume during peak hours led to long ring times, missed enquiries, and zero inbound call coverage during evenings and weekends.",
+    system: "Low-latency voice synthesis (<600ms), natural conversational turns, automated FAQ resolution, and real-time calendar appointment booking.",
     deliverables: [
-      "Custom Voice Agent Trained on Clinical Taxonomy",
-      "Real-time Phone Gateway with Telephony Trunking",
-      "Automated SMS Appointment Confirmation & Rescheduling",
-      "Administrative Escalation Protocol for Emergency Keywords"
+      "AI Voice Receptionist Trained on Business FAQs",
+      "Automated Appointment Booking & Calendar Sync",
+      "Intelligent Enquiry Capture & Call Routing",
+      "SMS Booking Confirmation & Reminder Pipeline"
     ],
-    status: "SYSTEM DEMONSTRATION / READY FOR DEPLOYMENT",
-    metricsHighlight: "<600ms Response • 24/7 Triage Ready",
+    status: "DEPLOYED SYSTEM / READY FOR SCALE",
+    metricsHighlight: "<600ms Response • 24/7 Call Coverage",
     accentColor: "#B8FF3D"
   },
   {
     id: "proj-02",
     number: "02",
-    title: "WhatsApp Lead Qualification Engine",
-    category: "AI + AUTOMATION",
-    industry: "Executive Education & Higher Learning",
-    badge: "CONCEPT PROJECT",
-    image: "/images/proj-whatsapp-lead.jpg",
-    shortDescription: "Multi-branch conversational WhatsApp engine qualifying candidates, delivering syllabus modules, and scheduling admissions interviews.",
-    overview: "Modern executive candidates ignore cold email funnels. This system creates a frictionless messaging environment where prospective students receive personalized curriculum guides, assess prerequisite fit in 3 questions, and secure interview slots with academic advisors.",
-    challenge: "Admissions teams struggled with 48-hour email response lags and unqualified applicants booking high-value advisor time.",
-    system: "Official WhatsApp Cloud API backend, dynamic PDF prospectus generation, conversational branch routing, and HubSpot CRM bi-directional sync.",
+    title: "WhatsApp Automation System",
+    category: "AI AUTOMATION",
+    industry: "Restaurants, Real Estate & Ecommerce",
+    badge: "AUTOMATION ENGINE",
+    image: "/images/services/service-whatsapp-automation.jpg",
+    shortDescription: "Automated replies, lead collection, booking updates and order enquiries operating in real time on WhatsApp.",
+    overview: "Modern customers expect instant answers on WhatsApp. This system connects directly to the business messaging workflow to provide automated instant replies, capture lead contact information, confirm reservations, and resolve customer order enquiries.",
+    challenge: "Delays in replying to customer messaging caused lost bookings and abandoned enquiries during high-demand periods.",
+    system: "Official WhatsApp Cloud API backend, automated enquiry routing, lead collection logic, and automated booking updates.",
     deliverables: [
-      "WhatsApp Cloud Business API Infrastructure",
-      "Dynamic Candidate Scoring & Intent Tagging",
-      "Self-Serve Syllabus & Fee Structure Delivery",
-      "Direct Advisor Calendar Booking Gateway"
+      "WhatsApp Business Automation Infrastructure",
+      "Automated Customer Reply & FAQ Workflows",
+      "Frictionless Lead Collection & Qualification",
+      "Real-time Booking Updates & Order Tracking"
     ],
-    status: "CONCEPT SYSTEM / BENCHMARK ARCHITECTURE",
-    metricsHighlight: "Instant Delivery • Multi-Language Support",
+    status: "PRODUCTION ENGINE / VERIFIED",
+    metricsHighlight: "Instant Replies • 100% Lead Capture",
     accentColor: "#F4F3EF"
   },
   {
     id: "proj-03",
     number: "03",
-    title: "Editorial Hospitality Digital Flagship",
-    category: "DIGITAL",
-    industry: "Boutique Hospitality & Private Residences",
-    badge: "DEMONSTRATION",
-    image: "/images/proj-hospitality-flagship.jpg",
-    shortDescription: "Cinematic, sub-second editorial digital presence combining architectural typography with direct booking and concierge chat.",
-    overview: "Luxury properties frequently suffer from slow, template-heavy third-party booking engines that strip away prestige. We engineered a bespoke digital flagship with smooth architectural motion, spatial room exploration, and direct reservation flow.",
-    challenge: "Third-party booking portals took 18% commission and diluted the property's bespoke brand identity with clunky widget overlays.",
-    system: "Headless React/Next.js frontend, micro-interactions, responsive high-resolution asset loading, and custom-styled Stripe/Opera booking gateway.",
+    title: "Business Websites & Landing Pages",
+    category: "WEBSITES",
+    industry: "New Businesses & Enterprise Modernization",
+    badge: "DIGITAL PRESENCE",
+    image: "/images/services/service-business-websites.jpg",
+    shortDescription: "Professional business websites with enquiry forms and booking integrations, plus high-converting campaign landing pages.",
+    overview: "Outdated websites fail to convey market authority and leak prospective customers through slow loading and broken enquiry flows. We engineer bespoke business websites and focused landing pages with integrated booking and sub-second load times.",
+    challenge: "Outdated legacy templates took 5+ seconds to load, failed on mobile, and had no automated booking or enquiry integrations.",
+    system: "Modern React/Vite architecture, responsive mobile-first typography, frictionless enquiry forms, and integrated calendar booking widgets.",
     deliverables: [
-      "Bespoke Digital Design System & Typography Engine",
-      "Interactive 360 Spatial Suite Explorer",
-      "Direct Zero-Commission Booking Checkout Flow",
-      "Multilingual VIP Concierge Digital Dossier"
+      "Custom Business Website Architecture & Redesign",
+      "High-Converting Campaign Landing Pages",
+      "Integrated Enquiry Forms & Calendar Schedulers",
+      "Sub-Second Performance & SEO Optimization"
     ],
-    status: "SELECTED DEMONSTRATION / PRODUCTION READY",
-    metricsHighlight: "99+ Mobile Performance • Direct Checkout",
+    status: "PRODUCTION DEPLOYMENT / VERIFIED",
+    metricsHighlight: "99+ Mobile Performance • Integrated Booking",
     accentColor: "#B8FF3D"
   },
   {
     id: "proj-04",
     number: "04",
-    title: "Modular Brand Creative Pipeline",
-    category: "CREATIVE",
-    industry: "Direct-to-Consumer & Modern Lifestyle",
-    badge: "SYSTEM EXPLORATION",
-    image: "/images/proj-creative-pipeline.jpg",
-    shortDescription: "High-velocity AI UGC and ad creative engine producing variations across aspect ratios, visual hooks, and campaign messaging.",
-    overview: "Paid acquisition on modern platforms requires dozens of fresh creative iterations weekly to combat ad fatigue. This modular creative pipeline combines brand guardrails with automated asset generation, yielding campaign-ready creative at 10x standard studio velocity.",
-    challenge: "Traditional photo and video shoots required 6-week lead times and massive budgets for assets that fatigue in 10 days.",
-    system: "Generative image and motion pipeline calibrated to precise brand guidelines, dynamic typography templates, and automated format rendering (9:16, 1:1, 16:9).",
+    title: "AI Creative Production Suite",
+    category: "CREATIVE PRODUCTION",
+    industry: "Jewellery, Fashion, Beauty & Ecommerce",
+    badge: "CREATIVE ENGINE",
+    image: "/images/services/service-ai-photography.jpg",
+    shortDescription: "AI product & model photography, scripted UGC-style video ads, and static ad creative design across multiple aspect ratios.",
+    overview: "Ecommerce and consumer brands need hundreds of fresh visual assets to scale digital advertising without massive production studio overhead. This creative suite delivers virtual model shoots, scripted AI spokesperson videos, and coordinated multi-placement ad creative.",
+    challenge: "Traditional commercial photo and video shoots required massive budgets and 6-week production timelines for assets that fatigued within days.",
+    system: "Generative AI photo pipeline calibrated to brand aesthetics, scripted video ads with natural AI spokespersons, and multi-ratio ad creative suites.",
     deliverables: [
-      "Comprehensive Dynamic Art Direction Guidelines",
-      "Automated Multi-Hook Video & Static Ad Variations",
-      "Localized Copy & Subtitle Sync System",
-      "Continuous Creative Performance Review Dashboard"
+      "AI Product & Virtual Model Photography",
+      "Scripted AI UGC-Style Video Ads (9:16 Vertical)",
+      "Coordinated Ad Creative Design & Carousels",
+      "Multi-Placement Campaign Asset Packages"
     ],
-    status: "SYSTEM EXPLORATION / READY FOR SCALE",
-    metricsHighlight: "10x Production Speed • Unified Brand Standards",
+    status: "CREATIVE PIPELINE / PRODUCTION READY",
+    metricsHighlight: "10x Asset Velocity • Multi-Format Suite",
     accentColor: "#F4F3EF"
   }
 ];
 
 export const SYSTEM_NODES = [
-  { id: "creative", step: "01", name: "CREATIVE", subtitle: "Scroll-stopping attention", detail: "Campaign hooks, AI UGC, visual systems" },
-  { id: "website", step: "02", name: "WEBSITE", subtitle: "Architectural anchor", detail: "Fast editorial design, clear positioning" },
-  { id: "lead", step: "03", name: "LEAD CAPTURE", subtitle: "Frictionless touchpoint", detail: "Zero-latency forms, intent capture" },
-  { id: "whatsapp", step: "04", name: "WHATSAPP", subtitle: "Instant communication", detail: "Direct conversational channel" },
-  { id: "ai_reception", step: "05", name: "AI RECEPTIONIST", subtitle: "24/7 intelligent agent", detail: "Voice & chat triage, contextual answers" },
-  { id: "qualification", step: "06", name: "QUALIFICATION", subtitle: "Automated scoring", detail: "Budget, timeline, scope verification" },
-  { id: "booking", step: "07", name: "BOOKING", subtitle: "Calendar synchronization", detail: "Direct scheduling into team workflow" },
-  { id: "followup", step: "08", name: "FOLLOW-UP", subtitle: "Closed-loop nurture", detail: "Automated sequences, CRM data sync" }
+  { id: "creative", step: "01", name: "CREATIVE PRODUCTION", subtitle: "Scroll-stopping attention", detail: "AI product photography, UGC video ads, static campaign designs" },
+  { id: "website", step: "02", name: "BUSINESS WEBSITES", subtitle: "Authoritative digital anchor", detail: "Fast editorial design, clear positioning, campaign landing pages" },
+  { id: "lead", step: "03", name: "ENQUIRY CAPTURE", subtitle: "Frictionless touchpoint", detail: "Integrated enquiry forms, appointment booking links" },
+  { id: "whatsapp", step: "04", name: "WHATSAPP AUTOMATION", subtitle: "Instant communication", detail: "Automated replies, lead collection, booking updates" },
+  { id: "ai_reception", step: "05", name: "AI RECEPTIONIST", subtitle: "24/7 voice assistant", detail: "Answer incoming calls, handle FAQs, book appointments, route calls" },
+  { id: "qualification", step: "06", name: "LEAD QUALIFICATION", subtitle: "Automated triage", detail: "Customer requirement, service interest, scope verification" },
+  { id: "booking", step: "07", name: "BOOKING INTEGRATION", subtitle: "Calendar synchronization", detail: "Direct scheduling into team operations and CRM" },
+  { id: "followup", step: "08", name: "CLOSED-LOOP NURTURE", subtitle: "Customer continuity", detail: "Order enquiries, automated follow-ups, retention flows" }
 ];
 
 export const APPROACH_STAGES = [
   {
     number: "01",
     title: "DISCOVER",
-    subtitle: "Mapping the operational architecture.",
-    description: "We analyze how your business currently captures, communicates with, and serves customers. We identify friction, dropped leads, and missed opportunities in your existing workflow.",
-    deliverable: "Systems Audit & Opportunity Matrix"
+    subtitle: "Understanding your service requirements.",
+    description: "We audit how your business currently captures enquiries, handles calls, and presents its brand. We identify friction, missed calls, outdated web pages, and creative bottlenecks in your customer flow.",
+    deliverable: "Service Audit & Systems Matrix"
   },
   {
     number: "02",
     title: "DESIGN",
     subtitle: "Architectural blueprints & creative direction.",
-    description: "We formulate the complete digital and automated foundation: typography, interface aesthetics, conversational trees, AI prompt engineering, and database integrations.",
-    deliverable: "Interactive Prototypes & System Schematics"
+    description: "We design the complete solution: website architecture, enquiry and booking flows, AI voice prompts, WhatsApp automation trees, and commercial ad creative styles.",
+    deliverable: "Interactive Prototypes & System Blueprints"
   },
   {
     number: "03",
     title: "BUILD",
     subtitle: "Precision engineering & AI integration.",
-    description: "We build the web experience, deploy the conversational agents, configure APIs, and stress-test the voice pipelines with extreme attention to latency and edge cases.",
-    deliverable: "Tested Production-Ready Systems"
+    description: "We build the web platforms, deploy the AI receptionist and voice assistants, configure WhatsApp automation, and produce high-resolution AI imagery and video ads.",
+    deliverable: "Tested Production-Ready Deliverables"
   },
   {
     number: "04",
-    title: "CONNECT",
-    subtitle: "Unified telemetry & operational launch.",
-    description: "We connect the pieces into one living, synchronized ecosystem. Your creative feeds your site; your site routes to AI; your AI qualifies and books directly into your team's workflow.",
-    deliverable: "Live Launch & Continuous Telemetry"
+    title: "LAUNCH",
+    subtitle: "Unified deployment & ongoing reliability.",
+    description: "We launch the live services across your channels. Your creative drives traffic; your website and landing pages capture intent; your AI automation and receptionists answer calls and book appointments around the clock.",
+    deliverable: "Live Launch & Post-Launch Hypercare"
   }
 ];
 
 export const PHILOSOPHY = [
-  { statement: "Good technology should simplify.", elaboration: "Complexity is easy. Distilling operational power into an invisible, effortless experience is true craftsmanship." },
-  { statement: "Good design should clarify.", elaboration: "Visual noise obscures value. We use architectural alignment, generous negative space, and disciplined typography to make positioning obvious." },
-  { statement: "Good automation should remove friction.", elaboration: "Automation should never feel robotic or cold. It should deliver instantaneous, respectful service at the exact second a client needs it." },
-  { statement: "Good creative should earn attention.", elaboration: "In a noisy landscape, only authentic visual hooks and cinematic standards command respect and inspire action." }
+  { statement: "Technology should make business simpler.", elaboration: "Complexity wastes time. We build AI automation and modern web systems that handle enquiries and calls effortlessly." },
+  { statement: "Design should establish authority.", elaboration: "Your website is your digital foundation. Clean typography, fast performance, and intuitive booking give clients immediate confidence." },
+  { statement: "Automation should eliminate wait times.", elaboration: "No customer wants to wait hours for a reply. Automated WhatsApp and AI voice receptionists deliver respectful, instant service 24/7." },
+  { statement: "Creative should command attention.", elaboration: "In saturated digital feeds, high-end AI product photography and authentic UGC-style video ads cut through the noise and drive action." }
 ];
 
 export const CONTACT_BUDGETS = [
@@ -283,16 +321,18 @@ export const CONTACT_TIMELINES = [
   "Immediate (Within 2 weeks)",
   "Next 30–60 Days",
   "Quarterly Planning",
-  "Exploring Architectural Options"
+  "Exploring Options"
 ];
 
 export const CONTACT_SERVICES = [
-  "AI Voice & Receptionist",
-  "WhatsApp Automation System",
-  "Flagship Website / Web App",
-  "High-Conversion Landing Page",
-  "Creative & AI Ad Production",
-  "End-to-End Growth Architecture"
+  "AI Receptionist & Voice Assistant",
+  "WhatsApp Automation",
+  "Business Websites",
+  "Landing Pages",
+  "AI Product & Model Photography",
+  "AI UGC-Style Video Ads",
+  "Ad Creative Design",
+  "General Enquiry"
 ];
 
 // 7 Flagship Live Website Projects deployed on Vercel (Reordered)

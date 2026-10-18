@@ -84,7 +84,7 @@ export const Navbar = ({ currentPath = "/", onNavigate }) => {
                 CORNERSTONE
               </span>
               <span className="micro-label" style={{ fontSize: '0.52rem', letterSpacing: '0.16em', color: 'var(--color-muted-gray)' }}>
-                SYSTEMS &amp; CREATIVE
+                AI • WEBSITES • CREATIVE
               </span>
             </div>
           </button>
@@ -145,7 +145,7 @@ export const Navbar = ({ currentPath = "/", onNavigate }) => {
               }}
               data-cursor="BUILD"
             >
-              <span>START A PROJECT</span>
+              <span>DISCUSS YOUR PROJECT</span>
               <ArrowUpRight size={13} />
             </button>
 

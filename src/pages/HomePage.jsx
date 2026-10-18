@@ -22,6 +22,7 @@ export const HomePage = ({ onNavigate }) => {
           else onNavigate('/work');
         }}
         onStartProject={() => onNavigate('/contact')}
+        onExploreServices={() => onNavigate('/services')}
       />
 
       {/* 2. The Editorial Statement Section */}
