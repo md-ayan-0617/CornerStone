@@ -136,6 +136,9 @@ export async function authenticateAdmin(username, password, req) {
     return { success: false, rateLimited: true, error: rateLimit.message };
   }
 
+  const rawPassword = typeof password === 'string' ? password : '';
+  const cleanPassword = rawPassword.trim();
+
   const res = await query('SELECT * FROM admin_users WHERE username = $1 LIMIT 1', [cleanUsername]);
   const user = res.rows[0];
 
@@ -144,7 +147,10 @@ export async function authenticateAdmin(username, password, req) {
     return { success: false, error: 'Invalid administrator credentials.' };
   }
 
-  const passwordMatch = await bcrypt.compare(password, user.password_hash);
+  const passwordMatch =
+    (await bcrypt.compare(rawPassword, user.password_hash)) ||
+    (await bcrypt.compare(cleanPassword, user.password_hash));
+
   if (!passwordMatch) {
     await recordLoginAttempt(ip, false);
     return { success: false, error: 'Invalid administrator credentials.' };

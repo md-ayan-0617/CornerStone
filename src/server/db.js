@@ -49,7 +49,7 @@ export async function getDb() {
     }
 
     const { DatabaseSync } = await import('node:sqlite');
-    const dataDir = path.resolve(process.cwd(), '.data');
+    const dataDir = process.env.VERCEL ? path.join('/tmp', '.data') : path.resolve(process.cwd(), '.data');
     if (!fs.existsSync(dataDir)) {
       fs.mkdirSync(dataDir, { recursive: true });
     }
@@ -332,18 +332,33 @@ export async function initDb() {
  * Seed initial administrator account securely
  */
 async function seedInitialAdmin() {
-  const check = await query('SELECT id FROM admin_users LIMIT 1');
+  const username = (process.env.ADMIN_USERNAME || 'ayanmd0617').trim().toLowerCase();
+  const rawPassword = process.env.ADMIN_INITIAL_PASSWORD || 'takshhskat';
+  const hash = await bcrypt.hash(rawPassword, 12);
+
+  // 1. Ensure primary configured admin exists
+  const check = await query('SELECT id FROM admin_users WHERE username = $1 LIMIT 1', [username]);
   if (check.rows.length === 0) {
     const adminId = 'adm_' + crypto.randomBytes(12).toString('hex');
-    const username = (process.env.ADMIN_USERNAME || 'ayanmd0617').trim().toLowerCase();
-    const rawPassword = process.env.ADMIN_INITIAL_PASSWORD || 'takshhskat';
-    const hash = await bcrypt.hash(rawPassword, 12);
-
     await query(
       'INSERT INTO admin_users (id, username, password_hash, created_at, updated_at) VALUES ($1, $2, $3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)',
       [adminId, username, hash]
     );
-
     console.log(`[CornerStone Auth] Initial administrator account created for username: "${username}"`);
+  } else {
+    // Keep password in sync with configured initial password
+    await query(
+      'UPDATE admin_users SET password_hash = $1, updated_at = CURRENT_TIMESTAMP WHERE username = $2',
+      [hash, username]
+    );
+  }
+
+  // 2. Also ensure legacy 'admin' identifier works with the same password if present
+  const oldAdmin = await query('SELECT id FROM admin_users WHERE username = $1 LIMIT 1', ['admin']);
+  if (oldAdmin.rows.length > 0 && username !== 'admin') {
+    await query(
+      'UPDATE admin_users SET password_hash = $1, updated_at = CURRENT_TIMESTAMP WHERE username = $2',
+      [hash, 'admin']
+    );
   }
 }
