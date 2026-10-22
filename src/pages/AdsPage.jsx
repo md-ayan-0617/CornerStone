@@ -3,9 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import {
   FEATURED_SHORTS,
-  ADS_CATEGORIES,
-  ADS_PHOTOGRAPHY,
-  ADS_CAROUSELS,
+  LOCAL_ADS_IMAGES,
   getYouTubeEmbedUrl
 } from '../data/adsProjects';
 import CampaignLightboxModal from '../components/CampaignLightboxModal';
@@ -15,20 +13,13 @@ import {
   VolumeX,
   Maximize2,
   ArrowUpRight,
-  Filter,
   Eye,
-  ChevronDown,
-  ChevronLeft,
-  ChevronRight,
-  Film,
-  Camera,
-  Sparkles
+  ChevronDown
 } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export const AdsPage = ({ onNavigate }) => {
-  const [activeCategory, setActiveCategory] = useState("All");
   const [activeModalItem, setActiveModalItem] = useState(null);
   const [activePlayingVideoId, setActivePlayingVideoId] = useState(null);
   const [mutedStates, setMutedStates] = useState({
@@ -36,31 +27,44 @@ export const AdsPage = ({ onNavigate }) => {
     "short-02": true,
     "short-03": true
   });
-  
-  // Carousel active slide index
-  const [carouselIndex, setCarouselIndex] = useState({
-    "carousel-fashion": 0,
-    "carousel-product": 0
-  });
 
   const pageRef = useRef(null);
   const videoCardsRef = useRef({});
   const iframeRefs = useRef({});
   const activePlayingRef = useRef(null);
 
-  // Filtered photography items
-  const filteredPhotography = activeCategory === "All"
-    ? ADS_PHOTOGRAPHY
-    : ADS_PHOTOGRAPHY.filter(
-        (item) => item.categoryFilter === activeCategory || item.category === activeCategory
-      );
+  // Combined project items for lightbox pagination (3 Shorts + 10 Images = 13 items)
+  const allLightboxItems = [
+    ...FEATURED_SHORTS.map((s) => ({
+      id: s.id,
+      title: s.title,
+      client: "CornerStone Commercial",
+      year: "2026",
+      category: s.category,
+      mediaType: 'video',
+      mediaUrl: s.videoUrl,
+      thumbnailUrl: s.thumbnailUrl,
+      badge: s.badge
+    })),
+    ...LOCAL_ADS_IMAGES.map((img) => ({
+      id: img.id,
+      title: img.title,
+      client: img.client,
+      year: "2026",
+      category: img.category,
+      mediaType: 'image',
+      imageUrl: img.imageUrl,
+      thumbnailUrl: img.thumbnailUrl,
+      tagline: img.tagline,
+      badge: img.badge
+    }))
+  ];
 
   // =========================================================================
-  // 1. INTERSECTION OBSERVER FOR AUTOMATIC MUTED PLAYBACK ON SCROLL
+  // 1. INTERSECTION OBSERVER FOR VISIBILITY-AWARE MUTED AUTOPLAY
   // "Scroll to a video → it automatically plays muted → scroll away → it pauses."
   // =========================================================================
   useEffect(() => {
-    // Collect all card container elements
     const elements = Object.values(videoCardsRef.current).filter(Boolean);
     if (elements.length === 0) return;
 
@@ -71,9 +75,9 @@ export const AdsPage = ({ onNavigate }) => {
           const iframe = iframeRefs.current[videoId];
           if (!iframe || !iframe.contentWindow) return;
 
-          // When video becomes at least 60% visible in the viewport:
+          // When video becomes at least 58% visible in viewport
           if (entry.isIntersecting && entry.intersectionRatio >= 0.58) {
-            // Stop any other currently playing video to conserve bandwidth
+            // Stop any other currently playing video
             if (activePlayingRef.current && activePlayingRef.current !== videoId) {
               const prevIframe = iframeRefs.current[activePlayingRef.current];
               try {
@@ -84,7 +88,7 @@ export const AdsPage = ({ onNavigate }) => {
               } catch (_) {}
             }
 
-            // Start playing current video (muted by default)
+            // Start playing current video (muted)
             try {
               iframe.contentWindow.postMessage(
                 JSON.stringify({ event: 'command', func: 'playVideo', args: [] }),
@@ -94,16 +98,14 @@ export const AdsPage = ({ onNavigate }) => {
               setActivePlayingVideoId(videoId);
             } catch (_) {}
           } else if (entry.intersectionRatio < 0.45 && activePlayingRef.current === videoId) {
-            // When video leaves viewport (< 45% visible), pause playback
+            // Pause playback when scrolled away
             try {
               iframe.contentWindow.postMessage(
                 JSON.stringify({ event: 'command', func: 'pauseVideo', args: [] }),
                 '*'
               );
-              if (activePlayingRef.current === videoId) {
-                activePlayingRef.current = null;
-                setActivePlayingVideoId(null);
-              }
+              activePlayingRef.current = null;
+              setActivePlayingVideoId(null);
             } catch (_) {}
           }
         });
@@ -118,7 +120,6 @@ export const AdsPage = ({ onNavigate }) => {
 
     return () => {
       observer.disconnect();
-      // Ensure all videos pause when component unmounts
       Object.values(iframeRefs.current).forEach((iframe) => {
         try {
           iframe?.contentWindow?.postMessage(
@@ -150,14 +151,15 @@ export const AdsPage = ({ onNavigate }) => {
   };
 
   // =========================================================================
-  // 2. SOPHISTICATED GSAP SCROLLTRIGGER ANIMATIONS
+  // 2. SOPHISTICATED GSAP SCROLL ANIMATIONS
+  // Staggered entrances, subtle parallax, and clean unmount cleanup
   // =========================================================================
   useEffect(() => {
     const ctx = gsap.context(() => {
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
       if (prefersReducedMotion) {
-        gsap.set('.ads-hero-reveal, .ads-video-card, .ads-photo-card, .ads-carousel-box', {
+        gsap.set('.ads-hero-reveal, .ads-video-card, .ads-gallery-item', {
           opacity: 1,
           y: 0,
           scale: 1,
@@ -166,28 +168,28 @@ export const AdsPage = ({ onNavigate }) => {
         return;
       }
 
-      // Hero Entrance
+      // Hero Headline Reveal
       gsap.fromTo('.ads-hero-reveal',
-        { opacity: 0, y: 35 },
+        { opacity: 0, y: 30 },
         {
           opacity: 1,
           y: 0,
-          duration: 0.9,
-          stagger: 0.15,
+          duration: 0.85,
+          stagger: 0.12,
           ease: 'power3.out',
           clearProps: 'opacity,transform'
         }
       );
 
-      // Featured 9:16 Portrait Video Cards Staggered Entrance
+      // 9:16 Video Cards Staggered Entrance
       gsap.fromTo('.ads-video-card',
-        { opacity: 0, y: 45, scale: 0.97 },
+        { opacity: 0, y: 40, scale: 0.98 },
         {
           opacity: 1,
           y: 0,
           scale: 1,
           duration: 0.85,
-          stagger: 0.18,
+          stagger: 0.15,
           ease: 'power3.out',
           clearProps: 'opacity,transform',
           scrollTrigger: {
@@ -198,18 +200,18 @@ export const AdsPage = ({ onNavigate }) => {
         }
       );
 
-      // Photography Cards Stagger
-      gsap.fromTo('.ads-photo-card',
-        { opacity: 0, y: 30 },
+      // Local 10 Images Staggered Reveal
+      gsap.fromTo('.ads-gallery-item',
+        { opacity: 0, y: 35 },
         {
           opacity: 1,
           y: 0,
-          duration: 0.65,
-          stagger: 0.08,
+          duration: 0.75,
+          stagger: 0.1,
           ease: 'power2.out',
           clearProps: 'opacity,transform',
           scrollTrigger: {
-            trigger: '#ads-photo-grid',
+            trigger: '#creative-stills-gallery',
             start: 'top 85%',
             toggleActions: 'play none none none'
           }
@@ -220,7 +222,7 @@ export const AdsPage = ({ onNavigate }) => {
     }, pageRef);
 
     return () => ctx.revert();
-  }, [activeCategory]);
+  }, []);
 
   const handleScrollDown = () => {
     const el = document.querySelector('#featured-video-gallery');
@@ -237,18 +239,18 @@ export const AdsPage = ({ onNavigate }) => {
     <div ref={pageRef} style={{ width: '100%', maxWidth: '100vw', overflowX: 'hidden' }}>
 
       {/* =========================================================================
-          SECTION 1: HERO SECTION — Architectural Negative Space & Typography
+          HERO SECTION — Minimal Text, Maximum Visual Space
           ========================================================================= */}
       <section
         style={{
           position: 'relative',
           width: '100%',
-          minHeight: '84vh',
+          minHeight: '75vh',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          paddingTop: 'clamp(7.5rem, 15vh, 11rem)',
-          paddingBottom: 'clamp(4.5rem, 9vh, 7rem)',
+          paddingTop: 'clamp(7rem, 14vh, 10rem)',
+          paddingBottom: 'clamp(4rem, 8vh, 6rem)',
           backgroundColor: 'var(--color-near-black)',
           borderBottom: '1px solid var(--color-border-gray)',
           overflow: 'hidden'
@@ -283,21 +285,21 @@ export const AdsPage = ({ onNavigate }) => {
         />
 
         <div className="site-container" style={{ position: 'relative', zIndex: 2 }}>
-          {/* Section Micro Header */}
-          <div className="ads-hero-reveal" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1.5rem' }}>
+          {/* Micro Label */}
+          <div className="ads-hero-reveal" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1.25rem' }}>
             <CornerstoneMotif size={18} variant="bracket" />
             <span className="micro-label-lime">
-              CORNERSTONE / CREATIVE STUDIO
+              VISUAL CAMPAIGNS // SELECTED CREATIVE WORK
             </span>
           </div>
 
-          {/* Main Heading */}
+          {/* Single-Line Main Heading */}
           <h1
             className="display-mega ads-hero-reveal"
             style={{
-              margin: '0 0 clamp(1.5rem, 3vw, 2.5rem) 0',
-              fontSize: 'clamp(2.4rem, 5.8vw, 5.4rem)',
-              lineHeight: 1.04,
+              margin: '0 0 1.25rem 0',
+              fontSize: 'clamp(2.4rem, 5.6vw, 5.2rem)',
+              lineHeight: 1.05,
               letterSpacing: '-0.035em',
               maxWidth: '22ch'
             }}
@@ -308,31 +310,30 @@ export const AdsPage = ({ onNavigate }) => {
             </span>
           </h1>
 
-          {/* Supporting Statement + Call to Action Cluster */}
+          {/* Single-Line Supporting Statement + CTAs */}
           <div
             className="ads-hero-reveal"
             style={{
               display: 'flex',
               justifyContent: 'space-between',
-              alignItems: 'flex-end',
+              alignItems: 'center',
               flexWrap: 'wrap',
-              gap: 'clamp(2rem, 4vw, 4rem)',
+              gap: '1.5rem',
               maxWidth: '1100px',
               borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-              paddingTop: '2rem'
+              paddingTop: '1.75rem'
             }}
           >
             <p
               style={{
                 fontFamily: 'var(--font-body)',
-                fontSize: 'clamp(1.05rem, 1.8vw, 1.35rem)',
-                lineHeight: 1.55,
+                fontSize: 'clamp(0.95rem, 1.4vw, 1.15rem)',
+                lineHeight: 1.4,
                 color: 'var(--color-muted-gray)',
-                maxWidth: '52ch',
                 margin: 0
               }}
             >
-              Advertising films, campaign visuals, and creative experiences designed to make brands impossible to ignore.
+              High-impact commercial films, luxury advertising, and AI editorial direction.
             </p>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
@@ -341,7 +342,7 @@ export const AdsPage = ({ onNavigate }) => {
                 className="btn-cornerstone"
                 style={{ padding: '0.85rem 1.6rem', fontSize: '0.78rem' }}
               >
-                <span>EXPLORE AD REEL</span>
+                <span>EXPLORE WORK</span>
                 <ChevronDown size={14} />
               </button>
 
@@ -350,7 +351,7 @@ export const AdsPage = ({ onNavigate }) => {
                 className="btn-cornerstone-secondary"
                 style={{ padding: '0.85rem 1.6rem', fontSize: '0.78rem' }}
               >
-                <span>START A PRODUCTION</span>
+                <span>START A PROJECT</span>
                 <ArrowUpRight size={14} />
               </button>
             </div>
@@ -361,7 +362,7 @@ export const AdsPage = ({ onNavigate }) => {
         <div
           style={{
             position: 'absolute',
-            bottom: '1.5rem',
+            bottom: '1.25rem',
             left: '50%',
             transform: 'translateX(-50%)',
             display: 'flex',
@@ -374,64 +375,61 @@ export const AdsPage = ({ onNavigate }) => {
           }}
         >
           <span className="lime-dot" style={{ width: '4px', height: '4px' }} />
-          <span>SCROLL FOR 9:16 VERTICAL COMMERCIAL REEL</span>
+          <span>SCROLL FOR REELS &amp; STILLS</span>
         </div>
       </section>
 
       {/* =========================================================================
-          SECTION 2: FEATURED ADVERTISEMENT VIDEOS — 9:16 VERTICAL SHORTS GALLERY
-          "Use these three actual YouTube Shorts as the first video entries in the ADS portfolio."
-          "No large custom play icon over the automatically playing video. No duplicate play overlay."
+          SECTION 1: THE 3 FEATURED YOUTUBE SHORTS (9:16 Portrait Aspect Ratio)
           "Scroll to a video → it automatically plays muted → scroll away → it pauses."
+          "No large custom play icon over the automatically playing video."
           ========================================================================= */}
       <section
         id="featured-video-gallery"
         style={{
-          paddingTop: 'clamp(5rem, 10vw, 8rem)',
-          paddingBottom: 'clamp(5rem, 10vw, 8rem)',
+          paddingTop: 'clamp(4.5rem, 9vw, 7.5rem)',
+          paddingBottom: 'clamp(4.5rem, 9vw, 7.5rem)',
           backgroundColor: '#0A0A0A',
           borderBottom: '1px solid var(--color-border-gray)'
         }}
       >
         <div className="site-container">
-          {/* Section Header */}
-          <div style={{ marginBottom: 'clamp(3rem, 6vw, 4.5rem)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '0.85rem' }}>
+          {/* Minimal Single-Line Section Header */}
+          <div style={{ marginBottom: 'clamp(2.5rem, 5vw, 3.5rem)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '0.65rem' }}>
               <CornerstoneMotif size={14} variant="mark" />
               <span className="micro-label" style={{ color: 'var(--color-muted-gray)' }}>
-                SECTION 01 // 9:16 VERTICAL COMMERCIAL CAMPAIGNS
+                01 // COMMERCIAL FILMS
               </span>
             </div>
             <h2
               className="display-large"
               style={{
-                margin: '0 0 0.75rem 0',
-                fontSize: 'clamp(1.9rem, 3.6vw, 2.8rem)'
+                margin: '0 0 0.5rem 0',
+                fontSize: 'clamp(1.8rem, 3.2vw, 2.6rem)'
               }}
             >
-              FEATURED SHORT-FORM COMMERCIAL ADS
+              FEATURED 9:16 VERTICAL REELS
             </h2>
             <p
               style={{
                 fontFamily: 'var(--font-body)',
-                fontSize: '0.98rem',
+                fontSize: '0.92rem',
                 color: 'var(--color-muted-gray)',
-                maxWidth: '65ch',
                 margin: 0
               }}
             >
-              Native 9:16 portrait advertising films engineered for high-velocity feeds and immersive mobile viewing. Scroll into view to watch automatically.
+              Three native portrait commercial ads engineered for high-velocity feeds.
             </p>
           </div>
 
-          {/* 3-Column Responsive Portrait Video Gallery */}
+          {/* 3-Column Responsive Portrait Gallery */}
           <div
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))',
-              gap: 'clamp(2rem, 4vw, 3rem)',
-              justifyContent: 'center',
-              alignItems: 'start'
+              gap: 'clamp(1.75rem, 3.5vw, 2.75rem)',
+              justifyContent: 'center'
             }}
           >
             {FEATURED_SHORTS.map((short, idx) => {
@@ -449,8 +447,8 @@ export const AdsPage = ({ onNavigate }) => {
                     flexDirection: 'column',
                     backgroundColor: '#0E0E0E',
                     border: '1px solid rgba(255, 255, 255, 0.08)',
-                    borderRadius: 'clamp(20px, 2.4vw, 26px)',
-                    padding: 'clamp(1rem, 2vw, 1.25rem)',
+                    borderRadius: 'clamp(18px, 2.2vw, 24px)',
+                    padding: 'clamp(0.85rem, 1.5vw, 1.15rem)',
                     boxShadow: isPlaying
                       ? '0 25px 55px rgba(0, 0, 0, 0.8), 0 0 40px -10px rgba(184, 255, 61, 0.15)'
                       : '0 20px 45px rgba(0, 0, 0, 0.6)',
@@ -458,22 +456,22 @@ export const AdsPage = ({ onNavigate }) => {
                     transition: 'border-color 0.35s ease, box-shadow 0.35s ease'
                   }}
                 >
-                  {/* Portrait 9:16 Video Frame with Rounded Corners & Hardware-Accelerated Clipping */}
+                  {/* Portrait 9:16 Video Frame with Hardware-Accelerated Clipping */}
                   <div
                     style={{
                       position: 'relative',
                       width: '100%',
                       aspectRatio: '9 / 16',
-                      borderRadius: 'clamp(18px, 2.2vw, 22px)',
+                      borderRadius: 'clamp(16px, 2vw, 20px)',
                       overflow: 'hidden',
                       isolation: 'isolate',
                       WebkitMaskImage: '-webkit-radial-gradient(white, black)',
                       transform: 'translateZ(0)',
                       backgroundColor: '#050505',
-                      border: '1px solid rgba(255, 255, 255, 0.12)'
+                      border: '1px solid rgba(255, 255, 255, 0.1)'
                     }}
                   >
-                    {/* YouTube IFrame: Embedded with enablejsapi=1, controls=0, mute=1 */}
+                    {/* YouTube IFrame: enablejsapi=1, controls=0, mute=1 */}
                     <iframe
                       ref={(el) => (iframeRefs.current[short.id] = el)}
                       src={getYouTubeEmbedUrl(short.videoId, { autoplay: 0, mute: 1, controls: 0, loop: 1 })}
@@ -491,7 +489,7 @@ export const AdsPage = ({ onNavigate }) => {
                       }}
                     />
 
-                    {/* Unobtrusive Floating Overlay Controls (NO oversized play button overlay) */}
+                    {/* Unobtrusive Floating Controls (NO big overlay blocking playback) */}
                     <div
                       style={{
                         position: 'absolute',
@@ -505,20 +503,17 @@ export const AdsPage = ({ onNavigate }) => {
                         zIndex: 10
                       }}
                     >
-                      {/* Status indicator pill */}
                       <div
                         style={{
                           display: 'flex',
                           alignItems: 'center',
                           gap: '6px',
-                          padding: '4px 10px',
+                          padding: '4px 8px',
                           backgroundColor: 'rgba(10, 10, 10, 0.85)',
                           backdropFilter: 'blur(8px)',
-                          WebkitBackdropFilter: 'blur(8px)',
-                          border: '1px solid rgba(255, 255, 255, 0.15)',
                           borderRadius: '4px',
                           fontFamily: 'var(--font-mono)',
-                          fontSize: '0.65rem',
+                          fontSize: '0.62rem',
                           color: isPlaying ? 'var(--color-accent-lime)' : 'var(--color-warm-white)',
                           pointerEvents: 'auto'
                         }}
@@ -526,36 +521,33 @@ export const AdsPage = ({ onNavigate }) => {
                         <span
                           className="lime-dot"
                           style={{
-                            width: '5px',
-                            height: '5px',
+                            width: '4px',
+                            height: '4px',
                             backgroundColor: isPlaying ? 'var(--color-accent-lime)' : '#666'
                           }}
                         />
-                        <span>{isPlaying ? 'ACTIVE AUTOPLAY' : `SHORT 0${idx + 1}`}</span>
+                        <span>{isPlaying ? 'PLAYING MUTED' : `SHORT 0${idx + 1}`}</span>
                       </div>
 
-                      {/* Interactive Controls Pill: Audio & Lightbox */}
                       <div style={{ display: 'flex', gap: '6px', pointerEvents: 'auto' }}>
                         <button
                           onClick={() => toggleMute(short.id)}
-                          title={isMuted ? "Unmute Sound" : "Mute Sound"}
+                          title={isMuted ? "Unmute Audio" : "Mute Audio"}
                           style={{
-                            width: '32px',
-                            height: '32px',
+                            width: '30px',
+                            height: '30px',
                             borderRadius: '50%',
                             backgroundColor: 'rgba(10, 10, 10, 0.85)',
                             backdropFilter: 'blur(8px)',
-                            WebkitBackdropFilter: 'blur(8px)',
                             border: '1px solid rgba(255, 255, 255, 0.18)',
                             color: isMuted ? 'var(--color-muted-gray)' : 'var(--color-accent-lime)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            cursor: 'pointer',
-                            transition: 'all 0.2s ease'
+                            cursor: 'pointer'
                           }}
                         >
-                          {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
+                          {isMuted ? <VolumeX size={13} /> : <Volume2 size={13} />}
                         </button>
 
                         <button
@@ -563,92 +555,57 @@ export const AdsPage = ({ onNavigate }) => {
                             setActiveModalItem({
                               id: short.id,
                               title: short.title,
-                              client: short.client,
-                              year: short.year,
+                              client: "CornerStone Commercial",
+                              year: "2026",
                               category: short.category,
                               mediaType: 'video',
                               mediaUrl: short.videoUrl,
-                              thumbnailUrl: short.thumbnailUrl,
-                              description: short.description,
-                              deliverables: short.deliverables
+                              thumbnailUrl: short.thumbnailUrl
                             })
                           }
-                          title="Open Fullscreen Lightbox"
+                          title="Expand Fullscreen Lightbox"
                           style={{
-                            width: '32px',
-                            height: '32px',
+                            width: '30px',
+                            height: '30px',
                             borderRadius: '50%',
                             backgroundColor: 'rgba(10, 10, 10, 0.85)',
                             backdropFilter: 'blur(8px)',
-                            WebkitBackdropFilter: 'blur(8px)',
                             border: '1px solid rgba(255, 255, 255, 0.18)',
                             color: 'var(--color-warm-white)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            cursor: 'pointer',
-                            transition: 'all 0.2s ease'
+                            cursor: 'pointer'
                           }}
                         >
-                          <Maximize2 size={13} />
+                          <Maximize2 size={12} />
                         </button>
                       </div>
                     </div>
                   </div>
 
-                  {/* Minimal Metadata Below Video */}
-                  <div style={{ paddingTop: '1.25rem', paddingBottom: '0.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <span className="micro-label-lime" style={{ fontSize: '0.65rem' }}>
+                  {/* Single-Line Metadata */}
+                  <div style={{ paddingTop: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div>
+                      <span className="micro-label-lime" style={{ fontSize: '0.62rem', display: 'block', marginBottom: '2px' }}>
                         {short.category}
                       </span>
-                      <span className="micro-label" style={{ fontSize: '0.65rem', color: '#666' }}>
-                        {short.year}
-                      </span>
+                      <h3
+                        style={{
+                          fontFamily: 'var(--font-display)',
+                          fontSize: '1.05rem',
+                          fontWeight: 700,
+                          color: 'var(--color-warm-white)',
+                          margin: 0
+                        }}
+                      >
+                        {short.title}
+                      </h3>
                     </div>
 
-                    <h3
-                      style={{
-                        fontFamily: 'var(--font-display)',
-                        fontSize: 'clamp(1.2rem, 1.8vw, 1.45rem)',
-                        fontWeight: 800,
-                        color: 'var(--color-warm-white)',
-                        margin: 0,
-                        lineHeight: 1.2
-                      }}
-                    >
-                      {short.title}
-                    </h3>
-
-                    <p
-                      style={{
-                        fontFamily: 'var(--font-body)',
-                        fontSize: '0.86rem',
-                        lineHeight: 1.5,
-                        color: 'var(--color-muted-gray)',
-                        margin: 0
-                      }}
-                    >
-                      {short.subtitle}
-                    </p>
-
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '0.5rem' }}>
-                      {short.deliverables.map((del, dIdx) => (
-                        <span
-                          key={dIdx}
-                          style={{
-                            fontFamily: 'var(--font-mono)',
-                            fontSize: '0.68rem',
-                            padding: '3px 8px',
-                            backgroundColor: '#161616',
-                            border: '1px solid var(--color-border-gray)',
-                            color: 'var(--color-warm-white)'
-                          }}
-                        >
-                          {del}
-                        </span>
-                      ))}
-                    </div>
+                    <span className="micro-label" style={{ color: '#666', fontSize: '0.65rem' }}>
+                      9:16 REEL
+                    </span>
                   </div>
                 </div>
               );
@@ -658,11 +615,11 @@ export const AdsPage = ({ onNavigate }) => {
       </section>
 
       {/* =========================================================================
-          SECTION 3: ADVERTISING PHOTOGRAPHY & AI MODELS
-          Art-directed editorial grid mixing portrait, landscape, and square visuals.
+          SECTION 2: EDITORIAL STILLS & CAMPAIGNS (THE 10 LOCAL DEMO IMAGES)
+          Asymmetric visual placement, large featured images, minimal single-line labels.
           ========================================================================= */}
       <section
-        id="photography-gallery"
+        id="creative-stills-gallery"
         style={{
           paddingTop: 'clamp(5rem, 10vw, 8rem)',
           paddingBottom: 'clamp(5rem, 10vw, 8rem)',
@@ -671,504 +628,696 @@ export const AdsPage = ({ onNavigate }) => {
         }}
       >
         <div className="site-container">
-          {/* Header & Filter Tabs */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '1.5rem', marginBottom: 'clamp(2.5rem, 5vw, 4rem)' }}>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '0.75rem' }}>
-                <CornerstoneMotif size={14} variant="mark" />
-                <span className="micro-label" style={{ color: 'var(--color-muted-gray)' }}>
-                  SECTION 02 // ADVERTISING PHOTOGRAPHY & AI MODELS
-                </span>
-              </div>
-              <h2
-                className="display-large"
-                style={{
-                  margin: 0,
-                  fontSize: 'clamp(1.9rem, 3.4vw, 2.7rem)'
-                }}
-              >
-                CAMPAIGN STILLS &amp; MODEL SERIES
-              </h2>
-            </div>
-
-            {/* Filter Tabs */}
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                overflowX: 'auto',
-                whiteSpace: 'nowrap',
-                paddingBottom: '4px'
-              }}
-            >
-              {ADS_CATEGORIES.map((cat) => {
-                const isActive = activeCategory === cat;
-                return (
-                  <button
-                    key={cat}
-                    onClick={() => setActiveCategory(cat)}
-                    style={{
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.72rem',
-                      fontWeight: 600,
-                      padding: '6px 12px',
-                      backgroundColor: isActive ? 'var(--color-accent-lime)' : 'transparent',
-                      color: isActive ? '#0A0A0A' : 'var(--color-muted-gray)',
-                      border: isActive ? '1px solid var(--color-accent-lime)' : '1px solid var(--color-border-gray)',
-                      cursor: 'pointer',
-                      transition: 'all 0.2s ease'
-                    }}
-                  >
-                    {cat.toUpperCase()}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Photography Editorial Grid */}
-          <div
-            id="ads-photo-grid"
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 340px), 1fr))',
-              gap: 'clamp(1.75rem, 3.5vw, 2.75rem)'
-            }}
-          >
-            {filteredPhotography.map((item) => (
-              <div
-                key={item.id}
-                onClick={() =>
-                  setActiveModalItem({
-                    id: item.id,
-                    title: item.title,
-                    client: item.client,
-                    year: item.year,
-                    category: item.category,
-                    mediaType: 'image',
-                    mediaUrl: item.imageUrl,
-                    thumbnailUrl: item.thumbnailUrl,
-                    description: item.description,
-                    deliverables: item.deliverables
-                  })
-                }
-                className="ads-photo-card arch-box"
-                style={{
-                  cursor: 'pointer',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  backgroundColor: '#0F0F0F',
-                  overflow: 'hidden',
-                  borderRadius: '16px',
-                  border: '1px solid rgba(255, 255, 255, 0.08)'
-                }}
-              >
-                {/* Media Container with Dynamic Aspect Ratio */}
-                <div
-                  style={{
-                    position: 'relative',
-                    width: '100%',
-                    paddingTop: item.aspectRatio === '9:16' ? '135%' : item.aspectRatio === '1:1' ? '100%' : '60%',
-                    backgroundColor: '#050505',
-                    overflow: 'hidden'
-                  }}
-                  className="ads-photo-media"
-                >
-                  <img
-                    src={item.imageUrl}
-                    alt={item.title}
-                    style={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                      display: 'block',
-                      transition: 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)'
-                    }}
-                    onError={(e) => {
-                      e.currentTarget.src = '/images/services/service-ad-creative-design.jpg';
-                    }}
-                  />
-
-                  {/* Category Pill Overlay */}
-                  <div
-                    style={{
-                      position: 'absolute',
-                      top: '12px',
-                      left: '12px',
-                      padding: '3px 8px',
-                      backgroundColor: 'rgba(10, 10, 10, 0.85)',
-                      backdropFilter: 'blur(8px)',
-                      border: '1px solid var(--color-border-gray)',
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.65rem',
-                      color: 'var(--color-warm-white)'
-                    }}
-                  >
-                    {item.category.toUpperCase()}
-                  </div>
-
-                  {/* Hover Inspect Indicator */}
-                  <div
-                    style={{
-                      position: 'absolute',
-                      inset: 0,
-                      backgroundColor: 'rgba(0, 0, 0, 0.45)',
-                      opacity: 0,
-                      transition: 'opacity 0.25s ease',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '8px',
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.78rem',
-                      color: 'var(--color-accent-lime)'
-                    }}
-                    className="ads-photo-hover-overlay"
-                  >
-                    <Eye size={20} />
-                    <span>EXPAND HIGH-RES STILL</span>
-                  </div>
-                </div>
-
-                {/* Metadata */}
-                <div style={{ padding: '1.25rem', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                  <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '0.5rem' }}>
-                      <span className="micro-label" style={{ fontSize: '0.65rem' }}>
-                        {item.client}
-                      </span>
-                      <span style={{ color: '#444' }}>•</span>
-                      <span className="micro-label" style={{ fontSize: '0.65rem', color: '#777' }}>
-                        {item.year}
-                      </span>
-                    </div>
-
-                    <h4
-                      style={{
-                        fontFamily: 'var(--font-display)',
-                        fontSize: '1.15rem',
-                        fontWeight: 700,
-                        color: 'var(--color-warm-white)',
-                        margin: '0 0 0.5rem 0',
-                        lineHeight: 1.25
-                      }}
-                    >
-                      {item.title}
-                    </h4>
-
-                    <p
-                      style={{
-                        fontFamily: 'var(--font-body)',
-                        fontSize: '0.85rem',
-                        lineHeight: 1.5,
-                        color: 'var(--color-muted-gray)',
-                        margin: 0
-                      }}
-                    >
-                      {item.tagline}
-                    </p>
-                  </div>
-
-                  <div
-                    style={{
-                      marginTop: '1rem',
-                      paddingTop: '0.75rem',
-                      borderTop: '1px solid rgba(255, 255, 255, 0.05)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between'
-                    }}
-                  >
-                    <span className="micro-label-lime" style={{ fontSize: '0.65rem' }}>
-                      INSPECT STILL
-                    </span>
-                    <ArrowUpRight size={14} color="var(--color-muted-gray)" />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================================
-          SECTION 4: IMAGE CAROUSELS — Fashion & Product Lookbooks
-          ========================================================================= */}
-      <section
-        style={{
-          paddingTop: 'clamp(5rem, 10vw, 8rem)',
-          paddingBottom: 'clamp(5rem, 10vw, 8rem)',
-          backgroundColor: '#0A0A0A',
-          borderBottom: '1px solid var(--color-border-gray)'
-        }}
-      >
-        <div className="site-container">
+          {/* Minimal Section Header */}
           <div style={{ marginBottom: 'clamp(2.5rem, 5vw, 4rem)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '0.75rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '0.65rem' }}>
               <CornerstoneMotif size={14} variant="mark" />
               <span className="micro-label" style={{ color: 'var(--color-muted-gray)' }}>
-                SECTION 03 // EDITORIAL CAROUSEL SPOTLIGHTS
+                02 // SELECTED CREATIVE WORK
               </span>
             </div>
             <h2
               className="display-large"
               style={{
                 margin: '0 0 0.5rem 0',
-                fontSize: 'clamp(1.9rem, 3.4vw, 2.7rem)'
+                fontSize: 'clamp(1.8rem, 3.2vw, 2.6rem)'
               }}
             >
-              CURATED CAMPAIGN CAROUSELS
+              EDITORIAL STILLS &amp; CAMPAIGNS
             </h2>
             <p
               style={{
                 fontFamily: 'var(--font-body)',
-                fontSize: '0.95rem',
+                fontSize: '0.92rem',
                 color: 'var(--color-muted-gray)',
-                maxWidth: '58ch',
                 margin: 0
               }}
             >
-              Swipeable and clickable multi-look collections designed for AI model lookbooks, high-fashion lines, and luxury e-commerce catalogues.
+              Luxury brand campaigns, haute couture editorials, and commercial visuals.
             </p>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '4rem' }}>
-            {ADS_CAROUSELS.map((carousel) => {
-              const currentSlideIdx = carouselIndex[carousel.id] || 0;
-              const activeSlide = carousel.slides[currentSlideIdx];
+          {/* ===================================================================
+              GALLERY GROUP A: ASYMMETRIC SPLIT (Images 1, 2, 3)
+              Left: Large 9:16 Tall Hero (/images/1.png - Lumière)
+              Right: Stack of 2 (/images/2.png - Dot & Key, /images/3.png - Dior)
+              =================================================================== */}
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 460px), 1fr))',
+              gap: 'clamp(1.75rem, 3vw, 2.5rem)',
+              marginBottom: 'clamp(3rem, 6vw, 5rem)'
+            }}
+          >
+            {/* Image 1: Lumière Eau De Parfum (Prominent Hero) */}
+            <div
+              onClick={() =>
+                setActiveModalItem({
+                  ...LOCAL_ADS_IMAGES[0],
+                  mediaType: 'image'
+                })
+              }
+              className="ads-gallery-item"
+              style={{
+                position: 'relative',
+                width: '100%',
+                aspectRatio: '9 / 14',
+                borderRadius: 'clamp(18px, 2.2vw, 24px)',
+                overflow: 'hidden',
+                backgroundColor: '#0E0E0E',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                cursor: 'pointer'
+              }}
+            >
+              <img
+                src={LOCAL_ADS_IMAGES[0].imageUrl}
+                alt={LOCAL_ADS_IMAGES[0].title}
+                loading="eager"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  display: 'block',
+                  transition: 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
+                }}
+              />
+              {/* Frosted Top Badge */}
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '1rem',
+                  left: '1rem',
+                  padding: '4px 10px',
+                  backgroundColor: 'rgba(10, 10, 10, 0.85)',
+                  backdropFilter: 'blur(8px)',
+                  borderRadius: '4px',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.68rem',
+                  color: 'var(--color-accent-lime)',
+                  border: '1px solid rgba(255, 255, 255, 0.12)'
+                }}
+              >
+                {LOCAL_ADS_IMAGES[0].badge}
+              </div>
 
-              const handlePrevSlide = () => {
-                setCarouselIndex((prev) => ({
-                  ...prev,
-                  [carousel.id]: (currentSlideIdx - 1 + carousel.slides.length) % carousel.slides.length
-                }));
-              };
+              {/* Minimal Single-Line Bottom Bar */}
+              <div
+                style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  padding: '1.25rem',
+                  background: 'linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, transparent 100%)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between'
+                }}
+              >
+                <div>
+                  <h4 style={{ fontFamily: 'var(--font-display)', fontSize: '1.2rem', fontWeight: 800, color: '#FFF', margin: 0 }}>
+                    {LOCAL_ADS_IMAGES[0].title}
+                  </h4>
+                  <span className="micro-label" style={{ color: 'var(--color-muted-gray)', fontSize: '0.65rem' }}>
+                    {LOCAL_ADS_IMAGES[0].category}
+                  </span>
+                </div>
+                <Eye size={18} color="var(--color-accent-lime)" />
+              </div>
+            </div>
 
-              const handleNextSlide = () => {
-                setCarouselIndex((prev) => ({
-                  ...prev,
-                  [carousel.id]: (currentSlideIdx + 1) % carousel.slides.length
-                }));
-              };
-
-              return (
-                <div
-                  key={carousel.id}
-                  className="ads-carousel-box"
+            {/* Right Stack: Image 2 & Image 3 */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(1.75rem, 3vw, 2.5rem)' }}>
+              {/* Image 2: Dot & Key Watermelon Cooling Sunscreen */}
+              <div
+                onClick={() =>
+                  setActiveModalItem({
+                    ...LOCAL_ADS_IMAGES[1],
+                    mediaType: 'image'
+                  })
+                }
+                className="ads-gallery-item"
+                style={{
+                  position: 'relative',
+                  width: '100%',
+                  aspectRatio: '4 / 3.4',
+                  borderRadius: 'clamp(18px, 2.2vw, 24px)',
+                  overflow: 'hidden',
+                  backgroundColor: '#0E0E0E',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  cursor: 'pointer'
+                }}
+              >
+                <img
+                  src={LOCAL_ADS_IMAGES[1].imageUrl}
+                  alt={LOCAL_ADS_IMAGES[1].title}
+                  loading="lazy"
                   style={{
-                    backgroundColor: '#0E0E0E',
-                    border: '1px solid rgba(255, 255, 255, 0.08)',
-                    borderRadius: '24px',
-                    padding: 'clamp(1.5rem, 3vw, 2.5rem)',
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 340px), 1fr))',
-                    gap: '2.5rem',
-                    alignItems: 'center'
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    display: 'block',
+                    transition: 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
+                  }}
+                />
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '1rem',
+                    left: '1rem',
+                    padding: '4px 10px',
+                    backgroundColor: 'rgba(10, 10, 10, 0.85)',
+                    backdropFilter: 'blur(8px)',
+                    borderRadius: '4px',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.68rem',
+                    color: 'var(--color-accent-lime)',
+                    border: '1px solid rgba(255, 255, 255, 0.12)'
                   }}
                 >
-                  {/* Left Column: Visual Slide */}
-                  <div
-                    onClick={() =>
-                      setActiveModalItem({
-                        id: activeSlide.id,
-                        title: activeSlide.title,
-                        client: carousel.title,
-                        year: "2026",
-                        category: carousel.category,
-                        mediaType: 'image',
-                        mediaUrl: activeSlide.imageUrl,
-                        thumbnailUrl: activeSlide.imageUrl,
-                        description: carousel.description,
-                        deliverables: ["Key Visuals", "Carousel Look", "Digital Master"]
-                      })
-                    }
-                    style={{
-                      position: 'relative',
-                      width: '100%',
-                      aspectRatio: activeSlide.aspectRatio === '9:16' ? '9/14' : '1/1',
-                      borderRadius: '18px',
-                      overflow: 'hidden',
-                      cursor: 'pointer',
-                      border: '1px solid rgba(255, 255, 255, 0.12)'
-                    }}
-                  >
-                    <img
-                      src={activeSlide.imageUrl}
-                      alt={activeSlide.title}
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        display: 'block',
-                        transition: 'transform 0.4s ease'
-                      }}
-                    />
-
-                    {/* Hover indicator */}
-                    <div
-                      style={{
-                        position: 'absolute',
-                        inset: 0,
-                        backgroundColor: 'rgba(0, 0, 0, 0.4)',
-                        opacity: 0,
-                        transition: 'opacity 0.25s ease',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '6px',
-                        color: 'var(--color-accent-lime)',
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: '0.78rem'
-                      }}
-                      className="ads-photo-hover-overlay"
-                    >
-                      <Eye size={18} />
-                      <span>EXPAND SLIDE</span>
-                    </div>
-                  </div>
-
-                  {/* Right Column: Carousel Information & Controls */}
-                  <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                    <div>
-                      <span className="micro-label-lime" style={{ display: 'block', marginBottom: '0.75rem' }}>
-                        {carousel.category} • SLIDE {currentSlideIdx + 1} OF {carousel.slides.length}
-                      </span>
-
-                      <h3
-                        style={{
-                          fontFamily: 'var(--font-display)',
-                          fontSize: 'clamp(1.6rem, 2.6vw, 2.2rem)',
-                          fontWeight: 800,
-                          color: 'var(--color-warm-white)',
-                          margin: '0 0 0.75rem 0',
-                          lineHeight: 1.15
-                        }}
-                      >
-                        {carousel.title}
-                      </h3>
-
-                      <p
-                        style={{
-                          fontFamily: 'var(--font-mono)',
-                          fontSize: '0.86rem',
-                          color: 'var(--color-accent-lime)',
-                          margin: '0 0 1rem 0'
-                        }}
-                      >
-                        {activeSlide.title} // {activeSlide.subtitle}
-                      </p>
-
-                      <p
-                        style={{
-                          fontFamily: 'var(--font-body)',
-                          fontSize: '0.94rem',
-                          lineHeight: 1.65,
-                          color: 'var(--color-muted-gray)',
-                          margin: '0 0 2rem 0',
-                          maxWidth: '52ch'
-                        }}
-                      >
-                        {carousel.description}
-                      </p>
-                    </div>
-
-                    {/* Pagination Indicators & Next/Prev Controls */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-                      <div style={{ display: 'flex', gap: '6px' }}>
-                        {carousel.slides.map((_, sIdx) => (
-                          <button
-                            key={sIdx}
-                            onClick={() =>
-                              setCarouselIndex((prev) => ({
-                                ...prev,
-                                [carousel.id]: sIdx
-                              }))
-                            }
-                            style={{
-                              width: sIdx === currentSlideIdx ? '28px' : '8px',
-                              height: '4px',
-                              borderRadius: '2px',
-                              backgroundColor: sIdx === currentSlideIdx ? 'var(--color-accent-lime)' : 'rgba(255, 255, 255, 0.2)',
-                              border: 'none',
-                              cursor: 'pointer',
-                              transition: 'all 0.3s ease'
-                            }}
-                          />
-                        ))}
-                      </div>
-
-                      <div style={{ display: 'flex', gap: '8px', marginLeft: 'auto' }}>
-                        <button
-                          onClick={handlePrevSlide}
-                          aria-label="Previous Slide"
-                          style={{
-                            width: '40px',
-                            height: '40px',
-                            borderRadius: '50%',
-                            backgroundColor: '#161616',
-                            border: '1px solid var(--color-border-gray)',
-                            color: 'var(--color-warm-white)',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            cursor: 'pointer',
-                            transition: 'all 0.2s ease'
-                          }}
-                        >
-                          <ChevronLeft size={18} />
-                        </button>
-
-                        <button
-                          onClick={handleNextSlide}
-                          aria-label="Next Slide"
-                          style={{
-                            width: '40px',
-                            height: '40px',
-                            borderRadius: '50%',
-                            backgroundColor: '#161616',
-                            border: '1px solid var(--color-border-gray)',
-                            color: 'var(--color-warm-white)',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            cursor: 'pointer',
-                            transition: 'all 0.2s ease'
-                          }}
-                        >
-                          <ChevronRight size={18} />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
+                  {LOCAL_ADS_IMAGES[1].badge}
                 </div>
-              );
-            })}
+                <div
+                  style={{
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    padding: '1rem 1.25rem',
+                    background: 'linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, transparent 100%)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between'
+                  }}
+                >
+                  <h4 style={{ fontFamily: 'var(--font-display)', fontSize: '1.05rem', fontWeight: 800, color: '#FFF', margin: 0 }}>
+                    {LOCAL_ADS_IMAGES[1].title}
+                  </h4>
+                  <Eye size={16} color="var(--color-accent-lime)" />
+                </div>
+              </div>
+
+              {/* Image 3: Miss Dior Eau De Parfum */}
+              <div
+                onClick={() =>
+                  setActiveModalItem({
+                    ...LOCAL_ADS_IMAGES[2],
+                    mediaType: 'image'
+                  })
+                }
+                className="ads-gallery-item"
+                style={{
+                  position: 'relative',
+                  width: '100%',
+                  aspectRatio: '4 / 3.4',
+                  borderRadius: 'clamp(18px, 2.2vw, 24px)',
+                  overflow: 'hidden',
+                  backgroundColor: '#0E0E0E',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  cursor: 'pointer'
+                }}
+              >
+                <img
+                  src={LOCAL_ADS_IMAGES[2].imageUrl}
+                  alt={LOCAL_ADS_IMAGES[2].title}
+                  loading="lazy"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    display: 'block',
+                    transition: 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
+                  }}
+                />
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '1rem',
+                    left: '1rem',
+                    padding: '4px 10px',
+                    backgroundColor: 'rgba(10, 10, 10, 0.85)',
+                    backdropFilter: 'blur(8px)',
+                    borderRadius: '4px',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.68rem',
+                    color: 'var(--color-accent-lime)',
+                    border: '1px solid rgba(255, 255, 255, 0.12)'
+                  }}
+                >
+                  {LOCAL_ADS_IMAGES[2].badge}
+                </div>
+                <div
+                  style={{
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    padding: '1rem 1.25rem',
+                    background: 'linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, transparent 100%)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between'
+                  }}
+                >
+                  <h4 style={{ fontFamily: 'var(--font-display)', fontSize: '1.05rem', fontWeight: 800, color: '#FFF', margin: 0 }}>
+                    {LOCAL_ADS_IMAGES[2].title}
+                  </h4>
+                  <Eye size={16} color="var(--color-accent-lime)" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ===================================================================
+              GALLERY GROUP B: HAUTE COUTURE PANORAMIC DUO (Images 6 & 9)
+              Image 6: Solitaire Haute Joaillerie
+              Image 9: Gucci: The Poetry of Movement
+              =================================================================== */}
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 460px), 1fr))',
+              gap: 'clamp(1.75rem, 3vw, 2.5rem)',
+              marginBottom: 'clamp(3rem, 6vw, 5rem)'
+            }}
+          >
+            {/* Image 6: Solitaire Haute Joaillerie */}
+            <div
+              onClick={() =>
+                setActiveModalItem({
+                  ...LOCAL_ADS_IMAGES[5],
+                  mediaType: 'image'
+                })
+              }
+              className="ads-gallery-item"
+              style={{
+                position: 'relative',
+                width: '100%',
+                aspectRatio: '4 / 5',
+                borderRadius: 'clamp(18px, 2.2vw, 24px)',
+                overflow: 'hidden',
+                backgroundColor: '#0E0E0E',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                cursor: 'pointer'
+              }}
+            >
+              <img
+                src={LOCAL_ADS_IMAGES[5].imageUrl}
+                alt={LOCAL_ADS_IMAGES[5].title}
+                loading="lazy"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  display: 'block',
+                  transition: 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
+                }}
+              />
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '1rem',
+                  left: '1rem',
+                  padding: '4px 10px',
+                  backgroundColor: 'rgba(10, 10, 10, 0.85)',
+                  backdropFilter: 'blur(8px)',
+                  borderRadius: '4px',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.68rem',
+                  color: 'var(--color-accent-lime)',
+                  border: '1px solid rgba(255, 255, 255, 0.12)'
+                }}
+              >
+                {LOCAL_ADS_IMAGES[5].badge}
+              </div>
+              <div
+                style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  padding: '1.25rem',
+                  background: 'linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, transparent 100%)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between'
+                }}
+              >
+                <div>
+                  <h4 style={{ fontFamily: 'var(--font-display)', fontSize: '1.15rem', fontWeight: 800, color: '#FFF', margin: 0 }}>
+                    {LOCAL_ADS_IMAGES[5].title}
+                  </h4>
+                  <span className="micro-label" style={{ color: 'var(--color-muted-gray)', fontSize: '0.65rem' }}>
+                    {LOCAL_ADS_IMAGES[5].category}
+                  </span>
+                </div>
+                <Eye size={18} color="var(--color-accent-lime)" />
+              </div>
+            </div>
+
+            {/* Image 9: Gucci Burgundy Silk Monograph */}
+            <div
+              onClick={() =>
+                setActiveModalItem({
+                  ...LOCAL_ADS_IMAGES[8],
+                  mediaType: 'image'
+                })
+              }
+              className="ads-gallery-item"
+              style={{
+                position: 'relative',
+                width: '100%',
+                aspectRatio: '4 / 5',
+                borderRadius: 'clamp(18px, 2.2vw, 24px)',
+                overflow: 'hidden',
+                backgroundColor: '#0E0E0E',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                cursor: 'pointer'
+              }}
+            >
+              <img
+                src={LOCAL_ADS_IMAGES[8].imageUrl}
+                alt={LOCAL_ADS_IMAGES[8].title}
+                loading="lazy"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  display: 'block',
+                  transition: 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
+                }}
+              />
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '1rem',
+                  left: '1rem',
+                  padding: '4px 10px',
+                  backgroundColor: 'rgba(10, 10, 10, 0.85)',
+                  backdropFilter: 'blur(8px)',
+                  borderRadius: '4px',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.68rem',
+                  color: 'var(--color-accent-lime)',
+                  border: '1px solid rgba(255, 255, 255, 0.12)'
+                }}
+              >
+                {LOCAL_ADS_IMAGES[8].badge}
+              </div>
+              <div
+                style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  padding: '1.25rem',
+                  background: 'linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, transparent 100%)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between'
+                }}
+              >
+                <div>
+                  <h4 style={{ fontFamily: 'var(--font-display)', fontSize: '1.15rem', fontWeight: 800, color: '#FFF', margin: 0 }}>
+                    {LOCAL_ADS_IMAGES[8].title}
+                  </h4>
+                  <span className="micro-label" style={{ color: 'var(--color-muted-gray)', fontSize: '0.65rem' }}>
+                    {LOCAL_ADS_IMAGES[8].category}
+                  </span>
+                </div>
+                <Eye size={18} color="var(--color-accent-lime)" />
+              </div>
+            </div>
+          </div>
+
+          {/* ===================================================================
+              GALLERY GROUP C: EDITORIAL TRIPTYCH (Images 4, 5, 7)
+              Image 4: Aurora Fine Jewelry
+              Image 5: Minimalist Vitamin C Serum
+              Image 7: Fashion Week: The New Mood (Aisha)
+              =================================================================== */}
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 310px), 1fr))',
+              gap: 'clamp(1.5rem, 2.5vw, 2.25rem)',
+              marginBottom: 'clamp(3rem, 6vw, 5rem)'
+            }}
+          >
+            {[LOCAL_ADS_IMAGES[3], LOCAL_ADS_IMAGES[4], LOCAL_ADS_IMAGES[6]].map((item) => (
+              <div
+                key={item.id}
+                onClick={() =>
+                  setActiveModalItem({
+                    ...item,
+                    mediaType: 'image'
+                  })
+                }
+                className="ads-gallery-item"
+                style={{
+                  position: 'relative',
+                  width: '100%',
+                  aspectRatio: '4 / 5',
+                  borderRadius: 'clamp(16px, 2vw, 22px)',
+                  overflow: 'hidden',
+                  backgroundColor: '#0E0E0E',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  cursor: 'pointer'
+                }}
+              >
+                <img
+                  src={item.imageUrl}
+                  alt={item.title}
+                  loading="lazy"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    display: 'block',
+                    transition: 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
+                  }}
+                />
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '1rem',
+                    left: '1rem',
+                    padding: '3px 8px',
+                    backgroundColor: 'rgba(10, 10, 10, 0.85)',
+                    backdropFilter: 'blur(8px)',
+                    borderRadius: '4px',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.65rem',
+                    color: 'var(--color-accent-lime)',
+                    border: '1px solid rgba(255, 255, 255, 0.12)'
+                  }}
+                >
+                  {item.badge}
+                </div>
+                <div
+                  style={{
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    padding: '1rem',
+                    background: 'linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, transparent 100%)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between'
+                  }}
+                >
+                  <h4 style={{ fontFamily: 'var(--font-display)', fontSize: '0.95rem', fontWeight: 700, color: '#FFF', margin: 0 }}>
+                    {item.title}
+                  </h4>
+                  <Eye size={15} color="var(--color-accent-lime)" />
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* ===================================================================
+              GALLERY GROUP D: SUMMER & VINTAGE CRUISE DUO (Images 8 & 10)
+              Image 8: House of Quirk: Sip Personality
+              Image 10: Crumbl: Take the Scenic Sip
+              =================================================================== */}
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 460px), 1fr))',
+              gap: 'clamp(1.75rem, 3vw, 2.5rem)'
+            }}
+          >
+            {/* Image 8: House of Quirk */}
+            <div
+              onClick={() =>
+                setActiveModalItem({
+                  ...LOCAL_ADS_IMAGES[7],
+                  mediaType: 'image'
+                })
+              }
+              className="ads-gallery-item"
+              style={{
+                position: 'relative',
+                width: '100%',
+                aspectRatio: '4 / 4.6',
+                borderRadius: 'clamp(18px, 2.2vw, 24px)',
+                overflow: 'hidden',
+                backgroundColor: '#0E0E0E',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                cursor: 'pointer'
+              }}
+            >
+              <img
+                src={LOCAL_ADS_IMAGES[7].imageUrl}
+                alt={LOCAL_ADS_IMAGES[7].title}
+                loading="lazy"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  display: 'block',
+                  transition: 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
+                }}
+              />
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '1rem',
+                  left: '1rem',
+                  padding: '4px 10px',
+                  backgroundColor: 'rgba(10, 10, 10, 0.85)',
+                  backdropFilter: 'blur(8px)',
+                  borderRadius: '4px',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.68rem',
+                  color: 'var(--color-accent-lime)',
+                  border: '1px solid rgba(255, 255, 255, 0.12)'
+                }}
+              >
+                {LOCAL_ADS_IMAGES[7].badge}
+              </div>
+              <div
+                style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  padding: '1.25rem',
+                  background: 'linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, transparent 100%)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between'
+                }}
+              >
+                <div>
+                  <h4 style={{ fontFamily: 'var(--font-display)', fontSize: '1.15rem', fontWeight: 800, color: '#FFF', margin: 0 }}>
+                    {LOCAL_ADS_IMAGES[7].title}
+                  </h4>
+                  <span className="micro-label" style={{ color: 'var(--color-muted-gray)', fontSize: '0.65rem' }}>
+                    {LOCAL_ADS_IMAGES[7].category}
+                  </span>
+                </div>
+                <Eye size={18} color="var(--color-accent-lime)" />
+              </div>
+            </div>
+
+            {/* Image 10: Crumbl */}
+            <div
+              onClick={() =>
+                setActiveModalItem({
+                  ...LOCAL_ADS_IMAGES[9],
+                  mediaType: 'image'
+                })
+              }
+              className="ads-gallery-item"
+              style={{
+                position: 'relative',
+                width: '100%',
+                aspectRatio: '4 / 4.6',
+                borderRadius: 'clamp(18px, 2.2vw, 24px)',
+                overflow: 'hidden',
+                backgroundColor: '#0E0E0E',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                cursor: 'pointer'
+              }}
+            >
+              <img
+                src={LOCAL_ADS_IMAGES[9].imageUrl}
+                alt={LOCAL_ADS_IMAGES[9].title}
+                loading="lazy"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  display: 'block',
+                  transition: 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
+                }}
+              />
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '1rem',
+                  left: '1rem',
+                  padding: '4px 10px',
+                  backgroundColor: 'rgba(10, 10, 10, 0.85)',
+                  backdropFilter: 'blur(8px)',
+                  borderRadius: '4px',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.68rem',
+                  color: 'var(--color-accent-lime)',
+                  border: '1px solid rgba(255, 255, 255, 0.12)'
+                }}
+              >
+                {LOCAL_ADS_IMAGES[9].badge}
+              </div>
+              <div
+                style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  padding: '1.25rem',
+                  background: 'linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, transparent 100%)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between'
+                }}
+              >
+                <div>
+                  <h4 style={{ fontFamily: 'var(--font-display)', fontSize: '1.15rem', fontWeight: 800, color: '#FFF', margin: 0 }}>
+                    {LOCAL_ADS_IMAGES[9].title}
+                  </h4>
+                  <span className="micro-label" style={{ color: 'var(--color-muted-gray)', fontSize: '0.65rem' }}>
+                    {LOCAL_ADS_IMAGES[9].category}
+                  </span>
+                </div>
+                <Eye size={18} color="var(--color-accent-lime)" />
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* =========================================================================
-          SECTION 5: FINAL ADS CONTACT SECTION
+          FINAL ADS CONTACT SECTION — Single-Line Minimal Focus
           Headline: HAVE A BRAND TO MAKE UNFORGETTABLE?
-          Supporting text: Let's create advertising that captures attention and gives your brand a distinctive visual identity.
+          Supporting text: Let's create visual advertising that commands attention.
           Button: START A PROJECT
           ========================================================================= */}
       <section
         style={{
-          paddingTop: 'clamp(6rem, 12vw, 10rem)',
-          paddingBottom: 'clamp(6rem, 12vw, 10rem)',
+          paddingTop: 'clamp(5rem, 10vw, 8rem)',
+          paddingBottom: 'clamp(5rem, 10vw, 8rem)',
           backgroundColor: 'var(--color-near-black)',
           position: 'relative',
           overflow: 'hidden'
         }}
       >
         <div className="site-container" style={{ textAlign: 'center', position: 'relative', zIndex: 2 }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginBottom: '1.5rem' }}>
-            <CornerstoneMotif size={18} variant="bracket" />
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginBottom: '1.25rem' }}>
+            <CornerstoneMotif size={16} variant="bracket" />
             <span className="micro-label-lime">LET'S BUILD YOUR VISUAL IDENTITY</span>
           </div>
 
@@ -1176,8 +1325,8 @@ export const AdsPage = ({ onNavigate }) => {
             className="display-mega"
             style={{
               fontSize: 'clamp(2.2rem, 5vw, 4.4rem)',
-              margin: '0 auto 1.5rem auto',
-              maxWidth: '20ch',
+              margin: '0 auto 1.25rem auto',
+              maxWidth: '22ch',
               lineHeight: 1.08
             }}
           >
@@ -1187,14 +1336,14 @@ export const AdsPage = ({ onNavigate }) => {
           <p
             style={{
               fontFamily: 'var(--font-body)',
-              fontSize: 'clamp(1rem, 1.8vw, 1.25rem)',
-              lineHeight: 1.6,
+              fontSize: 'clamp(1rem, 1.6vw, 1.2rem)',
+              lineHeight: 1.5,
               color: 'var(--color-muted-gray)',
               maxWidth: '54ch',
               margin: '0 auto clamp(2rem, 4vw, 3rem) auto'
             }}
           >
-            Let's create advertising that captures attention and gives your brand a distinctive visual identity.
+            Let's create visual advertising that commands attention.
           </p>
 
           <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
@@ -1213,38 +1362,33 @@ export const AdsPage = ({ onNavigate }) => {
         </div>
       </section>
 
-      {/* Accessible Lightbox Modal */}
+      {/* Fullscreen Accessible Lightbox Modal (Supports all 13 items) */}
       {activeModalItem && (
         <CampaignLightboxModal
           project={activeModalItem}
-          allProjects={[...FEATURED_SHORTS, ...ADS_PHOTOGRAPHY]}
+          allProjects={allLightboxItems}
           onClose={() => setActiveModalItem(null)}
           onSelectProject={(item) => setActiveModalItem(item)}
           onNavigate={onNavigate}
         />
       )}
 
-      {/* Component Styles & Micro-Interactions */}
+      {/* CSS Micro-Interactions */}
       <style>{`
         .ads-video-card:hover {
           transform: translateY(-4px);
         }
-        .ads-photo-card:hover .ads-photo-media img {
-          transform: scale(1.04);
+        .ads-gallery-item:hover img {
+          transform: scale(1.03);
         }
-        .ads-photo-card:hover .ads-photo-hover-overlay {
-          opacity: 1 !important;
-        }
-        .ads-carousel-box:hover img {
-          transform: scale(1.02);
-        }
-        .ads-carousel-box:hover .ads-photo-hover-overlay {
-          opacity: 1 !important;
+        .ads-gallery-item:hover {
+          border-color: rgba(184, 255, 61, 0.3) !important;
+          box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8), 0 0 35px -10px rgba(184, 255, 61, 0.1);
         }
         @media (max-width: 768px) {
           .ads-video-card {
             padding: 0.85rem !important;
-            border-radius: 20px !important;
+            border-radius: 18px !important;
           }
         }
       `}</style>

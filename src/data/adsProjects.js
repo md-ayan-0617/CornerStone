@@ -2,14 +2,8 @@
 // CORNERSTONE — Centralized Advertising & Media Portfolio Data (ADS)
 // File: src/data/adsProjects.js
 // 
-// HOW TO REPLACE OR ADD MEDIA:
-// 1. YouTube Shorts / Videos:
-//    - Replace the `videoId` or `videoUrl` with your YouTube video or short URL.
-//    - The thumbnail URL will automatically resolve to https://i.ytimg.com/vi/<VIDEO_ID>/hqdefault.jpg
-// 2. Photography / AI Model Imagery:
-//    - Update `imageUrl` and `thumbnailUrl` with your high-res image link or local asset path.
-//    - Set `aspectRatio` to '9:16' (portrait), '16:9' (landscape), or '1:1' (square).
-//    - Set `isPlaceholder: false` when using your real production media.
+// Uses local demo images: /images/1.png through /images/10.png
+// Uses verified YouTube Shorts: n7i5_lQkq9k, aO1ADthWkjk, yrpbqVTbGd4
 // ==============================================================================
 
 /**
@@ -19,7 +13,6 @@ export function getYouTubeEmbedUrl(videoIdOrUrl, { autoplay = 0, mute = 1, contr
   if (!videoIdOrUrl) return null;
   const str = String(videoIdOrUrl).trim();
   
-  // Extract 11-character YouTube ID
   let id = str;
   const match = str.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
   if (match && match[1]) {
@@ -34,244 +27,176 @@ export function getYouTubeEmbedUrl(videoIdOrUrl, { autoplay = 0, mute = 1, contr
 }
 
 /**
- * 1. THE 3 VERIFIED YOUTUBE SHORTS (High-Priority Requirement)
- * Exact IDs in exact order requested by client:
- * Video 1: n7i5_lQkq9k
- * Video 2: aO1ADthWkjk
- * Video 3: yrpbqVTbGd4
+ * 1. THE 3 VERIFIED YOUTUBE SHORTS (Native 9:16 Portrait Aspect Ratio)
  */
 export const FEATURED_SHORTS = [
   {
     id: "short-01",
     videoId: "n7i5_lQkq9k",
     title: "THE OBSIDIAN ARCHIVE",
-    subtitle: "AI Brand Campaign & Cinema Direction",
     category: "AI BRAND FILM",
     type: "video",
     platform: "youtube",
     videoUrl: "https://youtube.com/shorts/n7i5_lQkq9k",
     thumbnailUrl: "https://i.ytimg.com/vi/n7i5_lQkq9k/hqdefault.jpg",
     aspectRatio: "9:16",
-    client: "CornerStone Creative",
-    year: "2026",
-    deliverables: ["4K Vertical Cut", "AI Lighting Suite", "Soundscape"],
-    description: "AI-powered product visuals, cinematic camera tracking, and tactile low-frequency reflections designed for luxury brand authority.",
-    badge: "FEATURED SHORT 01",
+    badge: "01 // FILM",
     isPlaceholder: false
   },
   {
     id: "short-02",
     videoId: "aO1ADthWkjk",
     title: "KINETIC VELOCITY",
-    subtitle: "Luxury Product Commercial & Motion Ad",
     category: "PRODUCT VIDEO AD",
     type: "video",
     platform: "youtube",
     videoUrl: "https://youtube.com/shorts/aO1ADthWkjk",
     thumbnailUrl: "https://i.ytimg.com/vi/aO1ADthWkjk/hqdefault.jpg",
     aspectRatio: "9:16",
-    client: "Aurelis Studio Co.",
-    year: "2026",
-    deliverables: ["Paid Social Reel", "Dynamic Pacing", "Story Ads"],
-    description: "Atmospheric, tactile 9:16 vertical video ad capturing rapid transitions, physical textures, and high-impact visual hooks.",
-    badge: "FEATURED SHORT 02",
+    badge: "02 // MOTION",
     isPlaceholder: false
   },
   {
     id: "short-03",
     videoId: "yrpbqVTbGd4",
     title: "CHROMA & SHADOW",
-    subtitle: "Macro Focus & High-Conversion Paid Feed Ad",
     category: "COMMERCIAL AD",
     type: "video",
     platform: "youtube",
     videoUrl: "https://youtube.com/shorts/yrpbqVTbGd4",
     thumbnailUrl: "https://i.ytimg.com/vi/yrpbqVTbGd4/hqdefault.jpg",
     aspectRatio: "9:16",
-    client: "Maison Studio Co.",
-    year: "2026",
-    deliverables: ["Meta Reels Campaign", "Vertical Feed Ads", "Audio Master"],
-    description: "Scripted commercial reel engineered for ultra-fast engagement, aesthetic distinction, and high-converting paid social campaigns.",
-    badge: "FEATURED SHORT 03",
+    badge: "03 // REEL",
     isPlaceholder: false
   }
 ];
 
-export const ADS_CATEGORIES = [
-  "All",
-  "Featured Shorts",
-  "AI Models & Fashion",
-  "Product Campaigns",
-  "Beauty & Lifestyle",
-  "Commercial Stills"
-];
-
 /**
- * 2. ADVERTISING PHOTOGRAPHY, AI MODELS & COMMERCIAL VISUALS
- * Curated art-directed mix of portrait (9:16), landscape (16:9), and square (1:1).
+ * 2. THE 10 LOCAL DEMO IMAGES (/images/1.png to /images/10.png)
+ * Ultra-high-resolution luxury, beauty, lifestyle, and fashion editorial advertising visuals.
  */
-export const ADS_PHOTOGRAPHY = [
+export const LOCAL_ADS_IMAGES = [
   {
-    id: "ad-photo-01",
-    title: "Aura Lumina: AI Fashion Editorial",
-    category: "AI Models & Fashion",
-    categoryFilter: "AI Models & Fashion",
-    type: "image",
-    client: "Maison Studio",
-    year: "2026",
+    id: "ad-img-01",
+    number: "01",
+    title: "LUMIÈRE EAU DE PARFUM",
+    category: "LUXURY PERFUME",
+    client: "Lumière",
+    imageUrl: "/images/1.png",
+    thumbnailUrl: "/images/1.png",
     aspectRatio: "9:16",
-    imageUrl: "/images/services/service-ai-photography.jpg",
-    thumbnailUrl: "/images/services/service-ai-photography.jpg",
-    tagline: "Hyper-realistic AI fashion models styled for Parisian high couture.",
-    description: "Full editorial series created without human sets or travel overhead, maintaining 100% fabric consistency and natural facial lighting.",
-    deliverables: ["Editorial Lookbook", "Vogue Placement", "Billboards"],
-    isPlaceholder: true
+    badge: "HAUTE PARFUMERIE",
+    tagline: "Amber glass reflections and couture perfume direction."
   },
   {
-    id: "ad-photo-02",
-    title: "Nocturne Chronograph: Tactile Product",
-    category: "Product Campaigns",
-    categoryFilter: "Product Campaigns",
-    type: "image",
-    client: "Vanguard Horology",
-    year: "2026",
-    aspectRatio: "1:1",
-    imageUrl: "/images/services/service-creative-production.jpg",
-    thumbnailUrl: "/images/services/service-creative-production.jpg",
-    tagline: "Surgical macro lighting on aerospace-grade titanium.",
-    description: "High-precision commercial product imagery capturing micro-bevels, sapphire crystal reflections, and subtle lime illumination.",
-    deliverables: ["Product Stills", "E-Commerce Hero", "Print Ads"],
-    isPlaceholder: true
+    id: "ad-img-02",
+    number: "02",
+    title: "DOT & KEY SUNSCREEN",
+    category: "BEAUTY & SKINCARE",
+    client: "Dot & Key",
+    imageUrl: "/images/2.png",
+    thumbnailUrl: "/images/2.png",
+    aspectRatio: "4:5",
+    badge: "SKINCARE CAMPAIGN",
+    tagline: "Watermelon cooling sunscreen commercial visuals."
   },
   {
-    id: "ad-photo-03",
-    title: "Komorebi Botanicals: Organic Beauty",
-    category: "Beauty & Lifestyle",
-    categoryFilter: "Beauty & Lifestyle",
-    type: "image",
-    client: "Komorebi Skincare",
-    year: "2026",
-    aspectRatio: "9:16",
-    imageUrl: "/images/services/service-ai-automation.jpg",
-    thumbnailUrl: "/images/services/service-ai-automation.jpg",
-    tagline: "Minimalist Japanese skincare visual identity.",
-    description: "Clean water surface tension, frosted glass dropper bottles, and gentle warm morning ambient lighting for luxury cosmetic retail.",
-    deliverables: ["Digital Flagship", "Sephora In-Store", "Story Ad Suite"],
-    isPlaceholder: true
+    id: "ad-img-03",
+    number: "03",
+    title: "MISS DIOR EAU DE PARFUM",
+    category: "FASHION FRAGRANCE",
+    client: "Dior",
+    imageUrl: "/images/3.png",
+    thumbnailUrl: "/images/3.png",
+    aspectRatio: "4:5",
+    badge: "PARISIAN EDITORIAL",
+    tagline: "Courtyard natural daylight and luxury fragrance styling."
   },
   {
-    id: "ad-photo-04",
-    title: "Equinox Architecture: Minimal Interior",
-    category: "Commercial Stills",
-    categoryFilter: "Commercial Stills",
-    type: "image",
-    client: "Studio Architekten",
-    year: "2026",
-    aspectRatio: "16:9",
-    imageUrl: "/images/services/service-website-development.jpg",
-    thumbnailUrl: "/images/services/service-website-development.jpg",
-    tagline: "Monolithic concrete and linear aperture illumination.",
-    description: "Architectural commercial stills commissioned for modern design firms and luxury real estate key visual portfolios.",
-    deliverables: ["Architectural Digest", "Hero Assets", "Print Monograph"],
-    isPlaceholder: true
+    id: "ad-img-04",
+    number: "04",
+    title: "AURORA FINE JEWELRY",
+    category: "HIGH JEWELRY",
+    client: "Aurora",
+    imageUrl: "/images/4.png",
+    thumbnailUrl: "/images/4.png",
+    aspectRatio: "4:5",
+    badge: "FINE JEWELRY",
+    tagline: "Gold and pearl layering with minimalist linen contrast."
   },
   {
-    id: "ad-photo-05",
-    title: "Verve Kinetic: Neo-Sportswear",
-    category: "AI Models & Fashion",
-    categoryFilter: "AI Models & Fashion",
-    type: "image",
-    client: "Verve Athletic Labs",
-    year: "2026",
-    aspectRatio: "9:16",
-    imageUrl: "/images/services/service-ad-creative-design.jpg",
-    thumbnailUrl: "/images/services/service-ad-creative-design.jpg",
-    tagline: "High-velocity technical performance wear.",
-    description: "Dynamic athletic poses captured with synthetic rain droplets, cinematic flash sync, and custom aerodynamic textiles.",
-    deliverables: ["Paid Social Ads", "Outdoor Posters", "Web Lookbook"],
-    isPlaceholder: true
+    id: "ad-img-05",
+    number: "05",
+    title: "MINIMALIST VITAMIN C SERUM",
+    category: "CLEAN COSMETICS",
+    client: "Minimalist",
+    imageUrl: "/images/5.png",
+    thumbnailUrl: "/images/5.png",
+    aspectRatio: "4:5",
+    badge: "CLEAN BEAUTY",
+    tagline: "Sunlight warmth and active clinical skincare aesthetics."
   },
   {
-    id: "ad-photo-06",
-    title: "Solis Audio: Carbon Fiber Headphone",
-    category: "Product Campaigns",
-    categoryFilter: "Product Campaigns",
-    type: "image",
-    client: "Solis Sound Systems",
-    year: "2026",
-    aspectRatio: "1:1",
-    imageUrl: "/images/services/service-ai-voice.jpg",
-    thumbnailUrl: "/images/services/service-ai-voice.jpg",
-    tagline: "Acoustic precision meets architectural industrial design.",
-    description: "High-contrast commercial lighting highlighting brushed aluminum sliders, memory foam ear cups, and braided audio cabling.",
-    deliverables: ["Product Launch Key Visual", "3D Renders", "Packaging"],
-    isPlaceholder: true
+    id: "ad-img-06",
+    number: "06",
+    title: "SOLITAIRE HAUTE JOAILLERIE",
+    category: "HAUTE JOAILLERIE",
+    client: "Solitaire",
+    imageUrl: "/images/6.png",
+    thumbnailUrl: "/images/6.png",
+    aspectRatio: "4:5",
+    badge: "DIAMOND SUITE",
+    tagline: "Pear-cut diamond brilliance on draped bronze silk."
+  },
+  {
+    id: "ad-img-07",
+    number: "07",
+    title: "FASHION WEEK: THE NEW MOOD",
+    category: "EDITORIAL MONOGRAPH",
+    client: "Fashion Week",
+    imageUrl: "/images/7.png",
+    thumbnailUrl: "/images/7.png",
+    aspectRatio: "4:5",
+    badge: "RUNWAY EDITORIAL",
+    tagline: "Structured chocolate blazer and studio aperture lighting."
+  },
+  {
+    id: "ad-img-08",
+    number: "08",
+    title: "HOUSE OF QUIRK: SIP PERSONALITY",
+    category: "LIFESTYLE PRODUCT",
+    client: "House of Quirk",
+    imageUrl: "/images/8.png",
+    thumbnailUrl: "/images/8.png",
+    aspectRatio: "4:5",
+    badge: "SUMMER CAMPAIGN",
+    tagline: "Playful pastel tumblers and high-energy commercial pop."
+  },
+  {
+    id: "ad-img-09",
+    number: "09",
+    title: "GUCCI: THE POETRY OF MOVEMENT",
+    category: "LUXURY COUTURE",
+    client: "Gucci",
+    imageUrl: "/images/9.png",
+    thumbnailUrl: "/images/9.png",
+    aspectRatio: "4:5",
+    badge: "COUTURE MONOGRAPH",
+    tagline: "Burgundy chiffon gown in sculpted architectural alcove."
+  },
+  {
+    id: "ad-img-10",
+    number: "10",
+    title: "CRUMBL: TAKE THE SCENIC SIP",
+    category: "BEVERAGE & LIFESTYLE",
+    client: "Crumbl",
+    imageUrl: "/images/10.png",
+    thumbnailUrl: "/images/10.png",
+    aspectRatio: "4:5",
+    badge: "CALIFORNIA CRUISE",
+    tagline: "Pink vintage convertible and sunny coastal lifestyle."
   }
 ];
 
-/**
- * 3. CURATED EDITORIAL CAROUSELS
- * Swipeable and clickable lookbooks for Fashion/AI Models & Luxury Products.
- */
-export const ADS_CAROUSELS = [
-  {
-    id: "carousel-fashion",
-    title: "AI FASHION & DIGITAL AVATAR LOOKBOOK",
-    category: "FASHION & EDITORIAL",
-    tagline: "Virtual Haute Couture & Synthetic Lookbooks",
-    description: "Full seasonal collections modeled by proprietary digital avatars. Zero studio logistics, 100% lighting & textile consistency across 40+ looks.",
-    slides: [
-      {
-        id: "cf-01",
-        title: "Look 01: Monolithic Wool Overcoat",
-        subtitle: "Oversized Charcoal & Structured Shoulders",
-        aspectRatio: "9:16",
-        imageUrl: "/images/services/service-ai-photography.jpg"
-      },
-      {
-        id: "cf-02",
-        title: "Look 02: Technical Metallic Trench",
-        subtitle: "Water-Repellent Liquid Chrome Weave",
-        aspectRatio: "9:16",
-        imageUrl: "/images/services/service-ad-creative-design.jpg"
-      },
-      {
-        id: "cf-03",
-        title: "Look 03: Sculptural Cashmere Knit",
-        subtitle: "Minimalist Bone White Silhouette",
-        aspectRatio: "9:16",
-        imageUrl: "/images/services/service-creative-production.jpg"
-      }
-    ]
-  },
-  {
-    id: "carousel-product",
-    title: "LUXURY PRODUCT & MATERIAL EXPLORATION",
-    category: "PRODUCT CAMPAIGN",
-    tagline: "Tactile Glass, Matte Ceramic & Titanium Key Visuals",
-    description: "Close-up macro advertising photography engineered to make product materials tangible through high-resolution screens.",
-    slides: [
-      {
-        id: "cp-01",
-        title: "Series A: Frosted Glass Refraction",
-        subtitle: "Cosmetic Essence Dropper with Sub-Surface Scattering",
-        aspectRatio: "1:1",
-        imageUrl: "/images/services/service-ai-automation.jpg"
-      },
-      {
-        id: "cp-02",
-        title: "Series B: Matte Black Ceramic",
-        subtitle: "Smart Ring Architecture with Micro Sensor Array",
-        aspectRatio: "1:1",
-        imageUrl: "/images/services/service-website-development.jpg"
-      },
-      {
-        id: "cp-03",
-        title: "Series C: Architectural Anodized Aluminum",
-        subtitle: "Precision Audio Core with Laser-Etched Monogram",
-        aspectRatio: "1:1",
-        imageUrl: "/images/services/service-ai-voice.jpg"
-      }
-    ]
-  }
-];
+// Backwards-compatible alias for any older references
+export const ADS_PHOTOGRAPHY = LOCAL_ADS_IMAGES;
