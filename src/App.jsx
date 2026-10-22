@@ -14,7 +14,7 @@ gsap.registerPlugin(ScrollTrigger);
 import HomePage from './pages/HomePage';
 import ServicesPage from './pages/ServicesPage';
 import DigitalExperiencesPage from './pages/DigitalExperiencesPage';
-import VisualCampaignsPage from './pages/VisualCampaignsPage';
+import AdsPage from './pages/AdsPage';
 import WorkPage from './pages/WorkPage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
@@ -101,6 +101,8 @@ export function App() {
     const validPaths = [
       "/",
       "/services",
+      "/web",
+      "/ads",
       "/work",
       "/work/digital-experiences",
       "/digital-experiences",
@@ -148,13 +150,15 @@ export function App() {
     switch (currentPath) {
       case "/services":
         return <ServicesPage onNavigate={navigate} />;
+      case "/web":
       case "/work/digital-experiences":
       case "/digital-experiences":
       case "/work":
         return <DigitalExperiencesPage onNavigate={navigate} />;
+      case "/ads":
       case "/work/visual-campaigns":
       case "/visual-campaigns":
-        return <VisualCampaignsPage onNavigate={navigate} />;
+        return <AdsPage onNavigate={navigate} />;
       case "/about":
         return <AboutPage onNavigate={navigate} />;
       case "/contact":

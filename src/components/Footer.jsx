@@ -94,8 +94,8 @@ export const Footer = ({ onNavigate }) => {
               {[
                 { label: "HOME", path: "/" },
                 { label: "SERVICES", path: "/services" },
-                { label: "DIGITAL EXPERIENCES", path: "/work/digital-experiences" },
-                { label: "VISUAL CAMPAIGNS", path: "/work/visual-campaigns" },
+                { label: "WEB", path: "/web" },
+                { label: "ADS", path: "/ads" },
                 { label: "ABOUT", path: "/about" },
                 { label: "CONTACT", path: "/contact" }
               ].map((link) => (

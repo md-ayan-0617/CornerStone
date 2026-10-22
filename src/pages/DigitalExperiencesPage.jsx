@@ -116,7 +116,7 @@ export const DigitalExperiencesPage = ({ onNavigate }) => {
           <div className="dx-hero-reveal" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1.75rem' }}>
             <CornerstoneMotif size={18} variant="bracket" />
             <span className="micro-label-lime">
-              DIGITAL EXPERIENCES // INTERACTIVE WEBSITES • WEBGL PLATFORMS • DIGITAL FLAGSHIPS
+              WEB // INTERACTIVE WEBSITES • DIGITAL EXPERIENCES • WEB APPLICATIONS
             </span>
           </div>
 

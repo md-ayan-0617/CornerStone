@@ -42,16 +42,16 @@ export const Navbar = ({ currentPath = "/", onNavigate }) => {
     { label: "HOME", path: "/", number: "01", icon: Home },
     { label: "SERVICES", path: "/services", number: "02", icon: Cpu },
     {
-      label: "DIGITAL EXPERIENCES",
-      path: "/work/digital-experiences",
-      altPaths: ["/work", "/digital-experiences"],
+      label: "WEB",
+      path: "/web",
+      altPaths: ["/work/digital-experiences", "/digital-experiences", "/work"],
       number: "03",
       icon: Globe
     },
     {
-      label: "VISUAL CAMPAIGNS",
-      path: "/work/visual-campaigns",
-      altPaths: ["/visual-campaigns"],
+      label: "ADS",
+      path: "/ads",
+      altPaths: ["/work/visual-campaigns", "/visual-campaigns"],
       number: "04",
       icon: Film
     },
