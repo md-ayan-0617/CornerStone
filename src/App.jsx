@@ -13,6 +13,8 @@ gsap.registerPlugin(ScrollTrigger);
 // Dedicated Pages
 import HomePage from './pages/HomePage';
 import ServicesPage from './pages/ServicesPage';
+import DigitalExperiencesPage from './pages/DigitalExperiencesPage';
+import VisualCampaignsPage from './pages/VisualCampaignsPage';
 import WorkPage from './pages/WorkPage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
@@ -96,7 +98,18 @@ export function App() {
 
   // Auto-redirect invalid or unknown paths back to home without error
   useEffect(() => {
-    const validPaths = ["/", "/work", "/services", "/about", "/contact", "/admin/9827988375"];
+    const validPaths = [
+      "/",
+      "/services",
+      "/work",
+      "/work/digital-experiences",
+      "/digital-experiences",
+      "/work/visual-campaigns",
+      "/visual-campaigns",
+      "/about",
+      "/contact",
+      "/admin/9827988375"
+    ];
     const normalized = (currentPath || "/").replace(/\/+$/, "") || "/";
     if (!validPaths.includes(normalized)) {
       window.history.replaceState({}, '', '/');
@@ -135,8 +148,13 @@ export function App() {
     switch (currentPath) {
       case "/services":
         return <ServicesPage onNavigate={navigate} />;
+      case "/work/digital-experiences":
+      case "/digital-experiences":
       case "/work":
-        return <WorkPage onNavigate={navigate} />;
+        return <DigitalExperiencesPage onNavigate={navigate} />;
+      case "/work/visual-campaigns":
+      case "/visual-campaigns":
+        return <VisualCampaignsPage onNavigate={navigate} />;
       case "/about":
         return <AboutPage onNavigate={navigate} />;
       case "/contact":

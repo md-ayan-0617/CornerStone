@@ -92,8 +92,10 @@ export const Footer = ({ onNavigate }) => {
             </span>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
               {[
-                { label: "WORK", path: "/work" },
+                { label: "HOME", path: "/" },
                 { label: "SERVICES", path: "/services" },
+                { label: "DIGITAL EXPERIENCES", path: "/work/digital-experiences" },
+                { label: "VISUAL CAMPAIGNS", path: "/work/visual-campaigns" },
                 { label: "ABOUT", path: "/about" },
                 { label: "CONTACT", path: "/contact" }
               ].map((link) => (
