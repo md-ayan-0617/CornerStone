@@ -27,6 +27,12 @@ export const AdminLogin = ({ onLoginSuccess, onNavigateHome }) => {
       const data = await res.json().catch(() => ({}));
 
       if (!res.ok || !data.success) {
+        if (res.status === 404) {
+          throw new Error('API server route not found (404). Please ensure latest deployment is complete.');
+        }
+        if (res.status === 500) {
+          throw new Error(data.error || 'Database connection error. Verify DATABASE_URL in Vercel settings.');
+        }
         throw new Error(data.error || 'Invalid administrator credentials.');
       }
 

@@ -101,8 +101,32 @@ export async function handleApiRequest(req, res) {
   const host = req.headers.host || 'localhost';
   const protocol = req.headers['x-forwarded-proto'] || 'http';
   const parsed = new URL(req.url, `${protocol}://${host}`);
-  const pathname = parsed.pathname.replace(/\/+$/, '') || '/';
+
+  // Resolve pathname across Vercel rewrite (__vpath), catch-all query, x-matched-path, or standard req.url
+  const queryParamVpath = parsed.searchParams.get('__vpath');
+  const reqQueryPath = req.query?.path;
+  const rawVpath = queryParamVpath || reqQueryPath;
+
+  let pathname = parsed.pathname.replace(/\/+$/, '') || '/';
+  if (rawVpath) {
+    const cleanSubpath = Array.isArray(rawVpath) ? rawVpath.join('/') : String(rawVpath);
+    // If invoked from /api/auth/[...path] vs /api/index
+    if (cleanSubpath.startsWith('api/')) {
+      pathname = `/${cleanSubpath.replace(/\/+$/, '')}`;
+    } else {
+      // Check if pathname itself contains a prefix like /api/auth or /api/inquiries
+      if (pathname.startsWith('/api/') && pathname !== '/api' && pathname !== '/api/index') {
+        pathname = `${pathname}/${cleanSubpath.replace(/^\/+/, '')}`;
+      } else {
+        pathname = `/api/${cleanSubpath.replace(/^\/+/, '')}`;
+      }
+    }
+  } else if (req.headers['x-matched-path'] && req.headers['x-matched-path'].startsWith('/api')) {
+    pathname = req.headers['x-matched-path'].replace(/\/+$/, '');
+  }
+
   const query = Object.fromEntries(parsed.searchParams.entries());
+  delete query.__vpath;
   const method = (req.method || 'GET').toUpperCase();
 
   try {
