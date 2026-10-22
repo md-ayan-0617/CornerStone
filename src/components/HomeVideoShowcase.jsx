@@ -7,21 +7,66 @@ import { Volume2, VolumeX, Maximize2 } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export const HomeVideoShowcase = ({ onSelectVideo }) => {
+export const HomeVideoShowcase = ({ onSelectVideo, onNavigate }) => {
   const [activePlayingId, setActivePlayingId] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
   const [mutedStates, setMutedStates] = useState({
     "short-01": true,
     "short-02": true,
     "short-03": true
   });
+  const [isInFullscreen, setIsInFullscreen] = useState(false);
 
   const sectionRef = useRef(null);
   const videoCardsRef = useRef({});
+  const videoContainerRefs = useRef({});
   const iframeRefs = useRef({});
   const activePlayingRef = useRef(null);
 
+  // Detect mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobile =
+        typeof window !== 'undefined' &&
+        (window.innerWidth <= 768 ||
+          /Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+      setIsMobile(mobile);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Listen to fullscreen changes across browsers
+  useEffect(() => {
+    const onFullscreenChange = () => {
+      const fsElement =
+        document.fullscreenElement ||
+        document.webkitFullscreenElement ||
+        document.mozFullScreenElement ||
+        document.msFullscreenElement;
+      setIsInFullscreen(Boolean(fsElement));
+      // Refresh ScrollTrigger to prevent layout shift after exiting fullscreen
+      ScrollTrigger.refresh();
+    };
+
+    document.addEventListener('fullscreenchange', onFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', onFullscreenChange);
+    document.addEventListener('mozfullscreenchange', onFullscreenChange);
+    document.addEventListener('MSFullscreenChange', onFullscreenChange);
+
+    return () => {
+      document.removeEventListener('fullscreenchange', onFullscreenChange);
+      document.removeEventListener('webkitfullscreenchange', onFullscreenChange);
+      document.removeEventListener('mozfullscreenchange', onFullscreenChange);
+      document.removeEventListener('MSFullscreenChange', onFullscreenChange);
+    };
+  }, []);
+
   // =========================================================================
-  // Visibility-Aware Muted Autoplay Engine (Scroll In -> Play Muted, Scroll Away -> Pause)
+  // Visibility-Aware Autoplay Engine (Scroll In -> Play, Scroll Away -> Pause)
+  // Desktop: Plays muted when in view
+  // Mobile: Respects browser policy; pauses when scrolled away
   // =========================================================================
   useEffect(() => {
     const elements = Object.values(videoCardsRef.current).filter(Boolean);
@@ -36,7 +81,7 @@ export const HomeVideoShowcase = ({ onSelectVideo }) => {
 
           // When video becomes at least 58% visible in viewport
           if (entry.isIntersecting && entry.intersectionRatio >= 0.58) {
-            // Pause any previously playing video to conserve bandwidth
+            // Pause any previously playing video to avoid simultaneous playback
             if (activePlayingRef.current && activePlayingRef.current !== videoId) {
               const prevIframe = iframeRefs.current[activePlayingRef.current];
               try {
@@ -47,7 +92,7 @@ export const HomeVideoShowcase = ({ onSelectVideo }) => {
               } catch (_) {}
             }
 
-            // Start playing current video (muted)
+            // Start playing current video
             try {
               iframe.contentWindow.postMessage(
                 JSON.stringify({ event: 'command', func: 'playVideo', args: [] }),
@@ -90,21 +135,82 @@ export const HomeVideoShowcase = ({ onSelectVideo }) => {
     };
   }, []);
 
+  // Audio unmute / mute handler supporting mobile user interaction
   const toggleMute = (shortId) => {
     const isMuted = mutedStates[shortId];
     const iframe = iframeRefs.current[shortId];
+
     if (iframe && iframe.contentWindow) {
       try {
-        iframe.contentWindow.postMessage(
-          JSON.stringify({
-            event: 'command',
-            func: isMuted ? 'unMute' : 'mute',
-            args: []
-          }),
-          '*'
-        );
+        if (isMuted) {
+          // Unmute + set full volume
+          iframe.contentWindow.postMessage(
+            JSON.stringify({ event: 'command', func: 'unMute', args: [] }),
+            '*'
+          );
+          iframe.contentWindow.postMessage(
+            JSON.stringify({ event: 'command', func: 'setVolume', args: [100] }),
+            '*'
+          );
+          // Also ensure playback starts upon user tap
+          iframe.contentWindow.postMessage(
+            JSON.stringify({ event: 'command', func: 'playVideo', args: [] }),
+            '*'
+          );
+          activePlayingRef.current = shortId;
+          setActivePlayingId(shortId);
+        } else {
+          // Mute
+          iframe.contentWindow.postMessage(
+            JSON.stringify({ event: 'command', func: 'mute', args: [] }),
+            '*'
+          );
+        }
         setMutedStates((prev) => ({ ...prev, [shortId]: !isMuted }));
       } catch (_) {}
+    }
+  };
+
+  // Fullscreen trigger targeting actual player iframe or container
+  const handleFullscreen = async (short) => {
+    const shortId = short.id;
+    const iframe = iframeRefs.current[shortId];
+    const container = videoContainerRefs.current[shortId];
+    if (!iframe) return;
+
+    // Ensure playback is running
+    try {
+      iframe.contentWindow?.postMessage(
+        JSON.stringify({ event: 'command', func: 'playVideo', args: [] }),
+        '*'
+      );
+      activePlayingRef.current = shortId;
+      setActivePlayingId(shortId);
+    } catch (_) {}
+
+    // Target the actual iframe directly for true video fullscreen
+    const target = iframe;
+
+    try {
+      if (target.requestFullscreen) {
+        await target.requestFullscreen();
+      } else if (target.webkitRequestFullscreen) {
+        target.webkitRequestFullscreen();
+      } else if (target.webkitEnterFullscreen) {
+        target.webkitEnterFullscreen();
+      } else if (target.mozRequestFullScreen) {
+        target.mozRequestFullScreen();
+      } else if (target.msRequestFullscreen) {
+        target.msRequestFullscreen();
+      } else if (container && container.requestFullscreen) {
+        await container.requestFullscreen();
+      } else {
+        // Fallback to lightbox modal
+        if (onSelectVideo) onSelectVideo(short);
+      }
+    } catch (err) {
+      console.warn('Native fullscreen request blocked or unsupported:', err);
+      if (onSelectVideo) onSelectVideo(short);
     }
   };
 
@@ -171,14 +277,14 @@ export const HomeVideoShowcase = ({ onSelectVideo }) => {
         maxWidth: '100vw',
         overflow: 'hidden',
         backgroundColor: '#0A0A0A',
-        paddingTop: 'clamp(5rem, 10vw, 8rem)',
-        paddingBottom: 'clamp(5rem, 10vw, 8rem)',
+        paddingTop: 'clamp(4.5rem, 8vw, 7rem)',
+        paddingBottom: 'clamp(4.5rem, 8vw, 7rem)',
         borderBottom: '1px solid var(--color-border-gray)'
       }}
     >
       <div className="site-container">
-        {/* Section Header: Minimal Single-Line Focus */}
-        <div style={{ marginBottom: 'clamp(2.5rem, 5vw, 4rem)' }}>
+        {/* Section Header: Minimal Single-Line Focus with "SELECTED FILMS" */}
+        <div style={{ marginBottom: 'clamp(2.5rem, 5vw, 3.5rem)' }}>
           <div className="home-video-header-elem" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '0.65rem' }}>
             <CornerstoneMotif size={14} variant="bracket" />
             <span className="micro-label-lime">
@@ -195,7 +301,7 @@ export const HomeVideoShowcase = ({ onSelectVideo }) => {
               whiteSpace: 'nowrap'
             }}
           >
-            MADE TO MAKE YOU LOOK.
+            SELECTED FILMS
           </h2>
 
           <p
@@ -207,7 +313,7 @@ export const HomeVideoShowcase = ({ onSelectVideo }) => {
               margin: 0
             }}
           >
-            High-velocity 9:16 portrait advertising films engineered for modern mobile feeds.
+            High-velocity 9:16 portrait commercial films engineered for modern mobile feeds.
           </p>
         </div>
 
@@ -246,26 +352,27 @@ export const HomeVideoShowcase = ({ onSelectVideo }) => {
               >
                 {/* Portrait 9:16 Video Frame with Rounded Corners & Hardware Clipping */}
                 <div
+                  ref={(el) => (videoContainerRefs.current[short.id] = el)}
+                  className="home-video-container-frame"
                   style={{
                     position: 'relative',
                     width: '100%',
                     aspectRatio: '9 / 16',
                     borderRadius: 'clamp(16px, 2vw, 20px)',
                     overflow: 'hidden',
-                    isolation: 'isolate',
-                    WebkitMaskImage: '-webkit-radial-gradient(white, black)',
-                    transform: 'translateZ(0)',
                     backgroundColor: '#050505',
                     border: '1px solid rgba(255, 255, 255, 0.1)'
                   }}
                 >
-                  {/* YouTube IFrame: enablejsapi=1, controls=0, mute=1 */}
+                  {/* YouTube IFrame: enablejsapi=1, fs=1, fullscreen permission */}
                   <iframe
                     ref={(el) => (iframeRefs.current[short.id] = el)}
                     src={getYouTubeEmbedUrl(short.videoId, { autoplay: 0, mute: 1, controls: 0, loop: 1 })}
                     title={short.title}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                     allowFullScreen
+                    webkitallowfullscreen="true"
+                    mozallowfullscreen="true"
                     style={{
                       position: 'absolute',
                       top: 0,
@@ -314,52 +421,48 @@ export const HomeVideoShowcase = ({ onSelectVideo }) => {
                           backgroundColor: isPlaying ? 'var(--color-accent-lime)' : '#666'
                         }}
                       />
-                      <span>{isPlaying ? 'PLAYING MUTED' : `SHORT 0${idx + 1}`}</span>
+                      <span>{isPlaying ? (isMuted ? 'PLAYING MUTED' : 'PLAYING') : `FILM 0${idx + 1}`}</span>
                     </div>
 
                     <div style={{ display: 'flex', gap: '6px', pointerEvents: 'auto' }}>
                       <button
                         onClick={() => toggleMute(short.id)}
-                        title={isMuted ? "Unmute Audio" : "Mute Audio"}
+                        title={isMuted ? "Enable Sound" : "Mute Sound"}
+                        aria-label={isMuted ? "Enable Sound" : "Mute Sound"}
                         style={{
-                          width: '30px',
-                          height: '30px',
-                          borderRadius: '50%',
-                          backgroundColor: 'rgba(10, 10, 10, 0.85)',
+                          minWidth: '32px',
+                          height: '32px',
+                          padding: isMobile ? '0 10px' : '0',
+                          borderRadius: '999px',
+                          backgroundColor: isMuted ? 'rgba(10, 10, 10, 0.85)' : 'var(--color-lime)',
                           backdropFilter: 'blur(8px)',
-                          border: '1px solid rgba(255, 255, 255, 0.18)',
-                          color: isMuted ? 'var(--color-muted-gray)' : 'var(--color-accent-lime)',
+                          border: isMuted ? '1px solid rgba(255, 255, 255, 0.22)' : '1px solid var(--color-lime)',
+                          color: isMuted ? 'var(--color-warm-white)' : '#000',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          cursor: 'pointer'
+                          gap: '6px',
+                          cursor: 'pointer',
+                          fontWeight: 600,
+                          fontSize: '0.65rem',
+                          fontFamily: 'var(--font-mono)'
                         }}
                       >
                         {isMuted ? <VolumeX size={13} /> : <Volume2 size={13} />}
+                        {isMobile && <span>{isMuted ? "SOUND" : "ON"}</span>}
                       </button>
 
                       <button
-                        onClick={() =>
-                          onSelectVideo &&
-                          onSelectVideo({
-                            id: short.id,
-                            title: short.title,
-                            client: "CornerStone Commercial",
-                            year: "2026",
-                            category: short.category,
-                            mediaType: 'video',
-                            mediaUrl: short.videoUrl,
-                            thumbnailUrl: short.thumbnailUrl
-                          })
-                        }
-                        title="Expand Fullscreen Lightbox"
+                        onClick={() => handleFullscreen(short)}
+                        title="View Fullscreen"
+                        aria-label="View Fullscreen"
                         style={{
-                          width: '30px',
-                          height: '30px',
+                          width: '32px',
+                          height: '32px',
                           borderRadius: '50%',
                           backgroundColor: 'rgba(10, 10, 10, 0.85)',
                           backdropFilter: 'blur(8px)',
-                          border: '1px solid rgba(255, 255, 255, 0.18)',
+                          border: '1px solid rgba(255, 255, 255, 0.22)',
                           color: 'var(--color-warm-white)',
                           display: 'flex',
                           alignItems: 'center',
@@ -367,10 +470,41 @@ export const HomeVideoShowcase = ({ onSelectVideo }) => {
                           cursor: 'pointer'
                         }}
                       >
-                        <Maximize2 size={12} />
+                        <Maximize2 size={13} />
                       </button>
                     </div>
                   </div>
+
+                  {/* Mobile Sound Interaction Banner (Clearly visible on phone screens) */}
+                  {isMobile && isMuted && isPlaying && (
+                    <div
+                      onClick={() => toggleMute(short.id)}
+                      style={{
+                        position: 'absolute',
+                        bottom: '12px',
+                        left: '12px',
+                        right: '12px',
+                        backgroundColor: 'rgba(10, 10, 10, 0.92)',
+                        backdropFilter: 'blur(10px)',
+                        border: '1px solid rgba(184, 255, 61, 0.4)',
+                        borderRadius: '6px',
+                        padding: '6px 10px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '6px',
+                        color: 'var(--color-lime)',
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.65rem',
+                        cursor: 'pointer',
+                        zIndex: 10,
+                        letterSpacing: '0.08em'
+                      }}
+                    >
+                      <Volume2 size={13} />
+                      <span>TAP TO ENABLE AUDIO</span>
+                    </div>
+                  )}
                 </div>
 
                 {/* Minimal Single-Line Bottom Bar */}
@@ -402,9 +536,29 @@ export const HomeVideoShowcase = ({ onSelectVideo }) => {
         </div>
       </div>
 
+      {/* Fullscreen CSS styling ensuring zero blank screen */}
       <style>{`
         .home-video-card:hover {
           transform: translateY(-4px);
+        }
+        :fullscreen, :-webkit-full-screen {
+          width: 100vw !important;
+          height: 100vh !important;
+          max-width: 100vw !important;
+          max-height: 100vh !important;
+          background-color: #000 !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          border-radius: 0 !important;
+          border: none !important;
+        }
+        :fullscreen iframe, :-webkit-full-screen iframe {
+          width: 100% !important;
+          height: 100% !important;
+          max-width: 100% !important;
+          max-height: 100% !important;
+          border: none !important;
         }
       `}</style>
     </section>

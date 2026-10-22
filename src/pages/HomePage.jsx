@@ -1,8 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import Hero from '../components/Hero';
+import HomeServicesOverview from '../components/HomeServicesOverview';
 import HomeVideoShowcase from '../components/HomeVideoShowcase';
-import HomeHorizontalGallery from '../components/HomeHorizontalGallery';
-import SystemDiagram from '../components/SystemDiagram';
+import HomePhotographyGrid from '../components/HomePhotographyGrid';
+import HomeWebsitesShowcase from '../components/HomeWebsitesShowcase';
 import FinalCTA from '../components/FinalCTA';
 import CampaignLightboxModal from '../components/CampaignLightboxModal';
 import { FEATURED_SHORTS, LOCAL_ADS_IMAGES } from '../data/adsProjects';
@@ -68,10 +69,10 @@ export const HomePage = ({ onNavigate }) => {
 
   return (
     <div style={{ width: '100%', maxWidth: '100vw', overflowX: 'hidden' }}>
-      {/* 1. Full 100vh Cinematic Hero */}
+      {/* 1. Existing Landing Hero Section */}
       <Hero
         onExploreWork={() => {
-          const el = document.getElementById('home-ads-showcase');
+          const el = document.getElementById('home-services-overview') || document.getElementById('home-ads-showcase');
           if (el) {
             if (window.__lenis) {
               window.__lenis.scrollTo(el, { offset: -50 });
@@ -79,29 +80,36 @@ export const HomePage = ({ onNavigate }) => {
               el.scrollIntoView({ behavior: 'smooth' });
             }
           } else {
-            onNavigate('/ads');
+            onNavigate('/services');
           }
         }}
         onStartProject={() => onNavigate('/contact')}
         onExploreServices={() => onNavigate('/services')}
       />
 
-      {/* 2. New 3-Video YouTube Shorts Advertisement Showcase (Native 9:16 portrait) */}
+      {/* 2. Services Overview — What CornerStone Offers (AI Automation, Websites, Creative Production) */}
+      <HomeServicesOverview
+        onNavigate={onNavigate}
+      />
+
+      {/* 3. Advertisement Video Showcase — Three YouTube Shorts (9:16 Portrait) */}
       <HomeVideoShowcase
         onSelectVideo={handleSelectVideo}
         onNavigate={onNavigate}
       />
 
-      {/* 3. New 10-Image GSAP Horizontal Scroll Showcase (/images/1.png to /images/10.png) */}
-      <HomeHorizontalGallery
+      {/* 4. Advertising Photography Gallery — Ten Local Images (Static Editorial Mosaic) */}
+      <HomePhotographyGrid
         onSelectImage={handleSelectImage}
         onNavigate={onNavigate}
       />
 
-      {/* 4. The Architectural Node System ("We connect them") - Retained Original Section */}
-      <SystemDiagram />
+      {/* 5. Selected Website Demos — Exactly Four Projects (Noise Dept, Paloma, Vale Selvato, Aurenne) */}
+      <HomeWebsitesShowcase
+        onNavigate={onNavigate}
+      />
 
-      {/* 5. Quiet Cinematic Pre-Footer CTA */}
+      {/* 6. Existing Final CTA and Footer */}
       <FinalCTA
         onStartProject={() => onNavigate('/contact')}
       />
@@ -121,4 +129,3 @@ export const HomePage = ({ onNavigate }) => {
 };
 
 export default HomePage;
-

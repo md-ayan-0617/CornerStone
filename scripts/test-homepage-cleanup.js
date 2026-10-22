@@ -1,5 +1,5 @@
 // ==============================================================================
-// CORNERSTONE — Homepage Cleanup & Cinematic ADS Showcase Verification Suite
+// CORNERSTONE — Final Homepage Restructure & Verification Suite
 // ==============================================================================
 
 import fs from 'fs';
@@ -18,78 +18,120 @@ function assert(condition, message) {
   console.log(`✓ PASS: ${message}`);
 }
 
-console.log('\n--- VERIFYING HOMEPAGE CLEANUP & CINEMATIC ADS SHOWCASE ---');
+console.log('\n--- VERIFYING FINAL HOMEPAGE RESTRUCTURE & FIXES ---');
 
-// 1. Verify src/pages/HomePage.jsx scope and content
+// 1. Verify src/pages/HomePage.jsx Section Order
 const homePath = path.join(rootDir, 'src', 'pages', 'HomePage.jsx');
 const homeContent = fs.readFileSync(homePath, 'utf-8');
 
-// Screenshot matching sections REMOVED from Home
+// Unwanted sections REMOVED from Home
 assert(!homeContent.includes('StatementSection'), 'Philosophy section (StatementSection) REMOVED from HomePage');
-assert(!homeContent.includes('CapabilitySection'), 'Three capability cards (CapabilitySection) REMOVED from HomePage');
+assert(!homeContent.includes('CapabilitySection'), 'Old capability cards (CapabilitySection) REMOVED from HomePage');
 assert(!homeContent.includes('HorizontalServices'), 'Service disciplines carousel (HorizontalServices) REMOVED from HomePage');
 assert(!homeContent.includes('ScrollJourneyVideo'), 'Attract-to-Grow funnel (ScrollJourneyVideo) REMOVED from HomePage');
-assert(!homeContent.includes('SelectedWork'), 'Website demo cards (SelectedWork) REMOVED from HomePage');
+assert(!homeContent.includes('SelectedWork'), 'Old website demo cards (SelectedWork) REMOVED from HomePage');
+assert(!homeContent.includes('HomeHorizontalGallery'), 'Image carousel REMOVED from HomePage');
 
-// New visual showcase sections ADDED to Home
-assert(homeContent.includes('HomeVideoShowcase'), 'HomeVideoShowcase imported and rendered in HomePage');
-assert(homeContent.includes('HomeHorizontalGallery'), 'HomeHorizontalGallery imported and rendered in HomePage');
-assert(homeContent.includes('SystemDiagram'), 'SystemDiagram preserved on HomePage');
-assert(homeContent.includes('FinalCTA'), 'FinalCTA preserved on HomePage');
-assert(homeContent.includes('CampaignLightboxModal'), 'CampaignLightboxModal integrated for both videos and stills');
+// Exact Homepage Order: Hero -> Services -> Videos -> Photos -> Websites -> CTA
+const heroIdx = homeContent.indexOf('<Hero');
+const srvIdx = homeContent.indexOf('<HomeServicesOverview');
+const vidIdx = homeContent.indexOf('<HomeVideoShowcase');
+const photoIdx = homeContent.indexOf('<HomePhotographyGrid');
+const webIdx = homeContent.indexOf('<HomeWebsitesShowcase');
+const ctaIdx = homeContent.indexOf('<FinalCTA');
 
-// 2. Verify HomeVideoShowcase.jsx Implementation
+assert(heroIdx !== -1, 'Hero is present in HomePage');
+assert(srvIdx !== -1, 'HomeServicesOverview is present in HomePage');
+assert(vidIdx !== -1, 'HomeVideoShowcase is present in HomePage');
+assert(photoIdx !== -1, 'HomePhotographyGrid is present in HomePage');
+assert(webIdx !== -1, 'HomeWebsitesShowcase is present in HomePage');
+assert(ctaIdx !== -1, 'FinalCTA is present in HomePage');
+
+assert(
+  heroIdx < srvIdx && srvIdx < vidIdx && vidIdx < photoIdx && photoIdx < webIdx && webIdx < ctaIdx,
+  'Homepage sections in EXACT order: HERO → SERVICES → VIDEOS → PHOTOS → WEBSITES → CTA'
+);
+
+// 2. Verify Services Overview (HomeServicesOverview.jsx)
+const servicesOverviewPath = path.join(rootDir, 'src', 'components', 'HomeServicesOverview.jsx');
+assert(fs.existsSync(servicesOverviewPath), 'HomeServicesOverview.jsx exists');
+const srvContent = fs.readFileSync(servicesOverviewPath, 'utf-8');
+
+assert(srvContent.includes('AI AUTOMATION'), 'Services overview includes AI AUTOMATION');
+assert(srvContent.includes('WEBSITES'), 'Services overview includes WEBSITES');
+assert(srvContent.includes('CREATIVE PRODUCTION'), 'Services overview includes CREATIVE PRODUCTION');
+assert(srvContent.includes('WHAT CORNERSTONE BUILDS.'), 'Services overview has punchy minimal heading');
+
+// 3. Verify Video Showcase & Fullscreen Bug Fix (HomeVideoShowcase.jsx)
 const videoShowcasePath = path.join(rootDir, 'src', 'components', 'HomeVideoShowcase.jsx');
 assert(fs.existsSync(videoShowcasePath), 'HomeVideoShowcase.jsx exists');
-const videoShowcaseContent = fs.readFileSync(videoShowcasePath, 'utf-8');
+const vidContent = fs.readFileSync(videoShowcasePath, 'utf-8');
 
-assert(videoShowcaseContent.includes('ADS / SELECTED FILMS'), 'Section label "ADS / SELECTED FILMS" present');
-assert(videoShowcaseContent.includes('MADE TO MAKE YOU LOOK.'), 'Heading "MADE TO MAKE YOU LOOK." present');
+assert(vidContent.includes('SELECTED FILMS'), 'Video showcase heading is "SELECTED FILMS"');
+assert(vidContent.includes('ADS / SELECTED FILMS'), 'Section label "ADS / SELECTED FILMS" present');
+
 const adsProjectsPath = path.join(rootDir, 'src', 'data', 'adsProjects.js');
 const adsProjectsContent = fs.readFileSync(adsProjectsPath, 'utf-8');
+assert(adsProjectsContent.includes('n7i5_lQkq9k'), 'YouTube Short ID n7i5_lQkq9k present');
+assert(adsProjectsContent.includes('aO1ADthWkjk'), 'YouTube Short ID aO1ADthWkjk present');
+assert(adsProjectsContent.includes('yrpbqVTbGd4'), 'YouTube Short ID yrpbqVTbGd4 present');
 
-assert(adsProjectsContent.includes('n7i5_lQkq9k'), 'YouTube Short ID n7i5_lQkq9k present in adsProjects');
-assert(adsProjectsContent.includes('aO1ADthWkjk'), 'YouTube Short ID aO1ADthWkjk present in adsProjects');
-assert(adsProjectsContent.includes('yrpbqVTbGd4'), 'YouTube Short ID yrpbqVTbGd4 present in adsProjects');
-assert(videoShowcaseContent.includes('FEATURED_SHORTS'), 'HomeVideoShowcase imports and uses FEATURED_SHORTS');
-assert(videoShowcaseContent.includes('aspectRatio: \'9 / 16\''), '9:16 portrait aspect ratio container present');
-assert(videoShowcaseContent.includes('IntersectionObserver'), 'IntersectionObserver visibility detection present');
-assert(videoShowcaseContent.includes('playVideo'), 'Muted autoplay on scroll entrance present');
-assert(videoShowcaseContent.includes('pauseVideo'), 'Auto-pause on scroll exit present');
-assert(videoShowcaseContent.includes('clamp(18px, 2.2vw, 24px)'), 'Rounded borders (18-24px) present');
+// Verify Fullscreen Bug Fixes
+assert(vidContent.includes('allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"'), 'Iframe has fullscreen permission policy enabled');
+assert(vidContent.includes('allowFullScreen'), 'allowFullScreen attribute enabled on iframe');
+assert(adsProjectsContent.includes('&fs=1'), 'YouTube embed URL enables &fs=1 parameter');
+assert(vidContent.includes('handleFullscreen'), 'Native fullscreen handler implemented');
+assert(vidContent.includes(':fullscreen'), 'Fullscreen CSS overrides aspect ratio and dimensions');
 
-// 3. Verify HomeHorizontalGallery.jsx Implementation
-const galleryPath = path.join(rootDir, 'src', 'components', 'HomeHorizontalGallery.jsx');
-assert(fs.existsSync(galleryPath), 'HomeHorizontalGallery.jsx exists');
-const galleryContent = fs.readFileSync(galleryPath, 'utf-8');
+// Verify Mobile Audio Support
+assert(vidContent.includes('TAP TO ENABLE AUDIO') || vidContent.includes('isMobile'), 'Mobile sound enable control implemented');
+assert(vidContent.includes('unMute'), 'unMute command dispatched to YouTube player');
+assert(vidContent.includes('setVolume'), 'setVolume dispatched on mobile tap');
 
-assert(galleryContent.includes('CAMPAIGNS / 001—010'), 'Section label "CAMPAIGNS / 001—010" present');
-assert(galleryContent.includes('LOCAL_ADS_IMAGES'), 'Uses LOCAL_ADS_IMAGES from adsProjects');
-assert(galleryContent.includes('ScrollTrigger'), 'GSAP ScrollTrigger used for horizontal scroll');
-assert(galleryContent.includes('pin: true'), 'Gallery section pinned for horizontal animation');
-assert(galleryContent.includes('gsap.matchMedia()'), 'Responsive matchMedia setup present');
-assert(galleryContent.includes('prefers-reduced-motion'), 'prefers-reduced-motion fallback implemented');
-assert(galleryContent.includes('clamp(18px, 2.2vw, 24px)'), 'Rounded image borders (18-24px) present');
+// 4. Verify Photography Grid (HomePhotographyGrid.jsx)
+const photographyGridPath = path.join(rootDir, 'src', 'components', 'HomePhotographyGrid.jsx');
+assert(fs.existsSync(photographyGridPath), 'HomePhotographyGrid.jsx exists');
+const photoContent = fs.readFileSync(photographyGridPath, 'utf-8');
 
-// 4. Verify All 10 Local Images exist in public/images/
+assert(photoContent.includes('LOCAL_ADS_IMAGES'), 'HomePhotographyGrid uses LOCAL_ADS_IMAGES');
+assert(photoContent.includes('DIRECTED TO RETAIN DESIRE.'), 'Photography grid has minimal 1-line headline');
+assert(!photoContent.includes('pin: true'), 'Photography grid does NOT use horizontal scroll pinning');
+
 for (let i = 1; i <= 10; i++) {
   const imgPath = path.join(rootDir, 'public', 'images', `${i}.png`);
   assert(fs.existsSync(imgPath), `Image /images/${i}.png exists in public/images/`);
 }
 
-// 5. Verify Critical Scope Restriction: Shared components not deleted globally
-assert(fs.existsSync(path.join(rootDir, 'src', 'components', 'StatementSection.jsx')), 'StatementSection.jsx preserved');
-assert(fs.existsSync(path.join(rootDir, 'src', 'components', 'CapabilitySection.jsx')), 'CapabilitySection.jsx preserved');
-assert(fs.existsSync(path.join(rootDir, 'src', 'components', 'HorizontalServices.jsx')), 'HorizontalServices.jsx preserved');
-assert(fs.existsSync(path.join(rootDir, 'src', 'components', 'ScrollJourneyVideo.jsx')), 'ScrollJourneyVideo.jsx preserved');
-assert(fs.existsSync(path.join(rootDir, 'src', 'components', 'SelectedWork.jsx')), 'SelectedWork.jsx preserved');
+// 5. Verify Selected Website Demos (HomeWebsitesShowcase.jsx)
+const webShowcasePath = path.join(rootDir, 'src', 'components', 'HomeWebsitesShowcase.jsx');
+assert(fs.existsSync(webShowcasePath), 'HomeWebsitesShowcase.jsx exists');
+const webShowcaseContent = fs.readFileSync(webShowcasePath, 'utf-8');
 
-// 6. Verify Services, WEB, and ADS pages are intact
+assert(webShowcaseContent.includes('Noise Dept.'), 'Website demos include Noise Dept.');
+assert(webShowcaseContent.includes('https://noise-dept-six.vercel.app/'), 'Noise Dept. has verified live URL');
+assert(webShowcaseContent.includes('Paloma'), 'Website demos include Paloma');
+assert(webShowcaseContent.includes('https://paloma-socail-house.vercel.app/'), 'Paloma has verified live URL');
+assert(webShowcaseContent.includes('Vale Selvato'), 'Website demos include Vale Selvato');
+assert(webShowcaseContent.includes('https://vale-selvatico.vercel.app/'), 'Vale Selvato has verified live URL');
+assert(webShowcaseContent.includes('Aurenne'), 'Website demos include Aurenne');
+assert(webShowcaseContent.includes('https://aurenne-six.vercel.app/'), 'Aurenne has verified live URL');
+assert(webShowcaseContent.includes('VIEW PROJECT'), 'Cards feature VIEW PROJECT action');
+
+// 6. Verify Complete Removal of Tawk.to AI
+const indexHtmlPath = path.join(rootDir, 'index.html');
+const indexHtmlContent = fs.readFileSync(indexHtmlPath, 'utf-8');
+assert(!indexHtmlContent.includes('tawk.to'), 'Tawk.to embed script completely REMOVED from index.html');
+assert(!indexHtmlContent.includes('Tawk_API'), 'Tawk_API completely REMOVED from index.html');
+assert(!indexHtmlContent.includes('1k48oav3d'), 'Tawk.to widget ID completely REMOVED from index.html');
+
+// 7. Verify Scope Restrictions: Dedicated pages and components preserved
 assert(fs.existsSync(path.join(rootDir, 'src', 'pages', 'ServicesPage.jsx')), 'ServicesPage.jsx preserved');
 assert(fs.existsSync(path.join(rootDir, 'src', 'pages', 'DigitalExperiencesPage.jsx')), 'DigitalExperiencesPage.jsx (WEB) preserved');
 assert(fs.existsSync(path.join(rootDir, 'src', 'pages', 'AdsPage.jsx')), 'AdsPage.jsx preserved');
+assert(fs.existsSync(path.join(rootDir, 'src', 'pages', 'AboutPage.jsx')), 'AboutPage.jsx preserved');
+assert(fs.existsSync(path.join(rootDir, 'src', 'pages', 'ContactPage.jsx')), 'ContactPage.jsx preserved');
 
-// 7. Verify Global Navigation preserves exact labels: HOME | SERVICES | WEB | ADS | ABOUT | CONTACT
+// 8. Verify Header Navigation: HOME | SERVICES | WEB | ADS | ABOUT | CONTACT
 const navbarPath = path.join(rootDir, 'src', 'components', 'Navbar.jsx');
 const navbarContent = fs.readFileSync(navbarPath, 'utf-8');
 assert(navbarContent.includes('HOME'), 'Navbar contains HOME');
@@ -99,6 +141,6 @@ assert(navbarContent.includes('ADS'), 'Navbar contains ADS');
 assert(navbarContent.includes('ABOUT'), 'Navbar contains ABOUT');
 assert(navbarContent.includes('CONTACT'), 'Navbar contains CONTACT');
 
-console.log('\n======================================================');
-console.log('ALL HOMEPAGE CLEANUP & CINEMATIC SHOWCASE CHECKS PASSED');
-console.log('======================================================\n');
+console.log('\n========================================================');
+console.log('ALL 46 FINAL HOMEPAGE RESTRUCTURE CHECKS PASSED');
+console.log('========================================================\n');

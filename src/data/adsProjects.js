@@ -23,7 +23,7 @@ export function getYouTubeEmbedUrl(videoIdOrUrl, { autoplay = 0, mute = 1, contr
   const playlistParam = loop ? `&playlist=${id}&loop=1` : '';
   const originParam = origin ? `&origin=${encodeURIComponent(origin)}` : '';
 
-  return `https://www.youtube-nocookie.com/embed/${id}?autoplay=${autoplay ? 1 : 0}&mute=${mute ? 1 : 0}&controls=${controls ? 1 : 0}&playsinline=1&enablejsapi=1&rel=0&modestbranding=1&iv_load_policy=3${playlistParam}${originParam}`;
+  return `https://www.youtube-nocookie.com/embed/${id}?autoplay=${autoplay ? 1 : 0}&mute=${mute ? 1 : 0}&controls=${controls ? 1 : 0}&fs=1&playsinline=1&enablejsapi=1&rel=0&modestbranding=1&iv_load_policy=3${playlistParam}${originParam}`;
 }
 
 /**

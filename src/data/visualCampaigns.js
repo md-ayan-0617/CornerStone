@@ -15,7 +15,7 @@ export function getEmbedUrl(url) {
   // YouTube watch: https://www.youtube.com/watch?v=VIDEO_ID
   const ytWatch = str.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
   if (ytWatch && ytWatch[1]) {
-    return `https://www.youtube-nocookie.com/embed/${ytWatch[1]}?autoplay=1&rel=0&modestbranding=1`;
+    return `https://www.youtube-nocookie.com/embed/${ytWatch[1]}?autoplay=1&fs=1&playsinline=1&rel=0&modestbranding=1`;
   }
 
   // Vimeo: https://vimeo.com/VIDEO_ID
