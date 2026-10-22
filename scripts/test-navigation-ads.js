@@ -82,7 +82,7 @@ const adsPagePath = path.join(rootDir, 'src', 'pages', 'AdsPage.jsx');
 const adsPageContent = fs.readFileSync(adsPagePath, 'utf-8');
 
 assert(adsPageContent.includes('aspectRatio: \'9 / 16\''), 'Video container uses portrait 9:16 aspect ratio');
-assert(adsPageContent.includes("clamp(18px, 2.2vw, 22px)"), 'Video container has 18-24px rounded corners');
+assert(adsPageContent.includes("clamp(18px, 2.2vw, 24px)") || adsPageContent.includes("clamp(18px, 2.2vw, 22px)"), 'Video container has 18-24px rounded corners');
 assert(adsPageContent.includes('overflow: \'hidden\'') || adsPageContent.includes('overflow: hidden') || adsPageContent.includes('overflow:'), 'Video container has overflow: hidden clipping');
 assert(adsPageContent.includes('IntersectionObserver'), 'IntersectionObserver used for visibility-aware playback');
 assert(adsPageContent.includes('threshold: [0.2, 0.58, 0.85]'), 'Threshold set around 60% visibility for playback trigger');

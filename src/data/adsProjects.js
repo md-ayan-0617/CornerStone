@@ -198,5 +198,6 @@ export const LOCAL_ADS_IMAGES = [
   }
 ];
 
-// Backwards-compatible alias for any older references
+// Backwards-compatible aliases for any older references
 export const ADS_PHOTOGRAPHY = LOCAL_ADS_IMAGES;
+export const ADS_CAROUSELS = LOCAL_ADS_IMAGES;
