@@ -5,38 +5,56 @@ import {
   VISUAL_CAMPAIGNS,
   FEATURED_CAMPAIGNS,
   CAMPAIGN_CATEGORIES,
-  CAROUSEL_COLLECTIONS
+  CAROUSEL_COLLECTIONS,
+  getEmbedUrl
 } from '../data/visualCampaigns';
 import CampaignLightboxModal from '../components/CampaignLightboxModal';
 import CampaignCarousel from '../components/CampaignCarousel';
 import CornerstoneMotif from '../components/CornerstoneMotif';
 import {
   Play,
+  Pause,
   ArrowUpRight,
   Filter,
   Eye,
   Film,
   Camera,
-  Sparkles,
-  Layers,
   ChevronDown,
-  Volume2,
-  ExternalLink
+  Maximize2,
+  X
 } from 'lucide-react';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export const VisualCampaignsPage = ({ onNavigate }) => {
   const [activeCategory, setActiveCategory] = useState("All");
   const [activeModalProject, setActiveModalProject] = useState(null);
+  const [playingInlineId, setPlayingInlineId] = useState(null);
   const pageRef = useRef(null);
 
   const filteredCampaigns = activeCategory === "All"
     ? VISUAL_CAMPAIGNS
     : VISUAL_CAMPAIGNS.filter((c) => c.categoryFilter === activeCategory);
 
-  // GSAP scroll-triggered reveals and hero entrance
+  // =========================================================================
+  // GSAP ScrollTrigger Animations & Responsive MatchMedia Implementation
+  // =========================================================================
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Hero headline cinematic reveal
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // Accessibility: Respect prefers-reduced-motion
+      if (prefersReducedMotion) {
+        gsap.set('.vc-hero-reveal, .vc-featured-card, .vc-video-frame, .vc-feat-cat, .vc-feat-heading, .vc-feat-tagline, .vc-feat-desc, .vc-chip, .vc-cta-group, .vc-gallery-item', {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          clearProps: 'all'
+        });
+        return;
+      }
+
+      // Hero headline cinematic entrance
       gsap.fromTo('.vc-hero-reveal',
         { opacity: 0, y: 35 },
         {
@@ -44,28 +62,143 @@ export const VisualCampaignsPage = ({ onNavigate }) => {
           y: 0,
           duration: 0.9,
           stagger: 0.15,
-          ease: 'power3.out'
-        }
-      );
-
-      // Featured campaigns entrance
-      gsap.fromTo('.vc-featured-card',
-        { opacity: 0, y: 40 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          stagger: 0.2,
           ease: 'power3.out',
-          scrollTrigger: {
-            trigger: '#featured-campaigns',
-            start: 'top 80%',
-            toggleActions: 'play none none none'
-          }
+          clearProps: 'opacity,transform'
         }
       );
 
-      // Gallery cards stagger
+      const mm = gsap.matchMedia();
+
+      // DESKTOP & TABLET: Sophisticated editorial timeline & scroll effects
+      mm.add('(min-width: 769px)', () => {
+        const cards = document.querySelectorAll('.vc-featured-card');
+        cards.forEach((card) => {
+          const videoFrame = card.querySelector('.vc-video-frame');
+          const catLabel = card.querySelector('.vc-feat-cat');
+          const heading = card.querySelector('.vc-feat-heading');
+          const tagline = card.querySelector('.vc-feat-tagline');
+          const desc = card.querySelector('.vc-feat-desc');
+          const chips = card.querySelectorAll('.vc-chip');
+          const cta = card.querySelector('.vc-cta-group');
+          const thumbImg = card.querySelector('.vc-video-thumb-img');
+
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: card,
+              start: 'top 82%',
+              toggleActions: 'play none none none'
+            }
+          });
+
+          // A. Video reveal: Subtle vertical offset, gentle scale, and clip-path
+          if (videoFrame) {
+            tl.fromTo(videoFrame,
+              {
+                opacity: 0,
+                y: 35,
+                scale: 0.96,
+                clipPath: 'polygon(0% 12%, 100% 12%, 100% 100%, 0% 100%)'
+              },
+              {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+                duration: 0.85,
+                ease: 'power3.out',
+                clearProps: 'clipPath,transform'
+              }
+            );
+          }
+
+          // B. Staggered text sequence: Category first, Heading, Tagline, Description, Chips, CTA last
+          if (catLabel) {
+            tl.fromTo(catLabel,
+              { opacity: 0, y: 15 },
+              { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out', clearProps: 'opacity,transform' },
+              '-=0.55'
+            );
+          }
+
+          if (heading) {
+            tl.fromTo(heading,
+              { opacity: 0, y: 22 },
+              { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out', clearProps: 'opacity,transform' },
+              '-=0.35'
+            );
+          }
+
+          if (tagline) {
+            tl.fromTo(tagline,
+              { opacity: 0, y: 14 },
+              { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out', clearProps: 'opacity,transform' },
+              '-=0.3'
+            );
+          }
+
+          if (desc) {
+            tl.fromTo(desc,
+              { opacity: 0, y: 16 },
+              { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out', clearProps: 'opacity,transform' },
+              '-=0.25'
+            );
+          }
+
+          if (chips && chips.length > 0) {
+            tl.fromTo(chips,
+              { opacity: 0, y: 12 },
+              { opacity: 1, y: 0, duration: 0.35, stagger: 0.05, ease: 'power2.out', clearProps: 'opacity,transform' },
+              '-=0.2'
+            );
+          }
+
+          if (cta) {
+            tl.fromTo(cta,
+              { opacity: 0, y: 15 },
+              { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out', clearProps: 'opacity,transform' },
+              '-=0.15'
+            );
+          }
+
+          // C. Tasteful scroll parallax on video thumbnail
+          if (thumbImg) {
+            gsap.to(thumbImg, {
+              yPercent: 5,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: card,
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: 1.2
+              }
+            });
+          }
+        });
+      });
+
+      // MOBILE: Single-column, clearProps guarantee so content is NEVER hidden
+      mm.add('(max-width: 768px)', () => {
+        const cards = document.querySelectorAll('.vc-featured-card');
+        cards.forEach((card) => {
+          gsap.fromTo(card,
+            { opacity: 0, y: 25 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.65,
+              ease: 'power2.out',
+              clearProps: 'all',
+              scrollTrigger: {
+                trigger: card,
+                start: 'top 90%',
+                toggleActions: 'play none none none'
+              }
+            }
+          );
+        });
+      });
+
+      // Gallery cards entrance
       gsap.fromTo('.vc-gallery-item',
         { opacity: 0, y: 30 },
         {
@@ -74,6 +207,7 @@ export const VisualCampaignsPage = ({ onNavigate }) => {
           duration: 0.6,
           stagger: 0.08,
           ease: 'power2.out',
+          clearProps: 'opacity,transform',
           scrollTrigger: {
             trigger: '#campaign-gallery-grid',
             start: 'top 85%',
@@ -81,13 +215,15 @@ export const VisualCampaignsPage = ({ onNavigate }) => {
           }
         }
       );
+
+      ScrollTrigger.refresh();
     }, pageRef);
 
     return () => ctx.revert();
   }, [activeCategory]);
 
   const handleScrollDown = () => {
-    const el = document.querySelector('#campaign-gallery');
+    const el = document.querySelector('#featured-campaigns');
     if (el) {
       if (window.__lenis) {
         window.__lenis.scrollTo(el, { offset: -70 });
@@ -101,7 +237,7 @@ export const VisualCampaignsPage = ({ onNavigate }) => {
     <div ref={pageRef} style={{ width: '100%', maxWidth: '100vw', overflowX: 'hidden' }}>
 
       {/* =========================================================================
-          1. CINEMATIC HERO SECTION — Generous Editorial Spacing
+          1. CINEMATIC HERO SECTION — Editorial Negative Space & Typography
           ========================================================================= */}
       <section
         style={{
@@ -243,7 +379,7 @@ export const VisualCampaignsPage = ({ onNavigate }) => {
       </section>
 
       {/* =========================================================================
-          2. FEATURED CAMPAIGNS — Large Editorial Split-Screen Compositions
+          2. FEATURED CAMPAIGNS — Premium 2-Column Desktop / 1-Column Mobile Layout
           ========================================================================= */}
       <section
         id="featured-campaigns"
@@ -255,7 +391,7 @@ export const VisualCampaignsPage = ({ onNavigate }) => {
         }}
       >
         <div className="site-container">
-          {/* Section Header with Generous Space */}
+          {/* Section Header with Generous Negative Space */}
           <div style={{ marginBottom: 'clamp(3rem, 6vw, 4.5rem)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '0.85rem' }}>
               <CornerstoneMotif size={14} variant="mark" />
@@ -285,200 +421,312 @@ export const VisualCampaignsPage = ({ onNavigate }) => {
             </p>
           </div>
 
-          {/* Featured Campaigns Stack */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(4rem, 8vw, 7rem)' }}>
-            {FEATURED_CAMPAIGNS.map((feat, idx) => (
-              <div
-                key={feat.id}
-                className="vc-featured-card arch-box"
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: idx % 2 === 0 ? 'minmax(0, 1.35fr) minmax(320px, 1fr)' : 'minmax(320px, 1fr) minmax(0, 1.35fr)',
-                  backgroundColor: '#0D0D0D',
-                  overflow: 'hidden'
-                }}
-              >
-                {/* Media Column */}
-                <div
-                  onClick={() => setActiveModalProject(feat)}
-                  style={{
-                    order: idx % 2 === 0 ? 1 : 2,
-                    position: 'relative',
-                    minHeight: 'clamp(340px, 50vh, 520px)',
-                    backgroundColor: '#050505',
-                    cursor: 'pointer',
-                    overflow: 'hidden'
-                  }}
-                  className="vc-featured-media-wrap"
+          {/* Featured Campaigns Stack: Always Visual on Left, Details on Right (Desktop) */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(4rem, 8vw, 6.5rem)' }}>
+            {FEATURED_CAMPAIGNS.map((feat) => {
+              const isPlaying = playingInlineId === feat.id;
+
+              return (
+                <article
+                  key={feat.id}
+                  className="vc-featured-card"
+                  aria-label={feat.title}
                 >
-                  <img
-                    src={feat.thumbnailUrl}
-                    alt={feat.title}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                      display: 'block',
-                      transition: 'transform 0.65s cubic-bezier(0.16, 1, 0.3, 1)'
-                    }}
-                    onError={(e) => {
-                      e.currentTarget.src = '/images/services/service-ad-creative-design.jpg';
-                    }}
-                  />
-
-                  {/* Play Overlay */}
-                  <div
-                    style={{
-                      position: 'absolute',
-                      inset: 0,
-                      backgroundColor: 'rgba(0, 0, 0, 0.4)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      transition: 'background-color 0.25s ease'
-                    }}
-                    className="vc-play-overlay"
-                  >
-                    <div
-                      style={{
-                        width: '64px',
-                        height: '64px',
-                        borderRadius: '50%',
-                        backgroundColor: 'rgba(184, 255, 61, 0.95)',
-                        color: '#0A0A0A',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        boxShadow: '0 0 30px rgba(184, 255, 61, 0.5)',
-                        transition: 'transform 0.25s ease'
-                      }}
-                      className="vc-play-icon"
-                    >
-                      {feat.mediaType === 'video' ? <Play size={24} fill="#0A0A0A" /> : <Eye size={24} />}
-                    </div>
-                  </div>
-
-                  {/* Corner Badge */}
-                  <div
-                    style={{
-                      position: 'absolute',
-                      top: '1.25rem',
-                      left: '1.25rem',
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.68rem',
-                      backgroundColor: 'rgba(10, 10, 10, 0.85)',
-                      backdropFilter: 'blur(8px)',
-                      color: 'var(--color-accent-lime)',
-                      border: '1px solid var(--color-border-gray)',
-                      padding: '4px 10px',
-                      letterSpacing: '0.1em'
-                    }}
-                  >
-                    {feat.badge}
-                  </div>
-                </div>
-
-                {/* Details Column */}
-                <div
-                  style={{
-                    order: idx % 2 === 0 ? 2 : 1,
-                    padding: 'clamp(2rem, 4vw, 3.5rem)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    borderLeft: idx % 2 === 0 ? '1px solid var(--color-border-gray)' : 'none',
-                    borderRight: idx % 2 === 0 ? 'none' : '1px solid var(--color-border-gray)'
-                  }}
-                >
-                  <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1rem' }}>
-                      <span className="micro-label" style={{ color: 'var(--color-muted-gray)' }}>
-                        {feat.client.toUpperCase()}
-                      </span>
-                      <span style={{ color: '#444' }}>•</span>
-                      <span className="micro-label-lime">{feat.category.toUpperCase()}</span>
-                    </div>
-
-                    <h3
-                      style={{
-                        fontFamily: 'var(--font-display)',
-                        fontSize: 'clamp(1.6rem, 2.6vw, 2.2rem)',
-                        fontWeight: 800,
-                        color: 'var(--color-warm-white)',
-                        margin: '0 0 0.75rem 0',
-                        lineHeight: 1.15
-                      }}
-                    >
-                      {feat.title}
-                    </h3>
-
-                    <p
-                      style={{
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: '0.85rem',
-                        color: 'var(--color-accent-lime)',
-                        margin: '0 0 1.25rem 0'
-                      }}
-                    >
-                      {feat.tagline}
-                    </p>
-
-                    <p
-                      style={{
-                        fontFamily: 'var(--font-body)',
-                        fontSize: '0.94rem',
-                        lineHeight: 1.65,
-                        color: 'var(--color-muted-gray)',
-                        margin: '0 0 2rem 0'
-                      }}
-                    >
-                      {feat.description}
-                    </p>
-
-                    {/* Deliverables Chips */}
-                    <div style={{ marginBottom: '2rem' }}>
-                      <span className="micro-label" style={{ display: 'block', marginBottom: '0.75rem' }}>
-                        DELIVERABLES &amp; SUITE
-                      </span>
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                        {feat.deliverables.map((item, i) => (
-                          <span
-                            key={i}
+                  {/* LEFT COLUMN (Desktop) / TOP COLUMN (Mobile): Video Container */}
+                  <div className="vc-featured-media-col">
+                    <div className="vc-video-frame">
+                      {isPlaying ? (
+                        <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                          <iframe
+                            src={`${getEmbedUrl(feat.mediaUrl)}&autoplay=1&enablejsapi=1`}
+                            title={feat.title}
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
                             style={{
-                              fontFamily: 'var(--font-mono)',
-                              fontSize: '0.74rem',
-                              padding: '5px 10px',
-                              backgroundColor: '#161616',
-                              border: '1px solid var(--color-border-gray)',
-                              color: 'var(--color-warm-white)'
+                              width: '100%',
+                              height: '100%',
+                              border: 'none',
+                              display: 'block'
+                            }}
+                          />
+                          {/* Playing Overlay Controls */}
+                          <div
+                            style={{
+                              position: 'absolute',
+                              top: '12px',
+                              right: '12px',
+                              display: 'flex',
+                              gap: '8px',
+                              zIndex: 10
                             }}
                           >
-                            {item}
-                          </span>
-                        ))}
-                      </div>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setActiveModalProject(feat);
+                              }}
+                              title="Expand to Fullscreen Lightbox"
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '5px',
+                                backgroundColor: 'rgba(10, 10, 10, 0.88)',
+                                backdropFilter: 'blur(8px)',
+                                WebkitBackdropFilter: 'blur(8px)',
+                                border: '1px solid rgba(255, 255, 255, 0.2)',
+                                color: 'var(--color-warm-white)',
+                                padding: '6px 10px',
+                                borderRadius: '6px',
+                                cursor: 'pointer',
+                                fontFamily: 'var(--font-mono)',
+                                fontSize: '0.68rem',
+                                transition: 'background-color 0.2s ease'
+                              }}
+                            >
+                              <Maximize2 size={12} />
+                              <span>EXPAND</span>
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setPlayingInlineId(null);
+                              }}
+                              title="Pause / Close player"
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '5px',
+                                backgroundColor: 'rgba(184, 255, 61, 0.95)',
+                                border: 'none',
+                                color: '#0A0A0A',
+                                padding: '6px 10px',
+                                borderRadius: '6px',
+                                cursor: 'pointer',
+                                fontFamily: 'var(--font-mono)',
+                                fontSize: '0.68rem',
+                                fontWeight: 700,
+                                transition: 'opacity 0.2s ease'
+                              }}
+                            >
+                              <X size={12} />
+                              <span>CLOSE</span>
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <div
+                          onClick={() => setPlayingInlineId(feat.id)}
+                          className="vc-thumbnail-wrap"
+                          style={{
+                            position: 'relative',
+                            width: '100%',
+                            height: '100%',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          <img
+                            src={feat.thumbnailUrl}
+                            alt={feat.title}
+                            className="vc-video-thumb-img"
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'cover',
+                              display: 'block'
+                            }}
+                            onError={(e) => {
+                              e.currentTarget.src = '/images/services/service-ad-creative-design.jpg';
+                            }}
+                          />
+
+                          {/* Cinematic Gradient Vignette */}
+                          <div
+                            style={{
+                              position: 'absolute',
+                              inset: 0,
+                              background: 'linear-gradient(180deg, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.65) 100%)',
+                              pointerEvents: 'none'
+                            }}
+                          />
+
+                          {/* Clean Play-Button Overlay */}
+                          <div className="vc-play-button-overlay">
+                            <div className="vc-play-circle" aria-label="Play video">
+                              <Play size={24} fill="#0A0A0A" style={{ marginLeft: '3px' }} />
+                            </div>
+                          </div>
+
+                          {/* Corner Badge */}
+                          <div
+                            style={{
+                              position: 'absolute',
+                              top: '1rem',
+                              left: '1rem',
+                              fontFamily: 'var(--font-mono)',
+                              fontSize: '0.68rem',
+                              backgroundColor: 'rgba(10, 10, 10, 0.85)',
+                              backdropFilter: 'blur(8px)',
+                              WebkitBackdropFilter: 'blur(8px)',
+                              color: 'var(--color-accent-lime)',
+                              border: '1px solid rgba(255, 255, 255, 0.12)',
+                              padding: '4px 10px',
+                              letterSpacing: '0.08em',
+                              borderRadius: '4px'
+                            }}
+                          >
+                            {feat.badge || 'FEATURED PRODUCTION'}
+                          </div>
+
+                          {/* Format Tag */}
+                          <div
+                            style={{
+                              position: 'absolute',
+                              bottom: '1rem',
+                              right: '1rem',
+                              fontFamily: 'var(--font-mono)',
+                              fontSize: '0.65rem',
+                              backgroundColor: 'rgba(10, 10, 10, 0.85)',
+                              backdropFilter: 'blur(8px)',
+                              WebkitBackdropFilter: 'blur(8px)',
+                              color: 'var(--color-warm-white)',
+                              border: '1px solid rgba(255, 255, 255, 0.1)',
+                              padding: '3px 8px',
+                              letterSpacing: '0.06em',
+                              borderRadius: '4px'
+                            }}
+                          >
+                            4K MASTER • YOUTUBE REEL
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
 
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                    <button
-                      onClick={() => setActiveModalProject(feat)}
-                      className="btn-cornerstone"
-                      style={{ padding: '0.75rem 1.4rem', fontSize: '0.75rem' }}
-                    >
-                      <span>{feat.mediaType === 'video' ? 'PLAY CAMPAIGN FILM' : 'INSPECT HIGH-RES STILL'}</span>
-                      {feat.mediaType === 'video' ? <Play size={13} fill="currentColor" /> : <Eye size={13} />}
-                    </button>
+                  {/* RIGHT COLUMN (Desktop) / BELOW VIDEO (Mobile): Campaign Editorial Information */}
+                  <div className="vc-featured-info-col">
+                    <div>
+                      {/* Category & Client Label */}
+                      <div className="vc-feat-cat" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1rem', flexWrap: 'wrap' }}>
+                        <span className="micro-label" style={{ color: 'var(--color-muted-gray)' }}>
+                          {feat.client.toUpperCase()}
+                        </span>
+                        <span style={{ color: '#444' }}>•</span>
+                        <span className="micro-label-lime">{feat.category.toUpperCase()}</span>
+                        <span style={{ color: '#444' }}>•</span>
+                        <span className="micro-label" style={{ color: '#666' }}>{feat.year}</span>
+                      </div>
+
+                      {/* Large Campaign Heading */}
+                      <h3
+                        className="vc-feat-heading"
+                        style={{
+                          fontFamily: 'var(--font-display)',
+                          fontSize: 'clamp(1.5rem, 2.5vw, 2.3rem)',
+                          fontWeight: 800,
+                          color: 'var(--color-warm-white)',
+                          margin: '0 0 0.75rem 0',
+                          lineHeight: 1.15,
+                          letterSpacing: '-0.02em',
+                          textTransform: 'uppercase'
+                        }}
+                      >
+                        {feat.title}
+                      </h3>
+
+                      {/* Supporting Tagline */}
+                      <p
+                        className="vc-feat-tagline"
+                        style={{
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: 'clamp(0.78rem, 1.1vw, 0.88rem)',
+                          color: 'var(--color-accent-lime)',
+                          margin: '0 0 1.25rem 0',
+                          letterSpacing: '0.03em'
+                        }}
+                      >
+                        {feat.tagline}
+                      </p>
+
+                      {/* Campaign Description */}
+                      <p
+                        className="vc-feat-desc"
+                        style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 'clamp(0.92rem, 1.2vw, 1rem)',
+                          lineHeight: 1.65,
+                          color: 'var(--color-muted-gray)',
+                          margin: '0 0 1.75rem 0',
+                          maxWidth: '54ch'
+                        }}
+                      >
+                        {feat.description}
+                      </p>
+
+                      {/* Deliverables Suite */}
+                      <div className="vc-deliverables-group" style={{ marginBottom: 'clamp(1.75rem, 2.5vw, 2.25rem)' }}>
+                        <span className="micro-label" style={{ display: 'block', marginBottom: '0.65rem', color: '#888' }}>
+                          DELIVERABLES &amp; SUITE
+                        </span>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                          {feat.deliverables.map((item, i) => (
+                            <span
+                              key={i}
+                              className="vc-chip"
+                              style={{
+                                fontFamily: 'var(--font-mono)',
+                                fontSize: '0.72rem',
+                                padding: '6px 12px',
+                                backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                                border: '1px solid var(--color-border-gray)',
+                                color: 'var(--color-warm-white)',
+                                borderRadius: '4px'
+                              }}
+                            >
+                              {item}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Action Buttons: Primary Play & Secondary Lightbox */}
+                    <div className="vc-cta-group">
+                      <button
+                        onClick={() => setPlayingInlineId(isPlaying ? null : feat.id)}
+                        className="btn-cornerstone"
+                        style={{
+                          minHeight: '46px',
+                          padding: '0.85rem 1.6rem',
+                          fontSize: '0.78rem'
+                        }}
+                      >
+                        <span>{isPlaying ? 'PAUSE FILM' : 'PLAY CAMPAIGN FILM'}</span>
+                        {isPlaying ? <Pause size={14} fill="currentColor" /> : <Play size={14} fill="currentColor" />}
+                      </button>
+
+                      <button
+                        onClick={() => setActiveModalProject(feat)}
+                        className="btn-cornerstone-secondary"
+                        style={{
+                          minHeight: '46px',
+                          padding: '0.85rem 1.4rem',
+                          fontSize: '0.78rem'
+                        }}
+                      >
+                        <span>FULLSCREEN REEL</span>
+                        <Maximize2 size={13} />
+                      </button>
+                    </div>
                   </div>
-                </div>
-              </div>
-            ))}
+                </article>
+              );
+            })}
           </div>
         </div>
       </section>
 
       {/* =========================================================================
-          3. CATEGORY FILTER BAR & EDITORIAL GALLERY — Generous Spacing
+          3. CATEGORY FILTER BAR & EDITORIAL GALLERY — Clean Spacing & Cards
           ========================================================================= */}
       <section
         id="campaign-gallery"
@@ -566,7 +814,7 @@ export const VisualCampaignsPage = ({ onNavigate }) => {
       >
         <div className="site-container">
           {/* Gallery Header Info */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 'clamp(2.5rem, 5vw, 3.5rem)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 'clamp(2.5rem, 5vw, 3.5rem)', flexWrap: 'wrap', gap: '1rem' }}>
             <div>
               <span className="micro-label" style={{ display: 'block', marginBottom: '0.5rem' }}>
                 SHOWING {filteredCampaigns.length} CURATED VISUALS
@@ -584,7 +832,7 @@ export const VisualCampaignsPage = ({ onNavigate }) => {
               </h3>
             </div>
 
-            <span className="micro-label" style={{ border: '1px solid var(--color-border-gray)', padding: '4px 10px' }}>
+            <span className="micro-label" style={{ border: '1px solid var(--color-border-gray)', padding: '6px 12px' }}>
               CLICK ANY WORK TO EXPAND
             </span>
           </div>
@@ -823,7 +1071,7 @@ export const VisualCampaignsPage = ({ onNavigate }) => {
       </section>
 
       {/* =========================================================================
-          5. CALL TO ACTION SECTION — Exactly as Specified in Prompt
+          5. CALL TO ACTION SECTION
           ========================================================================= */}
       <section
         style={{
@@ -892,26 +1140,171 @@ export const VisualCampaignsPage = ({ onNavigate }) => {
         />
       )}
 
-      {/* Component Specific CSS Transitions */}
+      {/* =========================================================================
+          COMPONENT-SPECIFIC RESPONSIVE CSS & PREMIUM HOVER INTERACTIONS
+          ========================================================================= */}
       <style>{`
-        .vc-featured-media-wrap:hover img {
-          transform: scale(1.03);
+        /* Featured Card Container */
+        .vc-featured-card {
+          display: grid;
+          grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+          gap: clamp(2rem, 4vw, 4rem);
+          align-items: center;
+          background-color: #0E0E0E;
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: clamp(20px, 2.5vw, 28px);
+          padding: clamp(1.75rem, 3vw, 3rem);
+          position: relative;
+          overflow: hidden;
+          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+          transition: border-color 0.35s ease, box-shadow 0.35s ease;
         }
-        .vc-featured-media-wrap:hover .vc-play-icon {
+
+        .vc-featured-card:hover {
+          border-color: rgba(184, 255, 61, 0.25);
+          box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75), 0 0 40px -15px rgba(184, 255, 61, 0.06);
+        }
+
+        .vc-featured-media-col {
+          width: 100%;
+          order: 1;
+        }
+
+        .vc-featured-info-col {
+          width: 100%;
+          order: 2;
+          display: flex;
+          flex-direction: column;
+          justifyContent: center;
+        }
+
+        /* Video Frame with Premium Border Radius & Clipping */
+        .vc-video-frame {
+          position: relative;
+          width: 100%;
+          aspect-ratio: 16 / 9;
+          border-radius: clamp(18px, 2.2vw, 24px);
+          overflow: hidden;
+          isolation: isolate;
+          -webkit-mask-image: -webkit-radial-gradient(white, black);
+          transform: translateZ(0);
+          background-color: #070707;
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          box-shadow: 0 20px 45px -12px rgba(0, 0, 0, 0.8), 0 0 35px -10px rgba(184, 255, 61, 0.08);
+          transition: border-color 0.35s ease, box-shadow 0.35s ease;
+        }
+
+        .vc-video-frame:hover {
+          border-color: rgba(184, 255, 61, 0.35);
+          box-shadow: 0 25px 55px -10px rgba(0, 0, 0, 0.9), 0 0 45px -10px rgba(184, 255, 61, 0.2);
+        }
+
+        /* Play Button Overlay */
+        .vc-play-button-overlay {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justifyContent: center;
+          transition: background-color 0.3s ease;
+        }
+
+        .vc-play-circle {
+          width: clamp(58px, 7vw, 74px);
+          height: clamp(58px, 7vw, 74px);
+          border-radius: 50%;
+          background-color: rgba(184, 255, 61, 0.96);
+          color: #0A0A0A;
+          display: flex;
+          align-items: center;
+          justifyContent: center;
+          box-shadow: 0 0 35px rgba(184, 255, 61, 0.45), 0 8px 24px rgba(0, 0, 0, 0.5);
+          transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+        }
+
+        .vc-thumbnail-wrap:hover .vc-video-thumb-img {
+          transform: scale(1.035);
+        }
+
+        .vc-thumbnail-wrap:hover .vc-play-circle {
           transform: scale(1.1);
+          box-shadow: 0 0 45px rgba(184, 255, 61, 0.7), 0 8px 30px rgba(0, 0, 0, 0.6);
         }
+
+        /* Deliverable Chips */
+        .vc-chip {
+          cursor: default;
+          transition: all 0.25s ease;
+        }
+
+        .vc-chip:hover {
+          background-color: rgba(184, 255, 61, 0.12) !important;
+          border-color: var(--color-accent-lime) !important;
+          color: var(--color-accent-lime) !important;
+        }
+
+        /* CTA Group */
+        .vc-cta-group {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          flex-wrap: wrap;
+        }
+
+        /* Gallery Item Hover */
         .vc-gallery-item:hover .vc-card-media img {
           transform: scale(1.04);
         }
+
         .vc-gallery-item:hover .vc-card-hover-overlay {
           opacity: 1 !important;
         }
-        @media (max-width: 900px) {
+
+        /* Tablet Responsive Breakpoint */
+        @media (min-width: 769px) and (max-width: 1024px) {
           .vc-featured-card {
-            grid-template-columns: 1fr !important;
+            grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+            gap: 2rem;
+            padding: 1.75rem;
           }
-          .vc-featured-media-wrap {
+        }
+
+        /* Mobile Responsive Breakpoint (Highest Priority: Single-Column Stack, No Clipping) */
+        @media (max-width: 768px) {
+          .vc-featured-card {
+            display: flex !important;
+            flex-direction: column !important;
+            width: 100% !important;
+            gap: 1.5rem !important;
+            padding: 1.25rem 1rem !important;
+            border-radius: 20px !important;
+          }
+
+          .vc-featured-media-col {
+            width: 100% !important;
             order: 1 !important;
+          }
+
+          .vc-featured-info-col {
+            width: 100% !important;
+            order: 2 !important;
+            padding: 0 !important;
+          }
+
+          .vc-video-frame {
+            border-radius: 16px !important;
+          }
+
+          .vc-cta-group {
+            width: 100% !important;
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 10px !important;
+          }
+
+          .vc-cta-group button {
+            width: 100% !important;
+            justify-content: center !important;
           }
         }
       `}</style>
