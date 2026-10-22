@@ -187,6 +187,26 @@ export const Footer = ({ onNavigate }) => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
             <span className="micro-label">PRIVACY PROTOCOL</span>
             <span className="micro-label">TERMS OF ARCHITECTURE</span>
+            <button
+              onClick={() => handleNav('/admin/9827988375')}
+              className="micro-label"
+              style={{
+                background: 'none',
+                border: 'none',
+                padding: 0,
+                cursor: 'pointer',
+                color: 'var(--color-muted-gray)',
+                transition: 'color 0.2s ease',
+                fontFamily: 'inherit',
+                fontSize: 'inherit',
+                letterSpacing: 'inherit'
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = '#B8FF3D')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--color-muted-gray)')}
+              aria-label="Staff Administration Portal"
+            >
+              ADMIN
+            </button>
             <span className="micro-label" style={{ color: 'var(--color-accent-lime)' }}>GMT+05:30</span>
           </div>
         </div>

@@ -4,7 +4,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import CornerstoneMotif from '../components/CornerstoneMotif';
 import TypewriterText from '../components/TypewriterText';
 import { CONTACT_BUDGETS, CONTACT_TIMELINES, CONTACT_SERVICES } from '../data/siteContent';
-import { GOOGLE_SHEET_URL } from '../config/sheetConfig';
 import { 
   ArrowUpRight, 
   CheckCircle2, 
@@ -38,6 +37,8 @@ export const ContactPage = () => {
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
+  const [inquiryId, setInquiryId] = useState(null);
+  const [honeypot, setHoneypot] = useState('');
   const [openFaq, setOpenFaq] = useState(0); // first FAQ open by default
 
   useEffect(() => {
@@ -130,37 +131,40 @@ export const ContactPage = () => {
     setSubmitError(null);
 
     const payload = {
-      timestamp: new Date().toLocaleString(),
       name: formData.name,
       company: formData.company,
       email: formData.email,
       phone: formData.phone,
-      website: formData.website || 'N/A',
+      website: formData.website,
       budget: formData.budget,
       timeline: formData.timeline,
-      services: formData.services.length > 0 ? formData.services.join(', ') : 'None selected',
-      details: formData.details || ''
+      services: formData.services,
+      details: formData.details,
+      hp_company_field: honeypot
     };
 
     try {
-      if (GOOGLE_SHEET_URL) {
-        await fetch(GOOGLE_SHEET_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: {
-            'Content-Type': 'text/plain;charset=utf-8'
-          },
-          body: JSON.stringify(payload)
-        });
-      } else {
-        console.warn('Google Sheet URL is not configured yet. Set VITE_GOOGLE_SHEET_URL in .env or src/config/sheetConfig.js');
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'Server could not process your inquiry. Please try again.');
       }
 
+      setInquiryId(data.inquiryId);
       setSubmitted(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err) {
-      console.error('Error submitting inquiry to Google Sheets:', err);
-      setSubmitError('An error occurred while submitting. Please try again or reach out directly.');
+      console.error('Error submitting inquiry to database:', err);
+      setSubmitError(err.message || 'An error occurred while submitting. Please reach out directly or try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -356,7 +360,7 @@ export const ContactPage = () => {
 
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1.5rem' }}>
                     <CheckCircle2 size={24} color="#B8FF3D" />
-                    <span className="micro-label-lime">INTAKE CONFIRMED • REF #CRN-2026-98</span>
+                    <span className="micro-label-lime">INTAKE PERSISTED • REF #{inquiryId || 'CRN-2026-ACTIVE'}</span>
                   </div>
 
                   <h3
@@ -377,15 +381,33 @@ export const ContactPage = () => {
                       fontSize: '1rem',
                       lineHeight: 1.6,
                       color: 'var(--color-muted-gray)',
+                      marginBottom: '1.25rem'
+                    }}
+                  >
+                    Your project inquiry for <strong>{formData.company || 'your organization'}</strong> has been verified and permanently committed to our systems desk database under reference <strong>{inquiryId}</strong>. We will review your scope against current deployment capacity and reply within 24 hours.
+                  </p>
+
+                  <div
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      padding: '8px 14px',
+                      backgroundColor: 'rgba(184, 255, 61, 0.08)',
+                      border: '1px solid rgba(184, 255, 61, 0.25)',
                       marginBottom: '1.5rem'
                     }}
                   >
-                    Your project inquiry for <strong>{formData.company || 'your organization'}</strong> has been received by our systems desk. We will review your scope against current deployment capacity and reply within 24 hours.
-                  </p>
+                    <ShieldCheck size={14} color="#B8FF3D" />
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: '#B8FF3D' }}>
+                      INQUIRY ID: {inquiryId} • STATUS: NEW / QUEUED
+                    </span>
+                  </div>
 
                   <button
                     onClick={() => {
                       setSubmitted(false);
+                      setInquiryId(null);
                       setFormData({
                         name: '',
                         company: '',
@@ -416,6 +438,18 @@ export const ContactPage = () => {
                     gap: '1.75rem'
                   }}
                 >
+                  {/* Anti-spam honeypot field - invisible to real humans */}
+                  <div style={{ display: 'none', position: 'absolute', opacity: 0, pointerEvents: 'none' }} aria-hidden="true">
+                    <input
+                      type="text"
+                      name="hp_company_field"
+                      tabIndex="-1"
+                      autoComplete="off"
+                      value={honeypot}
+                      onChange={(e) => setHoneypot(e.target.value)}
+                    />
+                  </div>
+
                   <div className="corner-bracket-tl" />
                   <div className="corner-bracket-br" />
 

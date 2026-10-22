@@ -16,6 +16,7 @@ import ServicesPage from './pages/ServicesPage';
 import WorkPage from './pages/WorkPage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
+const AdminPage = React.lazy(() => import('./pages/AdminPage'));
 
 export function App() {
   const [currentPath, setCurrentPath] = useState(window.location.pathname || "/");
@@ -95,8 +96,9 @@ export function App() {
 
   // Auto-redirect invalid or unknown paths back to home without error
   useEffect(() => {
-    const validPaths = ["/", "/work", "/services", "/about", "/contact"];
-    if (!validPaths.includes(currentPath)) {
+    const validPaths = ["/", "/work", "/services", "/about", "/contact", "/admin/9827988375"];
+    const normalized = (currentPath || "/").replace(/\/+$/, "") || "/";
+    if (!validPaths.includes(normalized)) {
       window.history.replaceState({}, '', '/');
       setCurrentPath('/');
     }
@@ -195,6 +197,57 @@ export function App() {
             100% { transform: translateX(250%); }
           }
         `}</style>
+      </div>
+    );
+  }
+
+  const normalizedPath = (currentPath || "/").replace(/\/+$/, "") || "/";
+  const isAdminRoute = normalizedPath === "/admin/9827988375";
+
+  if (isAdminRoute) {
+    return (
+      <div
+        style={{
+          minHeight: '100vh',
+          width: '100%',
+          maxWidth: '100vw',
+          overflowX: 'hidden',
+          backgroundColor: 'var(--color-near-black)',
+          color: 'var(--color-warm-white)',
+          display: 'flex',
+          flexDirection: 'column'
+        }}
+      >
+        <div className="noise-overlay" />
+        <React.Suspense
+          fallback={
+            <div
+              style={{
+                minHeight: '100vh',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: '#0A0A0A'
+              }}
+            >
+              <div style={{ width: '100px', height: '1.5px', backgroundColor: '#222', position: 'relative', overflow: 'hidden' }}>
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    height: '100%',
+                    width: '45%',
+                    backgroundColor: '#B8FF3D',
+                    animation: 'loadLine 0.5s infinite'
+                  }}
+                />
+              </div>
+            </div>
+          }
+        >
+          <AdminPage onNavigate={navigate} />
+        </React.Suspense>
       </div>
     );
   }

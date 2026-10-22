@@ -84,6 +84,12 @@ npm run dev
 
 Visit `http://localhost:5173/` in your browser.
 
+### Automated End-to-End Testing
+
+```bash
+npm run test:e2e
+```
+
 ### Production Build
 
 ```bash
@@ -93,6 +99,51 @@ npm run preview
 
 ---
 
+## Administration Console & Contact Management System
+
+### 1. Admin Access Entry Point
+- **Route:** `/admin/9827988375`
+- Displays the **SYSTEM ACCESS** login screen when unauthenticated.
+- Automatically grants access to the management console upon successful authentication.
+- Ordinary visitors without credentials cannot view or access inquiry data.
+
+### 2. Administrator Credentials & Setup
+- Initial credentials can be seeded via environment variables in `.env`:
+  ```bash
+  ADMIN_USERNAME=admin
+  ADMIN_INITIAL_PASSWORD=CornerStone@Admin2026
+  ```
+- Or set/updated directly via the CLI management script:
+  ```bash
+  npm run admin:create <username> <new_password>
+  # Example:
+  npm run admin:create admin MyStrongSecretPass!
+  ```
+- Administrators can also update their password directly inside the dashboard with current-password verification.
+
+### 3. Database Architecture & Migrations
+- **Production Database:** PostgreSQL (Neon, Supabase, AWS RDS, Render, etc.). Configured via `DATABASE_URL` in `.env`:
+  ```bash
+  DATABASE_URL=postgresql://user:password@ep-project.us-east-2.aws.neon.tech/neondb?sslmode=require
+  ```
+- **Local Zero-Config Fallback:** When `DATABASE_URL` is omitted locally, Cornerstone uses a persistent SQLite database in `.data/` using Node 24's built-in `node:sqlite` for seamless local testing.
+- **Run Migrations:**
+  ```bash
+  npm run db:migrate
+  ```
+
+### 4. Vercel Deployment Configuration
+1. Deploy the repository to Vercel.
+2. In the Vercel Project Dashboard, navigate to **Settings → Environment Variables** and add:
+   - `DATABASE_URL`: Your persistent PostgreSQL connection string (e.g. from Neon or Supabase).
+   - `ADMIN_USERNAME`: Your admin username (e.g. `admin`).
+   - `ADMIN_INITIAL_PASSWORD`: A secure initial password.
+   - `SESSION_SECRET`: A 32+ character random string for session hardening.
+3. Deploy! Vercel will build the frontend and serve all API endpoints via native serverless functions in `/api`.
+
+---
+
 ## License
 
 © 2026 CORNERSTONE. All rights reserved.
+
