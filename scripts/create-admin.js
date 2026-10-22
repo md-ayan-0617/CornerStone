@@ -4,8 +4,8 @@ import { query, initDb } from '../src/server/db.js';
 
 async function main() {
   const args = process.argv.slice(2);
-  const username = (args[0] || process.env.ADMIN_USERNAME || 'admin').trim().toLowerCase();
-  const rawPassword = args[1] || process.env.ADMIN_INITIAL_PASSWORD;
+  const username = (args[0] || process.env.ADMIN_USERNAME || 'ayanmd0617').trim().toLowerCase();
+  const rawPassword = args[1] || process.env.ADMIN_INITIAL_PASSWORD || 'takshhskat';
 
   if (!rawPassword) {
     console.error('Error: Please provide a password.');

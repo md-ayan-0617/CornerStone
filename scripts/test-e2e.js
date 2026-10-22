@@ -151,7 +151,7 @@ async function runTests() {
     // -------------------------------------------------------------------------
     const res5 = await request('/api/auth/login', {
       method: 'POST',
-      body: { username: 'admin', password: 'WrongPassword999!' }
+      body: { username: 'ayanmd0617', password: 'WrongPassword999!' }
     });
     assert(res5.status === 401, 'Invalid credentials rejected with HTTP 401');
     assert(res5.data.error === 'Invalid administrator credentials.', 'Generic authentication error returned');
@@ -161,7 +161,7 @@ async function runTests() {
     // -------------------------------------------------------------------------
     const res6 = await request('/api/auth/login', {
       method: 'POST',
-      body: { username: 'admin', password: 'CornerStone@2026!' }
+      body: { username: 'ayanmd0617', password: 'takshhskat' }
     });
     assert(res6.status === 200, 'Admin login succeeded with HTTP 200');
     assert(Boolean(res6.cookie), 'Admin login returned session cookie');
@@ -175,7 +175,7 @@ async function runTests() {
     });
     assert(res7.status === 200, '/api/auth/me returns HTTP 200');
     assert(res7.data.authenticated === true, 'Session successfully verified');
-    assert(res7.data.user.username === 'admin', 'Returned correct admin user');
+    assert(res7.data.user.username === 'ayanmd0617', 'Returned correct admin user');
 
     // -------------------------------------------------------------------------
     // TEST 8: List Inquiries with Session Cookie

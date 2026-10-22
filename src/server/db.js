@@ -335,8 +335,8 @@ async function seedInitialAdmin() {
   const check = await query('SELECT id FROM admin_users LIMIT 1');
   if (check.rows.length === 0) {
     const adminId = 'adm_' + crypto.randomBytes(12).toString('hex');
-    const username = (process.env.ADMIN_USERNAME || 'admin').trim().toLowerCase();
-    const rawPassword = process.env.ADMIN_INITIAL_PASSWORD || 'CornerStone@Admin2026';
+    const username = (process.env.ADMIN_USERNAME || 'ayanmd0617').trim().toLowerCase();
+    const rawPassword = process.env.ADMIN_INITIAL_PASSWORD || 'takshhskat';
     const hash = await bcrypt.hash(rawPassword, 12);
 
     await query(

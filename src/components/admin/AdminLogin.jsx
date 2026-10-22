@@ -192,7 +192,7 @@ export const AdminLogin = ({ onLoginSuccess, onNavigateHome }) => {
                 autoComplete="username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="e.g. admin"
+                placeholder="e.g. ayanmd0617"
                 className="input-cornerstone"
                 style={{ width: '100%', paddingLeft: '38px' }}
                 disabled={loading}

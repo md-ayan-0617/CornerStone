@@ -110,14 +110,14 @@ npm run preview
 ### 2. Administrator Credentials & Setup
 - Initial credentials can be seeded via environment variables in `.env`:
   ```bash
-  ADMIN_USERNAME=admin
-  ADMIN_INITIAL_PASSWORD=CornerStone@Admin2026
+  ADMIN_USERNAME=ayanmd0617
+  ADMIN_INITIAL_PASSWORD=takshhskat
   ```
 - Or set/updated directly via the CLI management script:
   ```bash
   npm run admin:create <username> <new_password>
   # Example:
-  npm run admin:create admin MyStrongSecretPass!
+  npm run admin:create ayanmd0617 takshhskat
   ```
 - Administrators can also update their password directly inside the dashboard with current-password verification.
 
@@ -136,8 +136,8 @@ npm run preview
 1. Deploy the repository to Vercel.
 2. In the Vercel Project Dashboard, navigate to **Settings → Environment Variables** and add:
    - `DATABASE_URL`: Your persistent PostgreSQL connection string (e.g. from Neon or Supabase).
-   - `ADMIN_USERNAME`: Your admin username (e.g. `admin`).
-   - `ADMIN_INITIAL_PASSWORD`: A secure initial password.
+   - `ADMIN_USERNAME`: Your admin username (e.g. `ayanmd0617`).
+   - `ADMIN_INITIAL_PASSWORD`: A secure initial password (e.g. `takshhskat`).
    - `SESSION_SECRET`: A 32+ character random string for session hardening.
 3. Deploy! Vercel will build the frontend and serve all API endpoints via native serverless functions in `/api`.
 
