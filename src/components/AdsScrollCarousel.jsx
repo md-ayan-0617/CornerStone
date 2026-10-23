@@ -314,8 +314,8 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
-          paddingTop: 'clamp(4.5rem, 8vh, 5.5rem)',
-          paddingBottom: 'clamp(1.5rem, 3vh, 2.5rem)',
+          paddingTop: 'clamp(4.2rem, 6.5vh, 4.8rem)',
+          paddingBottom: 'clamp(1rem, 2vh, 1.8rem)',
           boxSizing: 'border-box',
           zIndex: 10
         }}
@@ -498,15 +498,41 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
             minHeight: 0
           }}
         >
-          <div
-            style={{
-              position: 'relative',
-              width: '100%',
-              maxWidth: 'clamp(320px, 45vw, 560px)',
-              height: 'clamp(350px, 58vh, 540px)',
-              margin: '0 auto'
-            }}
-          >
+          {/* Big Cinematic Sizing on Laptop & Desktop */}
+          <style>{`
+            .ads-carousel-stage-container {
+              position: relative;
+              width: 100%;
+              margin: 0 auto;
+              height: clamp(380px, 60vh, 480px);
+              max-width: clamp(300px, 86vw, 420px);
+            }
+
+            @media (min-width: 640px) {
+              .ads-carousel-stage-container {
+                height: clamp(440px, 66vh, 580px);
+                max-width: clamp(420px, 70vw, 580px);
+              }
+            }
+
+            /* LAPTOP & DESKTOP (1024px+) — BIG, PROMINENT, CINEMATIC IMAGE CAROUSEL */
+            @media (min-width: 1024px) {
+              .ads-carousel-stage-container {
+                height: clamp(520px, 74vh, 760px);
+                max-width: clamp(620px, 68vw, 960px);
+              }
+            }
+
+            /* LARGE LAPTOPS & DESKTOPS (1440px+) — ULTRA IMPACT */
+            @media (min-width: 1440px) {
+              .ads-carousel-stage-container {
+                height: clamp(560px, 76vh, 820px);
+                max-width: clamp(720px, 70vw, 1080px);
+              }
+            }
+          `}</style>
+
+          <div className="ads-carousel-stage-container">
             {images.map((item, index) => {
               const isFirst = index === 0;
 
@@ -647,12 +673,12 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
                         bottom: 0,
                         left: 0,
                         right: 0,
-                        padding: 'clamp(1rem, 2vw, 1.5rem)',
+                        padding: 'clamp(1.25rem, 2.5vw, 2.25rem)',
                         zIndex: 2,
                         display: 'flex',
                         alignItems: 'flex-end',
                         justifyContent: 'space-between',
-                        gap: '1rem'
+                        gap: '1.25rem'
                       }}
                     >
                       <div>
@@ -660,10 +686,10 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
                           className="micro-label"
                           style={{
                             color: 'var(--color-accent-lime)',
-                            fontSize: '0.62rem',
+                            fontSize: '0.68rem',
                             display: 'block',
-                            marginBottom: '4px',
-                            letterSpacing: '0.1em'
+                            marginBottom: '6px',
+                            letterSpacing: '0.12em'
                           }}
                         >
                           {item.category} // {item.client}
@@ -671,12 +697,12 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
                         <h3
                           style={{
                             fontFamily: 'var(--font-display)',
-                            fontSize: 'clamp(1.15rem, 1.8vw, 1.55rem)',
+                            fontSize: 'clamp(1.25rem, 2.4vw, 2.15rem)',
                             fontWeight: 800,
                             letterSpacing: '-0.02em',
                             color: '#FFF',
                             margin: 0,
-                            lineHeight: 1.2
+                            lineHeight: 1.18
                           }}
                         >
                           {item.title}
@@ -684,10 +710,10 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
                         <p
                           style={{
                             fontFamily: 'var(--font-body)',
-                            fontSize: '0.8rem',
+                            fontSize: 'clamp(0.82rem, 1.1vw, 1.02rem)',
                             fontStyle: 'italic',
-                            color: 'rgba(244, 243, 239, 0.8)',
-                            margin: '4px 0 0 0'
+                            color: 'rgba(244, 243, 239, 0.82)',
+                            margin: '6px 0 0 0'
                           }}
                         >
                           "{item.tagline}"
@@ -698,12 +724,18 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
                         style={{
                           display: 'flex',
                           alignItems: 'center',
-                          gap: '6px',
+                          gap: '7px',
                           color: 'var(--color-accent-lime)',
-                          fontSize: '0.68rem',
+                          fontSize: '0.72rem',
                           fontFamily: 'var(--font-mono)',
                           whiteSpace: 'nowrap',
-                          flexShrink: 0
+                          flexShrink: 0,
+                          backgroundColor: 'rgba(10, 10, 10, 0.75)',
+                          backdropFilter: 'blur(8px)',
+                          padding: '6px 12px',
+                          borderRadius: '3px',
+                          border: '1px solid rgba(184, 255, 61, 0.35)',
+                          letterSpacing: '0.08em'
                         }}
                       >
                         <span>INSPECT</span>
