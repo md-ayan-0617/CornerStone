@@ -120,9 +120,9 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
         } else {
           gsap.set(card, {
             opacity: 0,
-            scale: 1.08,
-            y: 35,
-            filter: 'blur(6px)',
+            scale: 0.96,
+            y: 20,
+            filter: 'blur(4px)',
             zIndex: 5,
             pointerEvents: 'none'
           });
@@ -148,19 +148,19 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
         }
       });
 
-      // 3. Layered sequential transition sequence (Codrops-inspired reveal)
+      // 3. Layered sequential transition sequence — no edge clipping
       for (let i = 0; i < images.length - 1; i++) {
         const outCard = cards[i];
         const inCard = cards[i + 1];
 
-        // Card i smoothly fades, shrinks slightly and drifts up
+        // Outgoing card smoothly fades and settles slightly down to 0.96 (never cropped)
         tl.to(
           outCard,
           {
             opacity: 0,
-            scale: 0.92,
-            y: -30,
-            filter: 'blur(5px)',
+            scale: 0.96,
+            y: -20,
+            filter: 'blur(4px)',
             duration: 1,
             ease: 'power2.inOut',
             onStart: () => {
@@ -173,14 +173,14 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
           i
         );
 
-        // Card i+1 scales down from 1.08 to 1.0 and fades into crystal clarity
+        // Incoming card scales smoothly from 0.96 to 1.0 (never exceeds 1.0)
         tl.fromTo(
           inCard,
           {
             opacity: 0,
-            scale: 1.08,
-            y: 35,
-            filter: 'blur(6px)',
+            scale: 0.96,
+            y: 20,
+            filter: 'blur(4px)',
             zIndex: 10 + i + 1
           },
           {
@@ -263,7 +263,7 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
                 <img
                   src={item.imageUrl}
                   alt={item.title}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  style={{ width: '100%', height: '100%', objectFit: 'contain', backgroundColor: '#070707' }}
                 />
                 <div
                   style={{
@@ -498,37 +498,19 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
             minHeight: 0
           }}
         >
-          {/* Big Cinematic Sizing on Laptop & Desktop */}
+          {/* Natural 4:5 Portrait Frame Sizing — Accommodates complete original photographs without cropping */}
           <style>{`
             .ads-carousel-stage-container {
               position: relative;
               width: 100%;
               margin: 0 auto;
-              height: clamp(380px, 60vh, 480px);
-              max-width: clamp(300px, 86vw, 420px);
-            }
-
-            @media (min-width: 640px) {
-              .ads-carousel-stage-container {
-                height: clamp(440px, 66vh, 580px);
-                max-width: clamp(420px, 70vw, 580px);
-              }
-            }
-
-            /* LAPTOP & DESKTOP (1024px+) — BIG, PROMINENT, CINEMATIC IMAGE CAROUSEL */
-            @media (min-width: 1024px) {
-              .ads-carousel-stage-container {
-                height: clamp(520px, 74vh, 760px);
-                max-width: clamp(620px, 68vw, 960px);
-              }
-            }
-
-            /* LARGE LAPTOPS & DESKTOPS (1440px+) — ULTRA IMPACT */
-            @media (min-width: 1440px) {
-              .ads-carousel-stage-container {
-                height: clamp(560px, 76vh, 820px);
-                max-width: clamp(720px, 70vw, 1080px);
-              }
+              height: clamp(380px, 68vh, 660px);
+              max-height: calc(100vh - 150px);
+              aspect-ratio: 4 / 5;
+              max-width: min(90vw, calc((100vh - 150px) * 0.8));
+              display: flex;
+              align-items: center;
+              justify-content: center;
             }
           `}</style>
 
@@ -548,7 +530,10 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
                     width: '100%',
                     height: '100%',
                     cursor: 'pointer',
-                    willChange: 'transform, opacity, filter'
+                    willChange: 'transform, opacity, filter',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
                   }}
                 >
                   {/* Card Container with Architectural Accents */}
@@ -557,7 +542,7 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
                       position: 'relative',
                       width: '100%',
                       height: '100%',
-                      backgroundColor: '#0E0E0E',
+                      backgroundColor: '#070707',
                       borderRadius: 'clamp(14px, 1.8vw, 20px)',
                       border: '1px solid rgba(255, 255, 255, 0.12)',
                       overflow: 'hidden',
@@ -577,26 +562,37 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
                     <div className="corner-bracket-tl" style={{ borderColor: 'var(--color-accent-lime)' }} />
                     <div className="corner-bracket-br" style={{ borderColor: 'var(--color-accent-lime)' }} />
 
-                    {/* Image Element */}
+                    {/* Ambient Blurred Lighting Layer (Fills frame with natural mood without cropping subject) */}
+                    <img
+                      src={item.imageUrl}
+                      alt=""
+                      aria-hidden="true"
+                      style={{
+                        position: 'absolute',
+                        inset: 0,
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        filter: 'blur(30px) brightness(0.32)',
+                        opacity: 0.35,
+                        pointerEvents: 'none',
+                        transform: 'scale(1.15)'
+                      }}
+                    />
+
+                    {/* Complete Original Photograph — 100% Uncropped with object-fit: contain */}
                     <img
                       src={item.imageUrl}
                       alt={item.title}
                       loading={index < 3 ? 'eager' : 'lazy'}
                       style={{
+                        position: 'relative',
+                        zIndex: 1,
                         width: '100%',
                         height: '100%',
-                        objectFit: 'cover',
+                        objectFit: 'contain',
+                        objectPosition: 'center',
                         display: 'block'
-                      }}
-                    />
-
-                    {/* Top & Bottom Cinematic Gradient Shadows */}
-                    <div
-                      style={{
-                        position: 'absolute',
-                        inset: 0,
-                        background: 'linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0.15) 65%, rgba(0,0,0,0.85) 100%)',
-                        pointerEvents: 'none'
                       }}
                     />
 
@@ -604,8 +600,8 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
                     <div
                       style={{
                         position: 'absolute',
-                        top: '1rem',
-                        left: '1rem',
+                        top: '0.85rem',
+                        left: '0.85rem',
                         padding: '4px 10px',
                         backgroundColor: 'rgba(10, 10, 10, 0.85)',
                         backdropFilter: 'blur(8px)',
@@ -619,7 +615,7 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
                         display: 'flex',
                         alignItems: 'center',
                         gap: '6px',
-                        zIndex: 2
+                        zIndex: 3
                       }}
                     >
                       <span className="lime-dot" style={{ width: '4px', height: '4px' }} />
@@ -637,8 +633,8 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
                       title="Expand Fullscreen Lightbox"
                       style={{
                         position: 'absolute',
-                        top: '1rem',
-                        right: '1rem',
+                        top: '0.85rem',
+                        right: '0.85rem',
                         width: '32px',
                         height: '32px',
                         borderRadius: '50%',
@@ -651,7 +647,7 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
                         alignItems: 'center',
                         justifyContent: 'center',
                         cursor: 'pointer',
-                        zIndex: 2,
+                        zIndex: 3,
                         transition: 'all 0.2s ease'
                       }}
                       onMouseEnter={(e) => {
@@ -666,30 +662,31 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
                       <Maximize2 size={13} />
                     </button>
 
-                    {/* Bottom Metadata Overlay */}
+                    {/* Bottom Metadata Overlay — Compact & Non-Obtrusive */}
                     <div
                       style={{
                         position: 'absolute',
                         bottom: 0,
                         left: 0,
                         right: 0,
-                        padding: 'clamp(1.25rem, 2.5vw, 2.25rem)',
-                        zIndex: 2,
+                        padding: 'clamp(0.75rem, 1.6vw, 1.15rem)',
+                        background: 'linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.3) 35%, rgba(0,0,0,0.85) 100%)',
+                        zIndex: 3,
                         display: 'flex',
                         alignItems: 'flex-end',
                         justifyContent: 'space-between',
-                        gap: '1.25rem'
+                        gap: '0.85rem'
                       }}
                     >
-                      <div>
+                      <div style={{ minWidth: 0 }}>
                         <span
                           className="micro-label"
                           style={{
                             color: 'var(--color-accent-lime)',
-                            fontSize: '0.68rem',
+                            fontSize: '0.62rem',
                             display: 'block',
-                            marginBottom: '6px',
-                            letterSpacing: '0.12em'
+                            marginBottom: '3px',
+                            letterSpacing: '0.1em'
                           }}
                         >
                           {item.category} // {item.client}
@@ -697,12 +694,15 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
                         <h3
                           style={{
                             fontFamily: 'var(--font-display)',
-                            fontSize: 'clamp(1.25rem, 2.4vw, 2.15rem)',
+                            fontSize: 'clamp(0.95rem, 1.4vw, 1.25rem)',
                             fontWeight: 800,
                             letterSpacing: '-0.02em',
                             color: '#FFF',
                             margin: 0,
-                            lineHeight: 1.18
+                            lineHeight: 1.2,
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
                           }}
                         >
                           {item.title}
@@ -710,10 +710,13 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
                         <p
                           style={{
                             fontFamily: 'var(--font-body)',
-                            fontSize: 'clamp(0.82rem, 1.1vw, 1.02rem)',
+                            fontSize: 'clamp(0.72rem, 0.85vw, 0.82rem)',
                             fontStyle: 'italic',
-                            color: 'rgba(244, 243, 239, 0.82)',
-                            margin: '6px 0 0 0'
+                            color: 'rgba(244, 243, 239, 0.8)',
+                            margin: '3px 0 0 0',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
                           }}
                         >
                           "{item.tagline}"
@@ -724,22 +727,22 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
                         style={{
                           display: 'flex',
                           alignItems: 'center',
-                          gap: '7px',
+                          gap: '5px',
                           color: 'var(--color-accent-lime)',
-                          fontSize: '0.72rem',
+                          fontSize: '0.65rem',
                           fontFamily: 'var(--font-mono)',
                           whiteSpace: 'nowrap',
                           flexShrink: 0,
                           backgroundColor: 'rgba(10, 10, 10, 0.75)',
                           backdropFilter: 'blur(8px)',
-                          padding: '6px 12px',
+                          padding: '5px 10px',
                           borderRadius: '3px',
                           border: '1px solid rgba(184, 255, 61, 0.35)',
                           letterSpacing: '0.08em'
                         }}
                       >
                         <span>INSPECT</span>
-                        <Eye size={14} />
+                        <Eye size={12} />
                       </div>
                     </div>
                   </div>
