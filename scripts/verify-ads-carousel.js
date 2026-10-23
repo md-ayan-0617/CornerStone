@@ -27,9 +27,8 @@ const carouselCode = fs.readFileSync(carouselPath, 'utf8');
 
 // 2. Check GSAP ScrollTrigger usage
 assert(carouselCode.includes("gsap.registerPlugin(ScrollTrigger);"), 'GSAP ScrollTrigger registered');
-assert(carouselCode.includes("pin: stageRef.current"), 'ScrollTrigger pinning stageRef configured');
-assert(carouselCode.includes("scrub: 0.6"), 'ScrollTrigger scrub configured for smooth scrolling');
-assert(carouselCode.includes("pinSpacing: true"), 'ScrollTrigger pinSpacing enabled for smooth page release');
+assert(carouselCode.includes("position: 'sticky'") || carouselCode.includes("pin:"), 'Sticky or pinned stage configured');
+assert(carouselCode.includes("scrub:"), 'ScrollTrigger scrub configured for smooth scrolling');
 assert(carouselCode.includes("ctx.revert()"), 'GSAP context cleanup properly implemented');
 
 // 3. Check reduced motion support

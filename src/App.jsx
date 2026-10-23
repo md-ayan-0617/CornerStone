@@ -336,42 +336,42 @@ export function App() {
   return (
     <div
       style={{
-        minHeight: '100vh',
-        width: '100%',
-        maxWidth: '100vw',
-        overflowX: 'hidden',
-        backgroundColor: 'var(--color-near-black)',
-        color: 'var(--color-warm-white)',
-        display: 'flex',
-        flexDirection: 'column'
-      }}
-    >
-      {/* Global GSAP Scroll Progress Line */}
-      <div ref={progressRef} className="gsap-scroll-progress-line" />
-
-      {/* Subtle Noise Texture Overlay */}
-      <div className="noise-overlay" />
-
-      {/* Desktop Custom Magnetic Cursor */}
-      <CustomCursor />
-
-      {/* Global Architectural Navigation */}
-      <Navbar currentPath={currentPath} onNavigate={navigate} />
-
-      {/* Page Content with Transition Fade */}
-      <main
-        style={{
-          flex: 1,
+          minHeight: '100vh',
           width: '100%',
           maxWidth: '100vw',
-          overflowX: 'hidden',
-          opacity: isTransitioning ? 0 : 1,
-          transform: isTransitioning ? 'translateY(6px)' : 'translateY(0)',
-          transition: 'opacity 0.22s ease-out, transform 0.22s ease-out'
+          overflowX: 'clip',
+          backgroundColor: 'var(--color-near-black)',
+          color: 'var(--color-warm-white)',
+          display: 'flex',
+          flexDirection: 'column'
         }}
       >
-        {renderCurrentPage()}
-      </main>
+        {/* Global GSAP Scroll Progress Line */}
+        <div ref={progressRef} className="gsap-scroll-progress-line" />
+
+        {/* Subtle Noise Texture Overlay */}
+        <div className="noise-overlay" />
+
+        {/* Desktop Custom Magnetic Cursor */}
+        <CustomCursor />
+
+        {/* Global Architectural Navigation */}
+        <Navbar currentPath={currentPath} onNavigate={navigate} />
+
+        {/* Page Content with Transition Fade */}
+        <main
+          style={{
+            flex: 1,
+            width: '100%',
+            maxWidth: '100vw',
+            overflowX: 'clip',
+            opacity: isTransitioning ? 0 : 1,
+            transform: isTransitioning ? 'translateY(6px)' : 'none',
+            transition: 'opacity 0.22s ease-out, transform 0.22s ease-out'
+          }}
+        >
+          {renderCurrentPage()}
+        </main>
 
       {/* Global Large Editorial Footer */}
       <Footer onNavigate={navigate} />

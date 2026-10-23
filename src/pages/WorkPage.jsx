@@ -34,7 +34,7 @@ export const WorkPage = ({ onNavigate }) => {
   }, []);
 
   return (
-    <div style={{ width: '100%', maxWidth: '100vw', overflowX: 'hidden' }}>
+    <div style={{ width: '100%', maxWidth: '100vw', overflowX: 'clip' }}>
       {/* =====================================================================
           SECTION A: EXISTING WEB CONTENT (Websites & Digital Experiences)
           Complete original WEB portfolio implementation reused directly.

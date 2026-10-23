@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import CornerstoneMotif from './CornerstoneMotif';
-import { Eye, Maximize2, Sparkles, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Eye, Maximize2, ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -10,8 +10,50 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
   const containerRef = useRef(null);
   const stageRef = useRef(null);
   const progressLineRef = useRef(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const counterRef = useRef(null);
+  const titleRef = useRef(null);
+  const categoryRef = useRef(null);
+  const taglineRef = useRef(null);
+  const badgeRef = useRef(null);
+  const dotsRef = useRef([]);
+  const cardsRef = useRef([]);
+  const currentActiveIndexRef = useRef(0);
+
   const [isReducedMotion, setIsReducedMotion] = useState(false);
+
+  // Jump to specific slide by calculating target scroll offset
+  const jumpToSlide = (targetIndex) => {
+    const clamped = Math.max(0, Math.min(images.length - 1, targetIndex));
+    if (!containerRef.current) return;
+
+    const rect = containerRef.current.getBoundingClientRect();
+    const scrollTop = window.scrollY + rect.top;
+    const totalScrollableHeight = containerRef.current.offsetHeight - window.innerHeight;
+    const targetY = scrollTop + (clamped / (images.length - 1)) * totalScrollableHeight;
+
+    if (window.__lenis) {
+      window.__lenis.scrollTo(targetY, { immediate: false, duration: 1.1 });
+    } else {
+      window.scrollTo({ top: targetY, behavior: 'smooth' });
+    }
+  };
+
+  const handlePrev = (e) => {
+    e.stopPropagation();
+    jumpToSlide(currentActiveIndexRef.current - 1);
+  };
+
+  const handleNext = (e) => {
+    e.stopPropagation();
+    jumpToSlide(currentActiveIndexRef.current + 1);
+  };
+
+  const handleOpenLightbox = () => {
+    const activeItem = images[currentActiveIndexRef.current] || images[0];
+    if (onSelectImage && activeItem) {
+      onSelectImage({ ...activeItem, mediaType: 'image' });
+    }
+  };
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -21,77 +63,160 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
       return;
     }
 
-    const isMobile = window.innerWidth < 768;
-    const scrollDistanceMultiplier = isMobile ? 0.45 : 0.75;
-    const totalScrollDistance = (images.length - 1) * window.innerHeight * scrollDistanceMultiplier;
+    const cards = cardsRef.current.filter(Boolean);
+    if (cards.length === 0) return;
+
+    // Direct DOM telemetry updater — Zero React re-renders on scroll
+    const updateTelemetry = (activeIdx, progress) => {
+      currentActiveIndexRef.current = activeIdx;
+      const currentItem = images[activeIdx] || images[0];
+
+      if (progressLineRef.current) {
+        progressLineRef.current.style.transform = `scaleX(${progress})`;
+      }
+
+      if (counterRef.current) {
+        counterRef.current.textContent = `[${String(activeIdx + 1).padStart(2, '0')} // ${String(images.length).padStart(2, '0')}]`;
+      }
+
+      if (titleRef.current && currentItem) {
+        titleRef.current.textContent = currentItem.title;
+      }
+
+      if (categoryRef.current && currentItem) {
+        categoryRef.current.textContent = `${currentItem.category} // ${currentItem.client}`;
+      }
+
+      if (taglineRef.current && currentItem) {
+        taglineRef.current.textContent = `"${currentItem.tagline}"`;
+      }
+
+      if (badgeRef.current && currentItem) {
+        badgeRef.current.textContent = currentItem.badge;
+      }
+
+      // Update dot indicators
+      dotsRef.current.forEach((dot, dotIdx) => {
+        if (!dot) return;
+        const isActive = dotIdx === activeIdx;
+        dot.style.width = isActive ? '28px' : '8px';
+        dot.style.backgroundColor = isActive ? 'var(--color-accent-lime)' : 'rgba(255, 255, 255, 0.18)';
+        dot.style.boxShadow = isActive ? '0 0 10px rgba(184, 255, 61, 0.65)' : 'none';
+      });
+    };
 
     const ctx = gsap.context(() => {
-      // 1. Master Timeline driven by ScrollTrigger Pin & Scrub
+      // 1. Initial State Setup: Slide 0 active, all others stacked beneath and hidden
+      cards.forEach((card, idx) => {
+        if (idx === 0) {
+          gsap.set(card, {
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            filter: 'blur(0px)',
+            zIndex: 10,
+            pointerEvents: 'auto'
+          });
+        } else {
+          gsap.set(card, {
+            opacity: 0,
+            scale: 1.08,
+            y: 35,
+            filter: 'blur(6px)',
+            zIndex: 5,
+            pointerEvents: 'none'
+          });
+        }
+      });
+
+      // 2. Timeline synchronized to scroll progress through the container
       const tl = gsap.timeline({
         scrollTrigger: {
+          id: 'ads-carousel-trigger',
           trigger: containerRef.current,
           start: 'top top',
-          end: `+=${totalScrollDistance}`,
-          pin: stageRef.current,
-          pinSpacing: true,
-          scrub: 0.6,
-          anticipatePin: 1,
+          end: 'bottom bottom',
+          scrub: 0.5,
           onUpdate: (self) => {
-            const rawProgress = self.progress;
-            const idx = Math.min(
+            const rawProgress = Math.max(0, Math.min(1, self.progress));
+            const activeIdx = Math.min(
               images.length - 1,
               Math.floor(rawProgress * images.length)
             );
-            setCurrentIndex(idx);
-
-            if (progressLineRef.current) {
-              progressLineRef.current.style.transform = `scaleX(${rawProgress})`;
-            }
+            updateTelemetry(activeIdx, rawProgress);
           }
         }
       });
 
-      // 2. Sequential Transitions between slides (Codrops-inspired layered scale & fade)
-      images.forEach((_, i) => {
-        if (i < images.length - 1) {
-          // Slide i transitions out: subtle scale up, gentle upward drift and fade
-          tl.to(`.carousel-card-${i}`, {
-            opacity: 0,
-            scale: 0.94,
-            y: -30,
-            filter: 'blur(4px)',
-            duration: 1,
-            ease: 'power2.inOut'
-          }, i);
+      // 3. Layered sequential transition sequence (Codrops-inspired reveal)
+      for (let i = 0; i < images.length - 1; i++) {
+        const outCard = cards[i];
+        const inCard = cards[i + 1];
 
-          // Slide i+1 transitions in: smooth scale-down from 1.06 to 1.0 and fade in
-          tl.fromTo(`.carousel-card-${i + 1}`,
-            {
-              opacity: 0,
-              scale: 1.06,
-              y: 35,
-              filter: 'blur(4px)'
+        // Card i smoothly fades, shrinks slightly and drifts up
+        tl.to(
+          outCard,
+          {
+            opacity: 0,
+            scale: 0.92,
+            y: -30,
+            filter: 'blur(5px)',
+            duration: 1,
+            ease: 'power2.inOut',
+            onStart: () => {
+              outCard.style.pointerEvents = 'none';
             },
-            {
-              opacity: 1,
-              scale: 1,
-              y: 0,
-              filter: 'blur(0px)',
-              duration: 1,
-              ease: 'power2.inOut'
+            onReverseComplete: () => {
+              outCard.style.pointerEvents = 'auto';
+            }
+          },
+          i
+        );
+
+        // Card i+1 scales down from 1.08 to 1.0 and fades into crystal clarity
+        tl.fromTo(
+          inCard,
+          {
+            opacity: 0,
+            scale: 1.08,
+            y: 35,
+            filter: 'blur(6px)',
+            zIndex: 10 + i + 1
+          },
+          {
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            filter: 'blur(0px)',
+            duration: 1,
+            ease: 'power2.inOut',
+            immediateRender: false,
+            onStart: () => {
+              inCard.style.pointerEvents = 'auto';
             },
-            i
-          );
-        }
-      });
+            onReverseComplete: () => {
+              inCard.style.pointerEvents = 'none';
+            }
+          },
+          i
+        );
+      }
     }, containerRef);
 
-    return () => ctx.revert();
+    // Refresh ScrollTrigger to recalculate exact offsets after layout settle
+    const refreshTimer1 = setTimeout(() => ScrollTrigger.refresh(), 100);
+    const refreshTimer2 = setTimeout(() => ScrollTrigger.refresh(), 400);
+
+    return () => {
+      clearTimeout(refreshTimer1);
+      clearTimeout(refreshTimer2);
+      ctx.revert();
+    };
   }, [images]);
 
   if (!images || images.length === 0) return null;
 
-  const activeImage = images[currentIndex] || images[0];
+  const firstItem = images[0];
 
   // Accessible fallback for users with reduced motion preferences
   if (isReducedMotion) {
@@ -121,7 +246,7 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
               gap: '1.5rem'
             }}
           >
-            {images.map((item, idx) => (
+            {images.map((item) => (
               <div
                 key={item.id}
                 onClick={() => onSelectImage && onSelectImage({ ...item, mediaType: 'image' })}
@@ -140,7 +265,15 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
                   alt={item.title}
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
-                <div style={{ position: 'absolute', bottom: 0, insetInline: 0, padding: '1rem', background: 'linear-gradient(to top, rgba(0,0,0,0.85), transparent)' }}>
+                <div
+                  style={{
+                    position: 'absolute',
+                    bottom: 0,
+                    insetInline: 0,
+                    padding: '1rem',
+                    background: 'linear-gradient(to top, rgba(0,0,0,0.85), transparent)'
+                  }}
+                >
                   <h4 style={{ color: '#FFF', margin: 0, fontSize: '1rem' }}>{item.title}</h4>
                   <span style={{ color: '#AAA', fontSize: '0.7rem' }}>{item.category}</span>
                 </div>
@@ -152,6 +285,9 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
     );
   }
 
+  // Calculate container height: 100vh for stage + 75vh per transition
+  const totalTrackHeight = `${100 + (images.length - 1) * 75}vh`;
+
   return (
     <div
       ref={containerRef}
@@ -159,25 +295,29 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
       style={{
         position: 'relative',
         width: '100%',
+        height: totalTrackHeight,
         backgroundColor: '#070707',
         borderBottom: '1px solid var(--color-border-gray)'
       }}
     >
-      {/* Pinned Stage Window (Height: 100vh) */}
+      {/* Sticky Stage Window — Anchors seamlessly at top of viewport during the scroll sequence */}
       <div
         ref={stageRef}
         style={{
-          position: 'relative',
+          position: 'sticky',
+          top: 0,
+          left: 0,
           width: '100%',
           height: '100vh',
-          minHeight: '100svh',
+          height: '100svh',
           overflow: 'hidden',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
           paddingTop: 'clamp(4.5rem, 8vh, 5.5rem)',
           paddingBottom: 'clamp(1.5rem, 3vh, 2.5rem)',
-          boxSizing: 'border-box'
+          boxSizing: 'border-box',
+          zIndex: 10
         }}
       >
         {/* Top Scroll Scrub Progress Line */}
@@ -187,9 +327,9 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
             top: 0,
             left: 0,
             width: '100%',
-            height: '2px',
+            height: '2.5px',
             backgroundColor: 'rgba(255, 255, 255, 0.08)',
-            zIndex: 30
+            zIndex: 35
           }}
         >
           <div
@@ -200,25 +340,24 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
               backgroundColor: 'var(--color-accent-lime)',
               transformOrigin: 'left center',
               transform: 'scaleX(0)',
-              boxShadow: '0 0 10px rgba(184, 255, 61, 0.6)'
+              boxShadow: '0 0 12px rgba(184, 255, 61, 0.7)'
             }}
           />
         </div>
 
-        {/* Ambient Atmospheric Backdrop Glow (Tuned to active mood) */}
+        {/* Ambient Atmospheric Backdrop Glow */}
         <div
           style={{
             position: 'absolute',
             inset: 0,
             pointerEvents: 'none',
             zIndex: 1,
-            background: 'radial-gradient(circle at 50% 50%, rgba(184, 255, 61, 0.035) 0%, rgba(10, 10, 10, 0.8) 60%, #070707 100%)',
-            transition: 'opacity 0.6s ease'
+            background: 'radial-gradient(circle at 50% 50%, rgba(184, 255, 61, 0.035) 0%, rgba(10, 10, 10, 0.85) 60%, #070707 100%)'
           }}
         />
 
         {/* Top Header Bar */}
-        <div className="site-container" style={{ position: 'relative', zIndex: 10, width: '100%' }}>
+        <div className="site-container" style={{ position: 'relative', zIndex: 20, width: '100%' }}>
           <div
             style={{
               display: 'flex',
@@ -248,16 +387,76 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
               <span
+                ref={counterRef}
                 style={{
                   fontFamily: 'var(--font-mono)',
-                  fontSize: '0.72rem',
+                  fontSize: '0.74rem',
                   color: 'var(--color-warm-white)',
                   letterSpacing: '0.12em',
                   fontWeight: 700
                 }}
               >
-                [{String(currentIndex + 1).padStart(2, '0')} // {String(images.length).padStart(2, '0')}]
+                [01 // {String(images.length).padStart(2, '0')}]
               </span>
+
+              {/* Prev / Next Quick Controls */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <button
+                  onClick={handlePrev}
+                  aria-label="Previous image"
+                  style={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                    border: '1px solid rgba(255, 255, 255, 0.12)',
+                    borderRadius: '3px',
+                    width: '26px',
+                    height: '24px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#AAA',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.color = '#B8FF3D';
+                    e.currentTarget.style.borderColor = '#B8FF3D';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.color = '#AAA';
+                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
+                  }}
+                >
+                  <ChevronLeft size={14} />
+                </button>
+                <button
+                  onClick={handleNext}
+                  aria-label="Next image"
+                  style={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                    border: '1px solid rgba(255, 255, 255, 0.12)',
+                    borderRadius: '3px',
+                    width: '26px',
+                    height: '24px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#AAA',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.color = '#B8FF3D';
+                    e.currentTarget.style.borderColor = '#B8FF3D';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.color = '#AAA';
+                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
+                  }}
+                >
+                  <ChevronRight size={14} />
+                </button>
+              </div>
+
               <div
                 style={{
                   display: 'flex',
@@ -290,7 +489,7 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
           className="site-container"
           style={{
             position: 'relative',
-            zIndex: 10,
+            zIndex: 20,
             flex: 1,
             width: '100%',
             display: 'flex',
@@ -303,8 +502,8 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
             style={{
               position: 'relative',
               width: '100%',
-              maxWidth: 'clamp(320px, 42vw, 540px)',
-              height: 'clamp(340px, 56vh, 520px)',
+              maxWidth: 'clamp(320px, 45vw, 560px)',
+              height: 'clamp(350px, 58vh, 540px)',
               margin: '0 auto'
             }}
           >
@@ -314,16 +513,14 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
               return (
                 <div
                   key={item.id}
-                  className={`carousel-card-${index}`}
-                  onClick={() => onSelectImage && onSelectImage({ ...item, mediaType: 'image' })}
+                  ref={(el) => (cardsRef.current[index] = el)}
+                  onClick={handleOpenLightbox}
+                  className="ads-carousel-slide"
                   style={{
                     position: 'absolute',
                     inset: 0,
                     width: '100%',
                     height: '100%',
-                    opacity: isFirst ? 1 : 0,
-                    transform: isFirst ? 'scale(1) translateY(0)' : 'scale(1.06) translateY(35px)',
-                    pointerEvents: index === currentIndex ? 'auto' : 'none',
                     cursor: 'pointer',
                     willChange: 'transform, opacity, filter'
                   }}
@@ -338,16 +535,16 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
                       borderRadius: 'clamp(14px, 1.8vw, 20px)',
                       border: '1px solid rgba(255, 255, 255, 0.12)',
                       overflow: 'hidden',
-                      boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 35px -10px rgba(0, 0, 0, 0.8)',
+                      boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.95), 0 0 35px -10px rgba(0, 0, 0, 0.8)',
                       transition: 'border-color 0.3s ease, box-shadow 0.3s ease'
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.borderColor = 'var(--color-accent-lime)';
-                      e.currentTarget.style.boxShadow = '0 30px 70px -15px rgba(0, 0, 0, 0.95), 0 0 30px -10px rgba(184, 255, 61, 0.25)';
+                      e.currentTarget.style.boxShadow = '0 30px 70px -15px rgba(0, 0, 0, 0.98), 0 0 30px -10px rgba(184, 255, 61, 0.3)';
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
-                      e.currentTarget.style.boxShadow = '0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 35px -10px rgba(0, 0, 0, 0.8)';
+                      e.currentTarget.style.boxShadow = '0 25px 60px -15px rgba(0, 0, 0, 0.95), 0 0 35px -10px rgba(0, 0, 0, 0.8)';
                     }}
                   >
                     {/* Architectural Corner Accents */}
@@ -363,17 +560,16 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
                         width: '100%',
                         height: '100%',
                         objectFit: 'cover',
-                        display: 'block',
-                        transition: 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
+                        display: 'block'
                       }}
                     />
 
-                    {/* Subtle Top & Bottom Gradient Shadows */}
+                    {/* Top & Bottom Cinematic Gradient Shadows */}
                     <div
                       style={{
                         position: 'absolute',
                         inset: 0,
-                        background: 'linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0.15) 70%, rgba(0,0,0,0.85) 100%)',
+                        background: 'linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0.15) 65%, rgba(0,0,0,0.85) 100%)',
                         pointerEvents: 'none'
                       }}
                     />
@@ -408,7 +604,9 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        onSelectImage && onSelectImage({ ...item, mediaType: 'image' });
+                        if (onSelectImage) {
+                          onSelectImage({ ...item, mediaType: 'image' });
+                        }
                       }}
                       title="Expand Fullscreen Lightbox"
                       style={{
@@ -488,7 +686,7 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
                             fontFamily: 'var(--font-body)',
                             fontSize: '0.8rem',
                             fontStyle: 'italic',
-                            color: 'rgba(244, 243, 239, 0.78)',
+                            color: 'rgba(244, 243, 239, 0.8)',
                             margin: '4px 0 0 0'
                           }}
                         >
@@ -520,7 +718,7 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
         </div>
 
         {/* Bottom Interactive Thumbnail Track & Telemetry */}
-        <div className="site-container" style={{ position: 'relative', zIndex: 10, width: '100%' }}>
+        <div className="site-container" style={{ position: 'relative', zIndex: 20, width: '100%' }}>
           <div
             style={{
               display: 'flex',
@@ -534,6 +732,7 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
             {/* Active Item Title & Client Telemetry */}
             <div style={{ minWidth: 0, overflow: 'hidden' }}>
               <span
+                ref={categoryRef}
                 style={{
                   fontFamily: 'var(--font-mono)',
                   fontSize: '0.62rem',
@@ -542,12 +741,13 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
                   display: 'block'
                 }}
               >
-                FEATURED ARTIFACT:
+                {firstItem.category} // {firstItem.client}
               </span>
               <span
+                ref={titleRef}
                 style={{
                   fontFamily: 'var(--font-display)',
-                  fontSize: '0.88rem',
+                  fontSize: '0.92rem',
                   fontWeight: 700,
                   color: 'var(--color-warm-white)',
                   letterSpacing: '0.02em',
@@ -557,7 +757,7 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
                   display: 'block'
                 }}
               >
-                {activeImage.title}
+                {firstItem.title}
               </span>
             </div>
 
@@ -571,39 +771,27 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
               }}
             >
               {images.map((img, i) => {
-                const isActive = i === currentIndex;
+                const isActive = i === 0;
 
                 return (
                   <button
                     key={img.id}
-                    onClick={() => {
-                      // Smooth scroll into proportional position
-                      if (containerRef.current) {
-                        const rect = containerRef.current.getBoundingClientRect();
-                        const scrollTop = window.scrollY + rect.top;
-                        const isMobile = window.innerWidth < 768;
-                        const scrollDistanceMultiplier = isMobile ? 0.45 : 0.75;
-                        const totalScrollDistance = (images.length - 1) * window.innerHeight * scrollDistanceMultiplier;
-                        const targetScroll = scrollTop + (i / (images.length - 1)) * totalScrollDistance;
-                        
-                        if (window.__lenis) {
-                          window.__lenis.scrollTo(targetScroll, { immediate: false });
-                        } else {
-                          window.scrollTo({ top: targetScroll, behavior: 'smooth' });
-                        }
-                      }
+                    ref={(el) => (dotsRef.current[i] = el)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      jumpToSlide(i);
                     }}
                     title={`${img.title} (${i + 1}/${images.length})`}
                     style={{
                       height: '6px',
-                      width: isActive ? '24px' : '8px',
+                      width: isActive ? '28px' : '8px',
                       borderRadius: '3px',
                       backgroundColor: isActive ? 'var(--color-accent-lime)' : 'rgba(255, 255, 255, 0.18)',
                       border: 'none',
                       padding: 0,
                       cursor: 'pointer',
                       transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                      boxShadow: isActive ? '0 0 8px rgba(184, 255, 61, 0.6)' : 'none'
+                      boxShadow: isActive ? '0 0 10px rgba(184, 255, 61, 0.65)' : 'none'
                     }}
                   />
                 );

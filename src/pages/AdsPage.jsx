@@ -237,7 +237,7 @@ export const AdsPage = ({ onNavigate }) => {
   };
 
   return (
-    <div ref={pageRef} style={{ width: '100%', maxWidth: '100vw', overflowX: 'hidden' }}>
+    <div ref={pageRef} style={{ width: '100%', maxWidth: '100vw', overflowX: 'clip' }}>
 
       {/* =========================================================================
           HERO SECTION — Minimal Text, Maximum Visual Space
