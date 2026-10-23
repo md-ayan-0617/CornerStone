@@ -1,60 +1,26 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import CornerstoneMotif from './CornerstoneMotif';
+import WebsitePreviewFrame from './WebsitePreviewFrame';
+import PreviewLightboxModal from './PreviewLightboxModal';
+import { LIVE_WEBSITE_PROJECTS } from '../data/siteContent';
 import { ArrowUpRight, ExternalLink } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Curated 4 flagship live websites for homepage showcase:
+// Noise Dept., Spinform™, Paloma Social House, Vale Selvatico
 const FEATURED_WEBSITES = [
-  {
-    id: "live-noise-dept",
-    number: "01",
-    title: "Noise Dept.",
-    category: "CREATIVE STUDIO",
-    liveUrl: "https://noise-dept-six.vercel.app/",
-    domain: "noise-dept-six.vercel.app",
-    image: "/images/projects/noise-dept.jpg",
-    tagline: "Controlled disorder, kinetic typography, and raw editorial brutalism.",
-    badge: "01 // STUDIO"
-  },
-  {
-    id: "live-spinform",
-    number: "02",
-    title: "Spinform™",
-    category: "3D & CREATIVE TOOLS",
-    liveUrl: "https://spinform-eight.vercel.app/",
-    domain: "spinform-eight.vercel.app",
-    image: "/images/projects/spinform.jpg",
-    tagline: "Browser-based 3D brand extruder turning flat vectors into interactive form.",
-    badge: "02 // 3D TOOL"
-  },
-  {
-    id: "live-paloma-house",
-    number: "03",
-    title: "Paloma Social House",
-    category: "HOSPITALITY & DINING",
-    liveUrl: "https://paloma-socail-house.vercel.app/",
-    domain: "paloma-socail-house.vercel.app",
-    image: "/images/projects/paloma-house.jpg",
-    tagline: "Lunch turns into late — multi-mood Mediterranean hospitality flagship.",
-    badge: "03 // DINING"
-  },
-  {
-    id: "live-vale-selvatico",
-    number: "04",
-    title: "Vale Selvatico",
-    category: "BOTANICAL ESTATE",
-    liveUrl: "https://vale-selvatico.vercel.app/",
-    domain: "vale-selvatico.vercel.app",
-    image: "/images/projects/vale-selvatico.jpg",
-    tagline: "Sicilian botanical estate cultivating wild botanicals and small-batch apothecary.",
-    badge: "04 // LUXURY"
-  }
+  LIVE_WEBSITE_PROJECTS.find((p) => p.title === 'Noise Dept.') || LIVE_WEBSITE_PROJECTS[0],
+  LIVE_WEBSITE_PROJECTS.find((p) => p.title === 'Spinform™') || LIVE_WEBSITE_PROJECTS[1],
+  LIVE_WEBSITE_PROJECTS.find((p) => p.title === 'Paloma Social House') || LIVE_WEBSITE_PROJECTS[2],
+  LIVE_WEBSITE_PROJECTS.find((p) => p.title === 'Vale Selvatico') || LIVE_WEBSITE_PROJECTS[3]
 ];
 
 export const HomeWebsitesShowcase = ({ onNavigate }) => {
   const sectionRef = useRef(null);
+  const [zoomedProject, setZoomedProject] = useState(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -89,12 +55,12 @@ export const HomeWebsitesShowcase = ({ onNavigate }) => {
 
       gsap.fromTo(
         '.home-web-card',
-        { opacity: 0, y: 40, scale: 0.98 },
+        { opacity: 0, y: 35, scale: 0.985 },
         {
           opacity: 1,
           y: 0,
           scale: 1,
-          duration: 0.85,
+          duration: 0.8,
           stagger: 0.15,
           ease: 'power3.out',
           clearProps: 'opacity,transform',
@@ -142,7 +108,7 @@ export const HomeWebsitesShowcase = ({ onNavigate }) => {
                 fontWeight: 600
               }}
             >
-              WEB / SELECTED DEMOS
+              WEB // SELECTED PRODUCTION DEMOS
             </span>
           </div>
 
@@ -195,131 +161,168 @@ export const HomeWebsitesShowcase = ({ onNavigate }) => {
               margin: '0.65rem 0 0 0'
             }}
           >
-            Four live digital flagship demonstrations engineered for culture, luxury, and conversion.
+            Four live digital flagship demonstrations engineered for culture, luxury, and conversion. Hover to scroll and explore inside each live deployment.
           </p>
         </div>
 
-        {/* 4 Cards: 2x2 Grid on Desktop, 1-Column on Mobile */}
+        {/* 4 Cards: Balanced 2-Column Grid on Desktop, 1-Column on Mobile */}
         <div
+          className="home-web-grid"
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 460px), 1fr))',
-            gap: 'clamp(1.75rem, 3vw, 2.5rem)'
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 480px), 1fr))',
+            gap: 'clamp(2rem, 3.5vw, 3rem)'
           }}
         >
           {FEATURED_WEBSITES.map((proj) => (
             <div
               key={proj.id}
-              className="home-web-card group"
+              className="home-web-card"
               style={{
                 backgroundColor: '#0E0E0E',
                 border: '1px solid rgba(255, 255, 255, 0.08)',
-                borderRadius: 'clamp(18px, 2.2vw, 24px)',
+                borderRadius: '8px',
                 overflow: 'hidden',
                 display: 'flex',
                 flexDirection: 'column',
-                transition: 'border-color 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease',
-                boxShadow: '0 15px 35px rgba(0, 0, 0, 0.6)'
+                boxShadow: '0 16px 36px rgba(0, 0, 0, 0.65)',
+                transition: 'border-color 0.3s ease, box-shadow 0.3s ease'
               }}
             >
-              {/* Card Image Container with Click to Live Site */}
-              <a
-                href={proj.liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+              {/* 1. Status Bar Header */}
+              <div
+                style={{
+                  padding: '0.75rem 1.15rem',
+                  borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                  backgroundColor: '#121212',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '12px'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.72rem',
+                      fontWeight: 700,
+                      color: proj.accentColor || 'var(--color-lime)',
+                      letterSpacing: '0.08em'
+                    }}
+                  >
+                    {proj.number}
+                  </span>
+                  <div style={{ height: '10px', width: '1px', backgroundColor: 'rgba(255, 255, 255, 0.15)' }} />
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                    <span
+                      style={{
+                        width: '5px',
+                        height: '5px',
+                        borderRadius: '50%',
+                        backgroundColor: '#10B981',
+                        boxShadow: '0 0 6px #10B981'
+                      }}
+                    />
+                    <span
+                      style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.62rem',
+                        letterSpacing: '0.08em',
+                        color: 'var(--color-warm-white)',
+                        textTransform: 'uppercase'
+                      }}
+                    >
+                      LIVE DEMO
+                    </span>
+                  </div>
+                </div>
+
+                <span
+                  style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.62rem',
+                    color: 'var(--color-muted-gray)',
+                    letterSpacing: '0.04em'
+                  }}
+                >
+                  {proj.domain}
+                </span>
+              </div>
+
+              {/* 2. Dominant 16:10 Live Interactive Website Preview */}
+              <div
                 style={{
                   position: 'relative',
                   width: '100%',
                   aspectRatio: '16 / 10',
-                  overflow: 'hidden',
-                  display: 'block',
-                  backgroundColor: '#050505',
-                  borderBottom: '1px solid rgba(255, 255, 255, 0.06)'
+                  minHeight: 'clamp(340px, 44vh, 480px)',
+                  maxHeight: '520px',
+                  backgroundColor: '#070707',
+                  borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                  padding: 'clamp(4px, 0.8vw, 8px)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  boxSizing: 'border-box',
+                  overflow: 'hidden'
                 }}
+                className="home-preview-wrapper"
               >
-                <img
-                  src={proj.image}
-                  alt={proj.title}
-                  loading="lazy"
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    display: 'block',
-                    transition: 'transform 0.65s cubic-bezier(0.16, 1, 0.3, 1)'
-                  }}
-                  className="web-card-img"
+                <WebsitePreviewFrame
+                  project={proj}
+                  height="100%"
+                  minHeight="0"
+                  onOpenFullscreen={setZoomedProject}
                 />
+              </div>
 
-                <div
-                  style={{
-                    position: 'absolute',
-                    inset: 0,
-                    background: 'linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.6) 100%)',
-                    pointerEvents: 'none'
-                  }}
-                />
-
-                {/* Top Corner Badge */}
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: '1rem',
-                    left: '1rem',
-                    zIndex: 2
-                  }}
-                >
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.62rem',
-                      color: 'var(--color-lime)',
-                      backgroundColor: 'rgba(10, 10, 10, 0.78)',
-                      backdropFilter: 'blur(8px)',
-                      WebkitBackdropFilter: 'blur(8px)',
-                      padding: '0.28rem 0.65rem',
-                      borderRadius: '999px',
-                      border: '1px solid rgba(184, 255, 61, 0.25)',
-                      letterSpacing: '0.12em',
-                      fontWeight: 600
-                    }}
-                  >
-                    {proj.badge}
-                  </span>
-                </div>
-              </a>
-
-              {/* Card Body */}
+              {/* 3. Compact Supporting Information Body Below */}
               <div
                 style={{
-                  padding: 'clamp(1.25rem, 2.5vw, 1.75rem)',
+                  padding: 'clamp(1rem, 1.6vw, 1.35rem)',
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
+                  gap: '0.85rem',
                   flex: 1
                 }}
               >
                 <div>
-                  <div
-                    style={{
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.62rem',
-                      color: 'rgba(255, 255, 255, 0.55)',
-                      letterSpacing: '0.12em',
-                      marginBottom: '0.35rem'
-                    }}
-                  >
-                    {proj.category}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '0.35rem' }}>
+                    <span
+                      style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.62rem',
+                        fontWeight: 600,
+                        letterSpacing: '0.1em',
+                        color: proj.accentColor || 'var(--color-lime)',
+                        textTransform: 'uppercase'
+                      }}
+                    >
+                      {proj.category}
+                    </span>
+                    <span style={{ color: 'rgba(255, 255, 255, 0.25)', fontSize: '0.6rem' }}>•</span>
+                    <span
+                      style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.62rem',
+                        color: 'var(--color-muted-gray)',
+                        letterSpacing: '0.06em'
+                      }}
+                    >
+                      {proj.industry}
+                    </span>
                   </div>
 
                   <h3
                     style={{
                       fontFamily: 'var(--font-display)',
-                      fontSize: 'clamp(1.25rem, 2vw, 1.55rem)',
+                      fontSize: 'clamp(1.15rem, 1.5vw, 1.35rem)',
                       fontWeight: 700,
                       color: 'var(--color-warm-white)',
-                      margin: '0 0 0.45rem 0',
-                      letterSpacing: '-0.02em'
+                      margin: '0 0 0.35rem 0',
+                      letterSpacing: '-0.02em',
+                      lineHeight: 1.2
                     }}
                   >
                     {proj.title}
@@ -328,37 +331,76 @@ export const HomeWebsitesShowcase = ({ onNavigate }) => {
                   <p
                     style={{
                       fontFamily: 'var(--font-body)',
-                      fontSize: '0.88rem',
+                      fontSize: '0.82rem',
                       color: 'var(--color-muted-gray)',
-                      margin: 0,
-                      lineHeight: 1.45
+                      margin: '0 0 0.75rem 0',
+                      lineHeight: 1.5
                     }}
                   >
-                    {proj.tagline}
+                    {proj.shortDescription || proj.tagline}
                   </p>
+
+                  {/* Compact Tech Stack Labels */}
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
+                    {proj.techStack?.slice(0, 4).map((tech) => (
+                      <span
+                        key={tech}
+                        style={{
+                          backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                          border: '1px solid rgba(255, 255, 255, 0.08)',
+                          padding: '2px 7px',
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: '0.58rem',
+                          color: '#AAA',
+                          letterSpacing: '0.04em',
+                          borderRadius: '2px'
+                        }}
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
                 </div>
 
-                {/* Bottom Action: Minimal VIEW PROJECT */}
+                {/* Bottom Action Bar */}
                 <div
                   style={{
-                    marginTop: '1.5rem',
-                    paddingTop: '1rem',
+                    paddingTop: '0.75rem',
                     borderTop: '1px solid rgba(255, 255, 255, 0.06)',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'space-between'
+                    justifyContent: 'space-between',
+                    gap: '8px',
+                    flexWrap: 'wrap'
                   }}
                 >
-                  <span
+                  <button
+                    onClick={() => setZoomedProject(proj)}
                     style={{
+                      background: 'transparent',
+                      border: 'none',
+                      color: 'var(--color-warm-white)',
                       fontFamily: 'var(--font-mono)',
-                      fontSize: '0.65rem',
-                      color: 'var(--color-muted-gray)',
-                      letterSpacing: '0.08em'
+                      fontSize: '0.68rem',
+                      fontWeight: 600,
+                      letterSpacing: '0.06em',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '5px',
+                      padding: '4px 0',
+                      transition: 'color 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.color = proj.accentColor || 'var(--color-lime)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.color = 'var(--color-warm-white)';
                     }}
                   >
-                    {proj.domain}
-                  </span>
+                    <span>EXPAND PREVIEW</span>
+                    <ArrowUpRight size={12} />
+                  </button>
 
                   <a
                     href={proj.liveUrl}
@@ -366,15 +408,15 @@ export const HomeWebsitesShowcase = ({ onNavigate }) => {
                     rel="noopener noreferrer"
                     className="btn-cornerstone"
                     style={{
-                      padding: '0.55rem 1.1rem',
-                      fontSize: '0.72rem',
+                      padding: '0.5rem 1rem',
+                      fontSize: '0.68rem',
                       display: 'inline-flex',
                       alignItems: 'center',
                       gap: '6px'
                     }}
                   >
-                    <span>VIEW PROJECT</span>
-                    <ExternalLink size={12} />
+                    <span>OPEN LIVE SITE</span>
+                    <ExternalLink size={11} />
                   </a>
                 </div>
               </div>
@@ -383,14 +425,18 @@ export const HomeWebsitesShowcase = ({ onNavigate }) => {
         </div>
       </div>
 
+      {/* Lightbox Fullscreen Preview Modal */}
+      {zoomedProject && (
+        <PreviewLightboxModal
+          project={zoomedProject}
+          onClose={() => setZoomedProject(null)}
+        />
+      )}
+
       <style>{`
         .home-web-card:hover {
-          border-color: rgba(184, 255, 61, 0.4) !important;
-          transform: translateY(-4px);
-          box-shadow: 0 25px 50px rgba(0, 0, 0, 0.85), 0 0 35px -10px rgba(184, 255, 61, 0.15) !important;
-        }
-        .home-web-card:hover .web-card-img {
-          transform: scale(1.035);
+          border-color: rgba(184, 255, 61, 0.35) !important;
+          box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8), 0 0 25px -8px rgba(184, 255, 61, 0.12) !important;
         }
       `}</style>
     </section>

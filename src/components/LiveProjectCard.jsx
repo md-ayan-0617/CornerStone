@@ -199,7 +199,7 @@ export const LiveProjectCard = ({
         </div>
       </div>
 
-      {/* 2. Website Preview Container — Fixed & Consistent 16:10 Desktop Aspect Ratio on Top */}
+      {/* 2. Website Preview Container — Dominant, Expansive 16:10 Live Frame */}
       <div
         onMouseEnter={() => {
           setIsHoveringPreview(true);
@@ -211,11 +211,11 @@ export const LiveProjectCard = ({
           position: 'relative',
           width: '100%',
           aspectRatio: '16 / 10',
-          minHeight: '260px',
-          maxHeight: '400px',
+          minHeight: 'clamp(340px, 46vh, 480px)',
+          maxHeight: '560px',
           backgroundColor: '#070707',
           borderBottom: '1px solid var(--color-border-gray)',
-          padding: 'clamp(6px, 1.2vw, 10px)',
+          padding: 'clamp(4px, 0.8vw, 8px)',
           display: 'flex',
           flexDirection: 'column',
           boxSizing: 'border-box',
@@ -231,26 +231,25 @@ export const LiveProjectCard = ({
         />
       </div>
 
-      {/* 3. Complete Project Information Body — Placed DIRECTLY Below Preview across Full Width */}
+      {/* 3. Compact Project Information Body — Subordinated to the Large Preview Above */}
       <div
         style={{
-          padding: 'clamp(1.25rem, 2.2vw, 1.75rem)',
+          padding: 'clamp(1rem, 1.6vw, 1.35rem)',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
-          flex: 1,
-          gap: '1.25rem',
+          gap: '0.85rem',
           width: '100%',
           boxSizing: 'border-box'
         }}
       >
         <div>
           {/* Category & Industry */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '0.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '0.35rem' }}>
             <span
               style={{
                 fontFamily: 'var(--font-mono)',
-                fontSize: '0.65rem',
+                fontSize: '0.62rem',
                 fontWeight: 600,
                 letterSpacing: '0.1em',
                 color: project.accentColor,
@@ -259,11 +258,11 @@ export const LiveProjectCard = ({
             >
               {project.category}
             </span>
-            <span style={{ color: 'var(--color-border-gray)' }}>•</span>
+            <span style={{ color: 'var(--color-border-gray)', fontSize: '0.6rem' }}>•</span>
             <span
               style={{
                 fontFamily: 'var(--font-mono)',
-                fontSize: '0.65rem',
+                fontSize: '0.62rem',
                 color: 'var(--color-muted-gray)',
                 letterSpacing: '0.06em'
               }}
@@ -272,54 +271,40 @@ export const LiveProjectCard = ({
             </span>
           </div>
 
-          {/* Project Title */}
+          {/* Project Title — Secondary Hierarchy */}
           <h3
             style={{
               fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(1.35rem, 2vw, 1.75rem)',
-              fontWeight: 800,
-              letterSpacing: '-0.025em',
-              lineHeight: 1.15,
+              fontSize: 'clamp(1.15rem, 1.5vw, 1.35rem)',
+              fontWeight: 700,
+              letterSpacing: '-0.02em',
+              lineHeight: 1.2,
               color: 'var(--color-warm-white)',
-              marginBottom: '0.4rem'
+              marginBottom: '0.35rem'
             }}
           >
             {project.title}
           </h3>
 
-          {/* Tagline / Subtitle */}
+          {/* Compact Supporting Description */}
           <p
             style={{
               fontFamily: 'var(--font-body)',
-              fontSize: '0.85rem',
-              fontStyle: 'italic',
-              color: 'rgba(244, 243, 239, 0.75)',
-              marginBottom: '0.85rem'
-            }}
-          >
-            "{project.tagline}"
-          </p>
-
-          {/* Complete Project Description */}
-          <p
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: '0.88rem',
-              lineHeight: 1.6,
+              fontSize: '0.82rem',
+              lineHeight: 1.5,
               color: 'var(--color-muted-gray)',
-              margin: 0
+              margin: '0 0 0.75rem 0'
             }}
           >
             {project.shortDescription}
           </p>
 
-          {/* Tech Stack Tags */}
+          {/* Tech Stack Tags — Compact Metadata */}
           <div
             style={{
               display: 'flex',
               flexWrap: 'wrap',
-              gap: '6px',
-              marginTop: '1.15rem'
+              gap: '5px'
             }}
           >
             {project.techStack.map((tech) => (
@@ -328,11 +313,12 @@ export const LiveProjectCard = ({
                 style={{
                   backgroundColor: 'rgba(255, 255, 255, 0.04)',
                   border: '1px solid rgba(255, 255, 255, 0.08)',
-                  padding: '3px 8px',
+                  padding: '2px 7px',
                   fontFamily: 'var(--font-mono)',
-                  fontSize: '0.62rem',
-                  color: '#CCC',
-                  letterSpacing: '0.04em'
+                  fontSize: '0.58rem',
+                  color: '#AAA',
+                  letterSpacing: '0.04em',
+                  borderRadius: '2px'
                 }}
               >
                 {tech}
@@ -341,15 +327,15 @@ export const LiveProjectCard = ({
           </div>
         </div>
 
-        {/* Bottom Project Actions */}
+        {/* Bottom Project Actions — Small, Clear Controls */}
         <div
           style={{
-            paddingTop: '1rem',
+            paddingTop: '0.75rem',
             borderTop: '1px solid var(--color-border-gray)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            gap: '10px',
+            gap: '8px',
             flexWrap: 'wrap'
           }}
         >
@@ -364,14 +350,14 @@ export const LiveProjectCard = ({
               border: 'none',
               color: 'var(--color-warm-white)',
               fontFamily: 'var(--font-mono)',
-              fontSize: '0.72rem',
+              fontSize: '0.68rem',
               fontWeight: 600,
-              letterSpacing: '0.08em',
+              letterSpacing: '0.06em',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              gap: '6px',
-              padding: '6px 0',
+              gap: '5px',
+              padding: '4px 0',
               transition: 'color 0.2s ease'
             }}
             onMouseEnter={(e) => {
@@ -382,7 +368,7 @@ export const LiveProjectCard = ({
             }}
           >
             <span>INSPECT SYSTEM</span>
-            <Layers size={13} />
+            <Layers size={12} />
           </button>
 
           {/* Live External Demo Link */}
@@ -394,15 +380,15 @@ export const LiveProjectCard = ({
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '7px',
-              padding: '8px 14px',
+              gap: '6px',
+              padding: '6px 12px',
               backgroundColor: isHovered ? project.accentColor : 'rgba(255, 255, 255, 0.08)',
               color: isHovered ? '#0A0A0A' : 'var(--color-warm-white)',
               border: `1px solid ${isHovered ? project.accentColor : 'rgba(255, 255, 255, 0.15)'}`,
               fontFamily: 'var(--font-mono)',
-              fontSize: '0.72rem',
+              fontSize: '0.68rem',
               fontWeight: 700,
-              letterSpacing: '0.08em',
+              letterSpacing: '0.06em',
               textDecoration: 'none',
               textTransform: 'uppercase',
               transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
@@ -411,7 +397,7 @@ export const LiveProjectCard = ({
             className="live-demo-btn"
           >
             <span>VIEW LIVE DEMO</span>
-            <ArrowUpRight size={13} />
+            <ArrowUpRight size={12} />
           </a>
         </div>
       </div>

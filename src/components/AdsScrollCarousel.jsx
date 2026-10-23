@@ -106,12 +106,13 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
     };
 
     const ctx = gsap.context(() => {
-      // 1. Initial State Setup: Slide 0 active, all others stacked beneath and hidden
+      // 1. Initial State Setup: Slide 0 at center, all others positioned off to the left and hidden
       cards.forEach((card, idx) => {
         if (idx === 0) {
           gsap.set(card, {
             opacity: 1,
             scale: 1,
+            x: '0%',
             y: 0,
             filter: 'blur(0px)',
             zIndex: 10,
@@ -120,8 +121,9 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
         } else {
           gsap.set(card, {
             opacity: 0,
-            scale: 0.96,
-            y: 20,
+            scale: 0.95,
+            x: '-70%', // Beginning off to the left
+            y: 0,
             filter: 'blur(4px)',
             zIndex: 5,
             pointerEvents: 'none'
@@ -148,18 +150,18 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
         }
       });
 
-      // 3. Layered sequential transition sequence — no edge clipping
+      // 3. Horizontal transition sequence: LEFT IMAGE -> CENTER POSITION -> CURRENT CENTER MOVES RIGHT
       for (let i = 0; i < images.length - 1; i++) {
         const outCard = cards[i];
         const inCard = cards[i + 1];
 
-        // Outgoing card smoothly fades and settles slightly down to 0.96 (never cropped)
+        // The image currently in the center shifts to the right and fades out
         tl.to(
           outCard,
           {
+            x: '70%', // Moves to the right
             opacity: 0,
-            scale: 0.96,
-            y: -20,
+            scale: 0.95,
             filter: 'blur(4px)',
             duration: 1,
             ease: 'power2.inOut',
@@ -173,20 +175,20 @@ export const AdsScrollCarousel = ({ images = [], onSelectImage }) => {
           i
         );
 
-        // Incoming card scales smoothly from 0.96 to 1.0 (never exceeds 1.0)
+        // The incoming image begins off to the left and moves into the center position
         tl.fromTo(
           inCard,
           {
+            x: '-70%', // Starts off to the left
             opacity: 0,
-            scale: 0.96,
-            y: 20,
+            scale: 0.95,
             filter: 'blur(4px)',
             zIndex: 10 + i + 1
           },
           {
+            x: '0%', // Moves into center position
             opacity: 1,
             scale: 1,
-            y: 0,
             filter: 'blur(0px)',
             duration: 1,
             ease: 'power2.inOut',

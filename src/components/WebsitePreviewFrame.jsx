@@ -27,6 +27,7 @@ export const WebsitePreviewFrame = ({
   const [hasError, setHasError] = useState(false);
   const [reloadKey, setReloadKey] = useState(0);
   const [showScrollHint, setShowScrollHint] = useState(true);
+  const [isInteracting, setIsInteracting] = useState(false);
   const iframeRef = useRef(null);
 
   // Auto-hide the scroll hint after timeout
