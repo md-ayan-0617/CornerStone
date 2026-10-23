@@ -21,7 +21,7 @@ import {
   Cpu
 } from 'lucide-react';
 
-export const DigitalExperiencesPage = ({ onNavigate }) => {
+export const DigitalExperiencesPage = ({ onNavigate, hideCTA = false }) => {
   const [activeCategory, setActiveCategory] = useState("ALL");
   const [layoutMode, setLayoutMode] = useState("bento");
   const [activeModalProject, setActiveModalProject] = useState(null);
@@ -531,7 +531,7 @@ export const DigitalExperiencesPage = ({ onNavigate }) => {
       {/* =========================================================================
           5. GLOBAL EDITORIAL FINAL CTA
           ========================================================================= */}
-      <FinalCTA onStartProject={() => onNavigate && onNavigate('/contact')} />
+      {!hideCTA && <FinalCTA onStartProject={() => onNavigate && onNavigate('/contact')} />}
 
       {/* Interactive Project Detail Modal */}
       {activeModalProject && (

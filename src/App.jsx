@@ -96,7 +96,8 @@ export function App() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  // Auto-redirect invalid or unknown paths back to home without error
+  // Auto-redirect invalid or unknown paths back to home without error,
+  // and redirect legacy /web and /ads paths to the unified /work portfolio.
   useEffect(() => {
     const validPaths = [
       "/",
@@ -113,6 +114,29 @@ export function App() {
       "/admin/9827988375"
     ];
     const normalized = (currentPath || "/").replace(/\/+$/, "") || "/";
+
+    if (normalized === "/web" || normalized === "/digital-experiences" || normalized === "/work/digital-experiences") {
+      window.history.replaceState({}, '', '/work');
+      setCurrentPath('/work');
+      return;
+    }
+
+    if (normalized === "/ads" || normalized === "/visual-campaigns" || normalized === "/work/visual-campaigns") {
+      window.history.replaceState({}, '', '/work#ads');
+      setCurrentPath('/work');
+      const el = document.getElementById('ads-portfolio-section');
+      if (el) {
+        setTimeout(() => {
+          if (window.__lenis) {
+            window.__lenis.scrollTo(el, { offset: -70 });
+          } else {
+            el.scrollIntoView({ behavior: 'smooth' });
+          }
+        }, 150);
+      }
+      return;
+    }
+
     if (!validPaths.includes(normalized)) {
       window.history.replaceState({}, '', '/');
       setCurrentPath('/');
@@ -120,24 +144,60 @@ export function App() {
   }, [currentPath]);
 
   const navigate = (path) => {
-    if (path === currentPath) {
-      if (window.__lenis) {
-        window.__lenis.scrollTo(0, { immediate: false });
+    // If navigating to legacy /web or /ads, redirect target to /work (or /work#ads)
+    let targetPath = path;
+    if (path === "/web" || path === "/digital-experiences" || path === "/work/digital-experiences") {
+      targetPath = "/work";
+    } else if (path === "/ads" || path === "/visual-campaigns" || path === "/work/visual-campaigns") {
+      targetPath = "/work#ads";
+    }
+
+    const targetPathname = targetPath.split('#')[0];
+    const targetHash = targetPath.includes('#') ? targetPath.substring(targetPath.indexOf('#')) : '';
+
+    if (targetPathname === currentPath) {
+      if (targetHash) {
+        window.history.pushState({}, '', targetPath);
+        const el = document.getElementById(targetHash.replace('#', '') + '-portfolio-section') || document.querySelector(targetHash);
+        if (el) {
+          if (window.__lenis) {
+            window.__lenis.scrollTo(el, { offset: -70 });
+          } else {
+            el.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
       } else {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (window.__lenis) {
+          window.__lenis.scrollTo(0, { immediate: false });
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
       }
       return;
     }
 
     setIsTransitioning(true);
-    window.history.pushState({}, '', path);
+    window.history.pushState({}, '', targetPath);
 
     setTimeout(() => {
-      setCurrentPath(path);
-      if (window.__lenis) {
-        window.__lenis.scrollTo(0, { immediate: true });
+      setCurrentPath(targetPathname);
+      if (targetHash) {
+        setTimeout(() => {
+          const el = document.getElementById(targetHash.replace('#', '') + '-portfolio-section') || document.querySelector(targetHash);
+          if (el) {
+            if (window.__lenis) {
+              window.__lenis.scrollTo(el, { offset: -70 });
+            } else {
+              el.scrollIntoView({ behavior: 'smooth' });
+            }
+          }
+        }, 100);
       } else {
-        window.scrollTo(0, 0);
+        if (window.__lenis) {
+          window.__lenis.scrollTo(0, { immediate: true });
+        } else {
+          window.scrollTo(0, 0);
+        }
       }
       setTimeout(() => {
         setIsTransitioning(false);
@@ -150,15 +210,14 @@ export function App() {
     switch (currentPath) {
       case "/services":
         return <ServicesPage onNavigate={navigate} />;
+      case "/work":
       case "/web":
+      case "/ads":
       case "/work/digital-experiences":
       case "/digital-experiences":
-      case "/work":
-        return <DigitalExperiencesPage onNavigate={navigate} />;
-      case "/ads":
       case "/work/visual-campaigns":
       case "/visual-campaigns":
-        return <AdsPage onNavigate={navigate} />;
+        return <WorkPage onNavigate={navigate} />;
       case "/about":
         return <AboutPage onNavigate={navigate} />;
       case "/contact":

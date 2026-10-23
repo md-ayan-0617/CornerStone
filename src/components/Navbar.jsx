@@ -37,26 +37,26 @@ export const Navbar = ({ currentPath = "/", onNavigate }) => {
     };
   }, [mobileMenuOpen]);
 
-  // The 6 exact navigation items required in exact order
+  // Global Navigation: Exactly 5 items in order: HOME | SERVICES | WORK | ABOUT | CONTACT
   const navLinks = [
     { label: "HOME", path: "/", number: "01", icon: Home },
     { label: "SERVICES", path: "/services", number: "02", icon: Cpu },
     {
-      label: "WEB",
-      path: "/web",
-      altPaths: ["/work/digital-experiences", "/digital-experiences", "/work"],
+      label: "WORK",
+      path: "/work",
+      altPaths: [
+        "/web",
+        "/ads",
+        "/work/digital-experiences",
+        "/digital-experiences",
+        "/work/visual-campaigns",
+        "/visual-campaigns"
+      ],
       number: "03",
-      icon: Globe
+      icon: Briefcase
     },
-    {
-      label: "ADS",
-      path: "/ads",
-      altPaths: ["/work/visual-campaigns", "/visual-campaigns"],
-      number: "04",
-      icon: Film
-    },
-    { label: "ABOUT", path: "/about", number: "05", icon: Info },
-    { label: "CONTACT", path: "/contact", number: "06", icon: MessageSquare }
+    { label: "ABOUT", path: "/about", number: "04", icon: Info },
+    { label: "CONTACT", path: "/contact", number: "05", icon: MessageSquare }
   ];
 
   const isLinkActive = (item) => {
@@ -262,7 +262,7 @@ export const Navbar = ({ currentPath = "/", onNavigate }) => {
               className="micro-label"
               style={{ display: 'block', marginBottom: '1.5rem', color: 'var(--color-muted-gray)' }}
             >
-              NAVIGATION DIRECTORY // 06 CHANNELS
+              NAVIGATION DIRECTORY // 05 CHANNELS
             </span>
 
             <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
