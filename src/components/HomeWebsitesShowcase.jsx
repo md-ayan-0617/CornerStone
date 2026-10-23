@@ -19,37 +19,37 @@ const FEATURED_WEBSITES = [
     badge: "01 // STUDIO"
   },
   {
-    id: "live-paloma-house",
+    id: "live-spinform",
     number: "02",
-    title: "Paloma",
+    title: "Spinform™",
+    category: "3D & CREATIVE TOOLS",
+    liveUrl: "https://spinform-eight.vercel.app/",
+    domain: "spinform-eight.vercel.app",
+    image: "/images/projects/spinform.jpg",
+    tagline: "Browser-based 3D brand extruder turning flat vectors into interactive form.",
+    badge: "02 // 3D TOOL"
+  },
+  {
+    id: "live-paloma-house",
+    number: "03",
+    title: "Paloma Social House",
     category: "HOSPITALITY & DINING",
     liveUrl: "https://paloma-socail-house.vercel.app/",
     domain: "paloma-socail-house.vercel.app",
     image: "/images/projects/paloma-house.jpg",
     tagline: "Lunch turns into late — multi-mood Mediterranean hospitality flagship.",
-    badge: "02 // DINING"
+    badge: "03 // DINING"
   },
   {
     id: "live-vale-selvatico",
-    number: "03",
-    title: "Vale Selvato",
+    number: "04",
+    title: "Vale Selvatico",
     category: "BOTANICAL ESTATE",
     liveUrl: "https://vale-selvatico.vercel.app/",
     domain: "vale-selvatico.vercel.app",
     image: "/images/projects/vale-selvatico.jpg",
-    tagline: "Botanical sanctuary cultivating wild botanicals and small-batch apothecary.",
-    badge: "03 // LUXURY"
-  },
-  {
-    id: "live-aurenne",
-    number: "04",
-    title: "Aurenne",
-    category: "HAUTE JOAILLERIE",
-    liveUrl: "https://aurenne-six.vercel.app/",
-    domain: "aurenne-six.vercel.app",
-    image: "/images/projects/aurenne.jpg",
-    tagline: "Sculptural fine jewellery and gemstone facets emerging from obsidian darkness.",
-    badge: "04 // MAISON"
+    tagline: "Sicilian botanical estate cultivating wild botanicals and small-batch apothecary.",
+    badge: "04 // LUXURY"
   }
 ];
 
@@ -170,7 +170,7 @@ export const HomeWebsitesShowcase = ({ onNavigate }) => {
 
             {onNavigate && (
               <button
-                onClick={() => onNavigate('/web')}
+                onClick={() => onNavigate('/work')}
                 className="btn-cornerstone-ghost"
                 style={{
                   padding: '0.55rem 1.15rem',
@@ -180,7 +180,7 @@ export const HomeWebsitesShowcase = ({ onNavigate }) => {
                   gap: '6px'
                 }}
               >
-                <span>EXPLORE ALL WEBSITES</span>
+                <span>EXPLORE ALL WORK</span>
                 <ArrowUpRight size={13} />
               </button>
             )}

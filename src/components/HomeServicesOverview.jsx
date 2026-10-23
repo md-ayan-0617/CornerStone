@@ -25,7 +25,7 @@ const SERVICES_DATA = [
     tagline: "High-converting digital flagships and landing pages engineered to convert visitors.",
     icon: Globe,
     highlights: ["Custom Business Websites", "Conversion Landing Pages", "Sub-Second Performance"],
-    path: "/web"
+    path: "/work"
   },
   {
     id: "service-creative-production",
@@ -35,7 +35,7 @@ const SERVICES_DATA = [
     tagline: "Commercial AI photography, 9:16 vertical video reels, and high-impact ad campaigns.",
     icon: Film,
     highlights: ["AI Model & Product Visuals", "9:16 Portrait Video Ads", "Omnichannel Ad Creative"],
-    path: "/ads"
+    path: "/work#ads"
   }
 ];
 

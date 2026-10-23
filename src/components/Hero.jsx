@@ -247,12 +247,12 @@ export const Hero = ({ onExploreWork, onStartProject, onExploreServices }) => {
               <ArrowUpRight size={16} />
             </button>
             <button
-              onClick={onExploreServices || onExploreWork}
+              onClick={onExploreWork || onExploreServices}
               className="btn-cornerstone-secondary"
               style={{ padding: '1rem 1.85rem' }}
-              data-cursor="SERVICES"
+              data-cursor="WORK"
             >
-              <span>EXPLORE OUR SERVICES</span>
+              <span>EXPLORE WORK</span>
             </button>
           </div>
         </div>
@@ -279,7 +279,16 @@ export const Hero = ({ onExploreWork, onStartProject, onExploreServices }) => {
           </div>
 
           <button
-            onClick={onExploreWork}
+            onClick={() => {
+              const el = document.getElementById('home-about') || document.getElementById('home-services-overview');
+              if (el) {
+                if (window.__lenis) {
+                  window.__lenis.scrollTo(el, { offset: -50 });
+                } else {
+                  el.scrollIntoView({ behavior: 'smooth' });
+                }
+              }
+            }}
             style={{
               background: 'none',
               border: 'none',

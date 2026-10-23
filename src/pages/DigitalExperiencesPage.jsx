@@ -346,36 +346,32 @@ export const DigitalExperiencesPage = ({ onNavigate, hideCTA = false }) => {
             </span>
           </div>
 
-          {/* Bento / Grid Architecture */}
+          {/* Clean, Evenly Aligned 2-Column Desktop Grid / 1-Column Mobile Grid */}
           <div
+            className="dx-websites-grid"
             style={{
               display: 'grid',
-              gridTemplateColumns: layoutMode === 'bento'
-                ? 'repeat(auto-fit, minmax(min(100%, 460px), 1fr))'
-                : 'repeat(auto-fit, minmax(min(100%, 360px), 1fr))',
-              gap: 'clamp(2rem, 4vw, 3.25rem)'
+              gap: 'clamp(2rem, 3.5vw, 3rem)',
+              width: '100%'
             }}
           >
-            {filteredProjects.map((project, index) => {
-              const isFeatured = project.layoutSpan === "span-2" || index === 0;
-
-              return (
-                <div
-                  key={project.id}
-                  className="dx-project-card"
-                  style={{
-                    gridColumn: isFeatured && layoutMode === 'bento' ? 'span 1' : 'span 1'
-                  }}
-                >
-                  <LiveProjectCard
-                    project={project}
-                    onOpenModal={() => setActiveModalProject(project)}
-                    onOpenZoom={() => setZoomedProject(project)}
-                    featured={isFeatured}
-                  />
-                </div>
-              );
-            })}
+            {filteredProjects.map((project) => (
+              <div
+                key={project.id}
+                className="dx-project-card"
+                style={{
+                  minWidth: 0,
+                  width: '100%'
+                }}
+              >
+                <LiveProjectCard
+                  project={project}
+                  onSelectProject={setActiveModalProject}
+                  onOpenModal={setActiveModalProject}
+                  onOpenZoom={setZoomedProject}
+                />
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -554,6 +550,14 @@ export const DigitalExperiencesPage = ({ onNavigate, hideCTA = false }) => {
       )}
 
       <style>{`
+        .dx-websites-grid {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        @media (min-width: 960px) {
+          .dx-websites-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          }
+        }
         @media (min-width: 768px) {
           .dx-layout-toggle {
             display: flex !important;

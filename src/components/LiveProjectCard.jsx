@@ -6,9 +6,11 @@ import WebsitePreviewFrame from './WebsitePreviewFrame';
 export const LiveProjectCard = ({
   project,
   onSelectProject,
+  onOpenModal,
   onOpenZoom,
-  layoutMode = 'bento' // 'bento' | 'grid'
+  layoutMode = 'grid'
 }) => {
+  const selectHandler = onSelectProject || onOpenModal;
   const [isHovered, setIsHovered] = useState(false);
   const [isHoveringPreview, setIsHoveringPreview] = useState(false);
   const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0, glareX: 50, glareY: 50 });
@@ -76,7 +78,7 @@ export const LiveProjectCard = ({
       onMouseEnter={() => setIsHovered(true)}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      onClick={() => onSelectProject(project)}
+      onClick={() => selectHandler && selectHandler(project)}
       style={{
         position: 'relative',
         backgroundColor: 'var(--color-charcoal)',
@@ -93,10 +95,11 @@ export const LiveProjectCard = ({
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',
-        minHeight: isWide ? '520px' : '560px',
+        width: '100%',
+        boxSizing: 'border-box',
         willChange: 'transform'
       }}
-      className={`live-project-card ${isWide ? 'live-card-span-2' : 'live-card-span-1'}`}
+      className="live-project-card"
       data-cursor="INSPECT"
     >
       {/* Corner Brackets */}
@@ -122,7 +125,7 @@ export const LiveProjectCard = ({
         />
       )}
 
-      {/* Card Header Bar */}
+      {/* 1. Card Header Bar / Status Bar */}
       <div
         style={{
           padding: '0.85rem 1.25rem',
@@ -196,228 +199,220 @@ export const LiveProjectCard = ({
         </div>
       </div>
 
-      {/* Card Layout: Grid or Bento Split */}
+      {/* 2. Website Preview Container — Fixed & Consistent 16:10 Desktop Aspect Ratio on Top */}
       <div
-        className={isWide ? 'live-card-split' : ''}
+        onMouseEnter={() => {
+          setIsHoveringPreview(true);
+          setTilt({ rotateX: 0, rotateY: 0, glareX: 50, glareY: 50 });
+        }}
+        onMouseLeave={() => setIsHoveringPreview(false)}
+        onClick={(e) => e.stopPropagation()}
         style={{
-          display: isWide ? 'grid' : 'flex',
-          gridTemplateColumns: isWide ? '1.2fr 0.8fr' : 'none',
-          flexDirection: isWide ? 'row' : 'column',
-          flex: 1
+          position: 'relative',
+          width: '100%',
+          aspectRatio: '16 / 10',
+          minHeight: '260px',
+          maxHeight: '400px',
+          backgroundColor: '#070707',
+          borderBottom: '1px solid var(--color-border-gray)',
+          padding: 'clamp(6px, 1.2vw, 10px)',
+          display: 'flex',
+          flexDirection: 'column',
+          boxSizing: 'border-box',
+          overflow: 'hidden'
+        }}
+        className="live-preview-container"
+      >
+        <WebsitePreviewFrame
+          project={project}
+          height="100%"
+          minHeight="0"
+          onOpenFullscreen={onOpenZoom}
+        />
+      </div>
+
+      {/* 3. Complete Project Information Body — Placed DIRECTLY Below Preview across Full Width */}
+      <div
+        style={{
+          padding: 'clamp(1.25rem, 2.2vw, 1.75rem)',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          flex: 1,
+          gap: '1.25rem',
+          width: '100%',
+          boxSizing: 'border-box'
         }}
       >
-        {/* Preview Frame with Interactive Website & Browser Chrome */}
-        <div
-          onMouseEnter={() => {
-            setIsHoveringPreview(true);
-            setTilt({ rotateX: 0, rotateY: 0, glareX: 50, glareY: 50 });
-          }}
-          onMouseLeave={() => setIsHoveringPreview(false)}
-          onClick={(e) => e.stopPropagation()}
-          style={{
-            position: 'relative',
-            height: isWide ? '100%' : 'auto',
-            minHeight: isWide ? '460px' : '390px',
-            backgroundColor: '#070707',
-            borderBottom: isWide ? 'none' : '1px solid var(--color-border-gray)',
-            borderRight: isWide ? '1px solid var(--color-border-gray)' : 'none',
-            padding: 'clamp(8px, 1.2vw, 12px)',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            boxSizing: 'border-box'
-          }}
-          className="live-preview-container"
-        >
-          <WebsitePreviewFrame
-            project={project}
-            height={isWide ? '100%' : '390px'}
-            minHeight={isWide ? '450px' : '380px'}
-            onOpenFullscreen={onOpenZoom}
-          />
-        </div>
-
-        {/* Content Body */}
-        <div
-          style={{
-            padding: 'clamp(1.25rem, 2.5vw, 1.75rem)',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            flex: 1,
-            gap: '1.25rem'
-          }}
-        >
-          <div>
-            {/* Category & Industry */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '0.5rem' }}>
-              <span
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.65rem',
-                  fontWeight: 600,
-                  letterSpacing: '0.1em',
-                  color: project.accentColor,
-                  textTransform: 'uppercase'
-                }}
-              >
-                {project.category}
-              </span>
-              <span style={{ color: 'var(--color-border-gray)' }}>•</span>
-              <span
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.65rem',
-                  color: 'var(--color-muted-gray)',
-                  letterSpacing: '0.06em'
-                }}
-              >
-                {project.industry}
-              </span>
-            </div>
-
-            {/* Title & Tagline */}
-            <h3
+        <div>
+          {/* Category & Industry */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '0.5rem' }}>
+            <span
               style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: isWide ? 'clamp(1.6rem, 2.2vw, 2.1rem)' : 'clamp(1.35rem, 2vw, 1.65rem)',
-                fontWeight: 800,
-                letterSpacing: '-0.025em',
-                lineHeight: 1.15,
-                color: 'var(--color-warm-white)',
-                marginBottom: '0.35rem'
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.65rem',
+                fontWeight: 600,
+                letterSpacing: '0.1em',
+                color: project.accentColor,
+                textTransform: 'uppercase'
               }}
             >
-              {project.title}
-            </h3>
-
-            <p
+              {project.category}
+            </span>
+            <span style={{ color: 'var(--color-border-gray)' }}>•</span>
+            <span
               style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '0.85rem',
-                fontStyle: 'italic',
-                color: 'rgba(244, 243, 239, 0.75)',
-                marginBottom: '0.85rem'
-              }}
-            >
-              "{project.tagline}"
-            </p>
-
-            {/* Short Description */}
-            <p
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '0.88rem',
-                lineHeight: 1.55,
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.65rem',
                 color: 'var(--color-muted-gray)',
-                margin: 0
+                letterSpacing: '0.06em'
               }}
             >
-              {project.shortDescription}
-            </p>
-
-            {/* Tech Stack Tags */}
-            <div
-              style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                gap: '6px',
-                marginTop: '1rem'
-              }}
-            >
-              {project.techStack.map((tech) => (
-                <span
-                  key={tech}
-                  style={{
-                    backgroundColor: 'rgba(255, 255, 255, 0.04)',
-                    border: '1px solid rgba(255, 255, 255, 0.08)',
-                    padding: '3px 7px',
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '0.62rem',
-                    color: '#CCC',
-                    letterSpacing: '0.04em'
-                  }}
-                >
-                  {tech}
-                </span>
-              ))}
-            </div>
+              {project.industry}
+            </span>
           </div>
 
-          {/* Bottom Actions: View Live Demo & View Specs */}
-          <div
+          {/* Project Title */}
+          <h3
             style={{
-              paddingTop: '1rem',
-              borderTop: '1px solid var(--color-border-gray)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: '10px',
-              flexWrap: 'wrap'
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(1.35rem, 2vw, 1.75rem)',
+              fontWeight: 800,
+              letterSpacing: '-0.025em',
+              lineHeight: 1.15,
+              color: 'var(--color-warm-white)',
+              marginBottom: '0.4rem'
             }}
           >
-            {/* View Project Specs Button */}
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onSelectProject(project);
-              }}
-              style={{
-                background: 'transparent',
-                border: 'none',
-                color: 'var(--color-warm-white)',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.72rem',
-                fontWeight: 600,
-                letterSpacing: '0.08em',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                padding: '6px 0',
-                transition: 'color 0.2s ease'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = project.accentColor;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = 'var(--color-warm-white)';
-              }}
-            >
-              <span>INSPECT SYSTEM</span>
-              <Layers size={13} />
-            </button>
+            {project.title}
+          </h3>
 
-            {/* Prominent View Live Demo / Open Full Website Anchor */}
-            <a
-              href={project.liveUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '7px',
-                padding: '8px 14px',
-                backgroundColor: isHovered ? project.accentColor : 'rgba(255, 255, 255, 0.08)',
-                color: isHovered ? '#0A0A0A' : 'var(--color-warm-white)',
-                border: `1px solid ${isHovered ? project.accentColor : 'rgba(255, 255, 255, 0.15)'}`,
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.72rem',
-                fontWeight: 700,
-                letterSpacing: '0.08em',
-                textDecoration: 'none',
-                textTransform: 'uppercase',
-                transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
-                whiteSpace: 'nowrap'
-              }}
-              className="live-demo-btn"
-            >
-              <span>VIEW LIVE DEMO</span>
-              <ArrowUpRight size={13} />
-            </a>
+          {/* Tagline / Subtitle */}
+          <p
+            style={{
+              fontFamily: 'var(--font-body)',
+              fontSize: '0.85rem',
+              fontStyle: 'italic',
+              color: 'rgba(244, 243, 239, 0.75)',
+              marginBottom: '0.85rem'
+            }}
+          >
+            "{project.tagline}"
+          </p>
+
+          {/* Complete Project Description */}
+          <p
+            style={{
+              fontFamily: 'var(--font-body)',
+              fontSize: '0.88rem',
+              lineHeight: 1.6,
+              color: 'var(--color-muted-gray)',
+              margin: 0
+            }}
+          >
+            {project.shortDescription}
+          </p>
+
+          {/* Tech Stack Tags */}
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '6px',
+              marginTop: '1.15rem'
+            }}
+          >
+            {project.techStack.map((tech) => (
+              <span
+                key={tech}
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  padding: '3px 8px',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.62rem',
+                  color: '#CCC',
+                  letterSpacing: '0.04em'
+                }}
+              >
+                {tech}
+              </span>
+            ))}
           </div>
+        </div>
 
+        {/* Bottom Project Actions */}
+        <div
+          style={{
+            paddingTop: '1rem',
+            borderTop: '1px solid var(--color-border-gray)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '10px',
+            flexWrap: 'wrap'
+          }}
+        >
+          {/* Inspect Specs Button */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              selectHandler && selectHandler(project);
+            }}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: 'var(--color-warm-white)',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.72rem',
+              fontWeight: 600,
+              letterSpacing: '0.08em',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '6px 0',
+              transition: 'color 0.2s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = project.accentColor;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = 'var(--color-warm-white)';
+            }}
+          >
+            <span>INSPECT SYSTEM</span>
+            <Layers size={13} />
+          </button>
+
+          {/* Live External Demo Link */}
+          <a
+            href={project.liveUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '7px',
+              padding: '8px 14px',
+              backgroundColor: isHovered ? project.accentColor : 'rgba(255, 255, 255, 0.08)',
+              color: isHovered ? '#0A0A0A' : 'var(--color-warm-white)',
+              border: `1px solid ${isHovered ? project.accentColor : 'rgba(255, 255, 255, 0.15)'}`,
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.72rem',
+              fontWeight: 700,
+              letterSpacing: '0.08em',
+              textDecoration: 'none',
+              textTransform: 'uppercase',
+              transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+              whiteSpace: 'nowrap'
+            }}
+            className="live-demo-btn"
+          >
+            <span>VIEW LIVE DEMO</span>
+            <ArrowUpRight size={13} />
+          </a>
         </div>
       </div>
     </div>
