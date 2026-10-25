@@ -46,7 +46,7 @@ export const Footer = ({ onNavigate, currentPath }) => {
               <span className="footer-kicker-text">HAVE A PROJECT IN MIND?</span>
             </div>
             <h2 className="footer-cta-heading">
-              LET’S BUILD SOMETHING<br />THAT MATTERS
+              LET’S BUILD SOMETHING<span className="footer-heading-break"><br /></span>THAT MATTERS
               <span className="footer-lime-dot">.</span>
             </h2>
           </div>
@@ -79,7 +79,21 @@ export const Footer = ({ onNavigate, currentPath }) => {
               data-cursor="HOME"
             >
               <span className="footer-brand-wordmark">
-                CORNERST<span className="footer-brand-o">O<span className="footer-brand-sparkle">✦</span></span>NE
+                CORNERST
+                <span className="footer-brand-o">
+                  O
+                  <svg
+                    width="11"
+                    height="11"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="footer-brand-sparkle"
+                    aria-hidden="true"
+                  >
+                    <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z" />
+                  </svg>
+                </span>
+                NE
                 <span className="footer-brand-dot">.</span>
               </span>
             </button>
@@ -88,8 +102,8 @@ export const Footer = ({ onNavigate, currentPath }) => {
               Independent digital experiences, built with intent.
             </p>
 
-            <div className="footer-status-bars" aria-label="System status indicators" role="img">
-              <span className="footer-bar footer-bar-active" title="System Active" />
+            <div className="footer-status-bars" aria-label="System status indicators: operational" role="img" title="Systems operational • 24/7 autonomous infrastructure">
+              <span className="footer-bar footer-bar-active" />
               <span className="footer-bar" />
               <span className="footer-bar" />
             </div>
@@ -98,7 +112,7 @@ export const Footer = ({ onNavigate, currentPath }) => {
           {/* Column 2: Explore Navigation */}
           <div className="footer-col footer-col-explore">
             <h3 className="footer-col-title">EXPLORE</h3>
-            <nav className="footer-nav-list" aria-label="Footer Navigation">
+            <nav className="footer-nav-list" aria-label="Footer Explore Navigation">
               {exploreLinks.map((item) => {
                 const isActive = currentPath === item.path;
                 return (
@@ -110,6 +124,7 @@ export const Footer = ({ onNavigate, currentPath }) => {
                     data-cursor="VIEW"
                   >
                     <span>{item.label}</span>
+                    <span className="footer-nav-line" aria-hidden="true" />
                   </button>
                 );
               })}
@@ -194,25 +209,12 @@ export const Footer = ({ onNavigate, currentPath }) => {
 
         {/* Bottom Bar */}
         <div className="footer-bottom-bar">
-          <div className="footer-bottom-segment footer-bottom-left">
+          <div className="footer-bottom-left">
             <span>© {currentYear} CORNERSTONE STUDIO</span>
             {/* Discreet Admin Portal access to preserve maintenance route */}
             <button
               onClick={() => handleNav('/admin/9827988375')}
-              style={{
-                background: 'none',
-                border: 'none',
-                padding: '0 0 0 8px',
-                cursor: 'pointer',
-                opacity: 0.15,
-                color: 'inherit',
-                fontSize: '0.65rem',
-                fontFamily: 'inherit',
-                letterSpacing: 'inherit',
-                transition: 'opacity 0.2s ease'
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.8')}
-              onMouseLeave={(e) => (e.currentTarget.style.opacity = '0.15')}
+              className="footer-admin-dot"
               aria-label="Staff Administration Portal"
               title="Staff Portal"
             >
@@ -222,13 +224,13 @@ export const Footer = ({ onNavigate, currentPath }) => {
 
           <span className="footer-bottom-separator" aria-hidden="true" />
 
-          <div className="footer-bottom-segment footer-bottom-center">
+          <div className="footer-bottom-center">
             <span>BUILT WITH INTENTION</span>
           </div>
 
           <span className="footer-bottom-separator" aria-hidden="true" />
 
-          <div className="footer-bottom-segment footer-bottom-right">
+          <div className="footer-bottom-right">
             <button
               onClick={scrollToTop}
               className="footer-back-to-top"
