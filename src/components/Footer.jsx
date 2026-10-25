@@ -1,214 +1,243 @@
 import React from 'react';
-import CornerstoneMotif from './CornerstoneMotif';
-import { ArrowUpRight } from 'lucide-react';
+import { Mail, ArrowUpRight, ArrowUp } from 'lucide-react';
 
-export const Footer = ({ onNavigate }) => {
+export const Footer = ({ onNavigate, currentPath }) => {
   const currentYear = 2026;
 
   const handleNav = (path) => {
     if (onNavigate) {
       onNavigate(path);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (window.__lenis) {
+        window.__lenis.scrollTo(0, { immediate: false, duration: 1.0 });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    } else {
+      window.location.href = path;
     }
   };
 
+  const scrollToTop = () => {
+    if (typeof window !== 'undefined') {
+      if (window.__lenis) {
+        window.__lenis.scrollTo(0, { duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+  };
+
+  const exploreLinks = [
+    { label: "Work", path: "/work" },
+    { label: "About", path: "/about" },
+    { label: "Services", path: "/services" },
+    { label: "Contact", path: "/contact" }
+  ];
+
   return (
-    <footer
-      style={{
-        position: 'relative',
-        width: '100%',
-        maxWidth: '100vw',
-        overflow: 'hidden',
-        backgroundColor: '#070707',
-        color: 'var(--color-warm-white)',
-        paddingTop: 'clamp(4.5rem, 9vw, 7.5rem)',
-        paddingBottom: 'clamp(5.5rem, 11vw, 7.5rem)',
-        borderTop: '1px solid var(--color-border-gray)'
-      }}
-    >
+    <footer className="cornerstone-footer" role="contentinfo" aria-label="Cornerstone Studio Footer">
       <div className="site-container">
         
-        {/* Top Massive Brand Wordmark */}
-        <div style={{ borderBottom: '1px solid var(--color-border-gray)', paddingBottom: 'clamp(2rem, 5vw, 4rem)', marginBottom: 'clamp(2.5rem, 5vw, 4rem)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.5rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <CornerstoneMotif size={28} variant="mark" />
-              <span className="micro-label" style={{ letterSpacing: '0.2em', color: 'var(--color-warm-white)' }}>
-                THE DIGITAL FOUNDATION FOR MODERN BUSINESS
-              </span>
+        {/* Top CTA Row */}
+        <div className="footer-cta-row">
+          <div className="footer-cta-left">
+            <div className="footer-micro-kicker">
+              <span className="footer-kicker-bar" aria-hidden="true" />
+              <span className="footer-kicker-text">HAVE A PROJECT IN MIND?</span>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span className="lime-dot" style={{ width: '6px', height: '6px' }} />
-              <span className="micro-label-lime">SYSTEMS ONLINE</span>
-            </div>
+            <h2 className="footer-cta-heading">
+              LET’S BUILD SOMETHING<br />THAT MATTERS
+              <span className="footer-lime-dot">.</span>
+            </h2>
           </div>
 
-          <h2
-            className="display-mega"
-            style={{
-              color: 'var(--color-warm-white)',
-              margin: 0,
-              letterSpacing: '-0.04em'
-            }}
-          >
-            CORNERSTONE
-          </h2>
-        </div>
-
-        {/* 4 Architectural Columns */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))',
-            gap: 'clamp(2rem, 4vw, 3.5rem)',
-            marginBottom: 'clamp(3rem, 6vw, 5rem)'
-          }}
-        >
-          {/* Col 1: Services */}
-          <div>
-            <span className="micro-label" style={{ display: 'block', marginBottom: '1.25rem' }}>
-              01 / SERVICES
-            </span>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
-              {[
-                "AI AUTOMATION",
-                "WEBSITES",
-                "CREATIVE PRODUCTION",
-                "AI VOICE RECEPTIONISTS",
-                "WHATSAPP AUTOMATION",
-                "AI PRODUCT & VIDEO ADS"
-              ].map((item) => (
-                <li key={item} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--color-warm-white)' }}>
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Col 2: Navigation */}
-          <div>
-            <span className="micro-label" style={{ display: 'block', marginBottom: '1.25rem' }}>
-              02 / DIRECTORY
-            </span>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
-              {[
-                { label: "HOME", path: "/" },
-                { label: "SERVICES", path: "/services" },
-                { label: "WORK", path: "/work" },
-                { label: "ABOUT", path: "/about" },
-                { label: "CONTACT", path: "/contact" }
-              ].map((link) => (
-                <button
-                  key={link.path}
-                  onClick={() => handleNav(link.path)}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    textAlign: 'left',
-                    color: 'var(--color-muted-gray)',
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '0.8rem',
-                    cursor: 'pointer',
-                    padding: 0,
-                    transition: 'color 0.2s ease',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px'
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = '#B8FF3D')}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--color-muted-gray)')}
-                >
-                  <span>{link.label}</span>
-                  <ArrowUpRight size={12} />
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Col 3: Direct Inquiries */}
-          <div>
-            <span className="micro-label" style={{ display: 'block', marginBottom: '1.25rem' }}>
-              03 / INQUIRIES
-            </span>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.88rem', color: 'var(--color-muted-gray)', lineHeight: 1.5, marginBottom: '0.75rem' }}>
-              For architectural consultations, enterprise systems deployment, and strategic creative:
-            </p>
-            <a
-              href="mailto:hello@cornerstone.build"
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.85rem',
-                color: 'var(--color-accent-lime)',
-                textDecoration: 'none',
-                display: 'inline-block'
-              }}
+          <div className="footer-cta-right">
+            <button
+              onClick={() => handleNav('/contact')}
+              className="footer-cta-button"
+              aria-label="Start a project with Cornerstone"
+              data-cursor="START"
             >
-              hello@cornerstone.build
-            </a>
-          </div>
-
-          {/* Col 4: Network & Protocols */}
-          <div>
-            <span className="micro-label" style={{ display: 'block', marginBottom: '1.25rem' }}>
-              04 / NETWORK
-            </span>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--color-muted-gray)' }}>
-                LinkedIn [Agency Archive]
-              </span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--color-muted-gray)' }}>
-                Instagram [Visual Direction]
-              </span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--color-muted-gray)' }}>
-                GitHub [Technical Standards]
-              </span>
-            </div>
+              <span>START A PROJECT</span>
+              <ArrowUpRight size={17} className="footer-cta-icon" aria-hidden="true" strokeWidth={2} />
+            </button>
           </div>
         </div>
 
-        {/* Bottom Bar: Copyright, Coordinates, Legal */}
-        <div
-          style={{
-            borderTop: '1px solid var(--color-border-gray)',
-            paddingTop: '2rem',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '1.25rem'
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <CornerstoneMotif size={16} variant="foundation" />
-            <span className="micro-label" style={{ color: 'var(--color-warm-white)' }}>
-              © {currentYear} CORNERSTONE. ALL RIGHTS RESERVED.
-            </span>
+        {/* Divider 1 */}
+        <div className="footer-divider" aria-hidden="true" />
+
+        {/* Three Columns Grid */}
+        <div className="footer-columns-grid">
+          
+          {/* Column 1: Brand */}
+          <div className="footer-col footer-col-brand">
+            <button
+              onClick={() => handleNav('/')}
+              className="footer-brand-button"
+              aria-label="Cornerstone Home"
+              data-cursor="HOME"
+            >
+              <span className="footer-brand-wordmark">
+                CORNERST<span className="footer-brand-o">O<span className="footer-brand-sparkle">✦</span></span>NE
+                <span className="footer-brand-dot">.</span>
+              </span>
+            </button>
+
+            <p className="footer-brand-tagline">
+              Independent digital experiences, built with intent.
+            </p>
+
+            <div className="footer-status-bars" aria-label="System status indicators" role="img">
+              <span className="footer-bar footer-bar-active" title="System Active" />
+              <span className="footer-bar" />
+              <span className="footer-bar" />
+            </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
-            <span className="micro-label">PRIVACY PROTOCOL</span>
-            <span className="micro-label">TERMS OF ARCHITECTURE</span>
+          {/* Column 2: Explore Navigation */}
+          <div className="footer-col footer-col-explore">
+            <h3 className="footer-col-title">EXPLORE</h3>
+            <nav className="footer-nav-list" aria-label="Footer Navigation">
+              {exploreLinks.map((item) => {
+                const isActive = currentPath === item.path;
+                return (
+                  <button
+                    key={item.path}
+                    onClick={() => handleNav(item.path)}
+                    className={`footer-nav-item ${isActive ? 'footer-nav-item-active' : ''}`}
+                    aria-label={`Navigate to ${item.label}`}
+                    data-cursor="VIEW"
+                  >
+                    <span>{item.label}</span>
+                  </button>
+                );
+              })}
+            </nav>
+          </div>
+
+          {/* Column 3: Connect */}
+          <div className="footer-col footer-col-connect">
+            <h3 className="footer-col-title">CONNECT</h3>
+            <ul className="footer-connect-list">
+              <li>
+                <a
+                  href="mailto:hello@cornerstone.build"
+                  className="footer-connect-link"
+                  aria-label="Email Cornerstone at hello@cornerstone.build"
+                  data-cursor="EMAIL"
+                >
+                  <Mail size={16} strokeWidth={1.8} aria-hidden="true" />
+                  <span>Email</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://instagram.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="footer-connect-link"
+                  aria-label="Cornerstone on Instagram"
+                  data-cursor="INSTAGRAM"
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                  </svg>
+                  <span>Instagram</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://linkedin.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="footer-connect-link"
+                  aria-label="Cornerstone on LinkedIn"
+                  data-cursor="LINKEDIN"
+                >
+                  <svg
+                    width="15"
+                    height="15"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.44 8.5h4.12v14.5H.44V8.5zm6.75 0h3.94v1.98h.06c.55-1.04 1.89-2.14 3.9-2.14 4.17 0 4.94 2.75 4.94 6.32v8.34h-4.12v-7.39c0-1.76-.03-4.03-2.45-4.03-2.46 0-2.83 1.92-2.83 3.91v7.51H7.19V8.5z" />
+                  </svg>
+                  <span>LinkedIn</span>
+                </a>
+              </li>
+            </ul>
+
+            <div className="footer-availability">
+              <span className="footer-avail-dot" aria-hidden="true" />
+              <span className="footer-avail-text">AVAILABLE FOR SELECT PROJECTS</span>
+            </div>
+          </div>
+
+        </div>
+
+        {/* Divider 2 */}
+        <div className="footer-divider" aria-hidden="true" />
+
+        {/* Bottom Bar */}
+        <div className="footer-bottom-bar">
+          <div className="footer-bottom-segment footer-bottom-left">
+            <span>© {currentYear} CORNERSTONE STUDIO</span>
+            {/* Discreet Admin Portal access to preserve maintenance route */}
             <button
               onClick={() => handleNav('/admin/9827988375')}
-              className="micro-label"
               style={{
                 background: 'none',
                 border: 'none',
-                padding: 0,
+                padding: '0 0 0 8px',
                 cursor: 'pointer',
-                color: 'var(--color-muted-gray)',
-                transition: 'color 0.2s ease',
+                opacity: 0.15,
+                color: 'inherit',
+                fontSize: '0.65rem',
                 fontFamily: 'inherit',
-                fontSize: 'inherit',
-                letterSpacing: 'inherit'
+                letterSpacing: 'inherit',
+                transition: 'opacity 0.2s ease'
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = '#B8FF3D')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--color-muted-gray)')}
+              onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.8')}
+              onMouseLeave={(e) => (e.currentTarget.style.opacity = '0.15')}
               aria-label="Staff Administration Portal"
+              title="Staff Portal"
             >
-              ADMIN
+              •
             </button>
-            <span className="micro-label" style={{ color: 'var(--color-accent-lime)' }}>GMT+05:30</span>
+          </div>
+
+          <span className="footer-bottom-separator" aria-hidden="true" />
+
+          <div className="footer-bottom-segment footer-bottom-center">
+            <span>BUILT WITH INTENTION</span>
+          </div>
+
+          <span className="footer-bottom-separator" aria-hidden="true" />
+
+          <div className="footer-bottom-segment footer-bottom-right">
+            <button
+              onClick={scrollToTop}
+              className="footer-back-to-top"
+              aria-label="Back to top of page"
+              data-cursor="TOP"
+            >
+              <span>BACK TO TOP</span>
+              <ArrowUp size={14} className="footer-top-icon" aria-hidden="true" strokeWidth={2.4} />
+            </button>
           </div>
         </div>
 

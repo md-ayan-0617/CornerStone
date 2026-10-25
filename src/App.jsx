@@ -374,7 +374,7 @@ export function App() {
         </main>
 
       {/* Global Large Editorial Footer */}
-      <Footer onNavigate={navigate} />
+      <Footer onNavigate={navigate} currentPath={currentPath} />
     </div>
   );
 }
