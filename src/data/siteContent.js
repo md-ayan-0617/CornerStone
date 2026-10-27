@@ -43,8 +43,8 @@ export const CAPABILITIES = [
     ],
     image: "/images/services/service-ai-receptionist.jpg",
     secondaryImage: "/images/services/service-whatsapp-automation.jpg",
-    accent: "Autonomous response pipelines, sub-second latency, multi-channel calendar sync.",
-    metrics: "24/7 Availability • Zero Missed Enquiries"
+    accent: "Automated call answering, inquiry capture, and calendar sync.",
+    metrics: "24/7 Availability • Automated Inquiry Routing"
   },
   {
     id: "02",
@@ -75,8 +75,8 @@ export const CAPABILITIES = [
     ],
     image: "/images/services/service-business-websites.jpg",
     secondaryImage: "/images/services/service-landing-pages.jpg",
-    accent: "Sub-second load times, editorial typography, seamless enquiry and booking flows.",
-    metrics: "99+ Core Web Vitals • Sub-second LCP"
+    accent: "Fast page performance, editorial typography, and seamless inquiry and booking flows.",
+    metrics: "High Performance • Optimized for Conversion"
   },
   {
     id: "03",
@@ -181,15 +181,15 @@ export const FEATURED_PROJECTS = [
     shortDescription: "Autonomous voice assistant answering incoming calls, resolving FAQs, capturing enquiries, booking appointments and routing calls 24/7.",
     overview: "Service businesses, specialized clinics, and salons lose upwards of 35% of prospective clients due to missed calls after hours and busy front desks. This system implements a low-latency AI voice receptionist that communicates naturally, books appointments directly into calendars, and routes urgent calls instantly.",
     challenge: "High call volume during peak hours led to long ring times, missed enquiries, and zero inbound call coverage during evenings and weekends.",
-    system: "Low-latency voice synthesis (<600ms), natural conversational turns, automated FAQ resolution, and real-time calendar appointment booking.",
+    system: "Conversational voice assistant, automated FAQ resolution, caller inquiry capture, and direct calendar appointment booking.",
     deliverables: [
       "AI Voice Receptionist Trained on Business FAQs",
       "Automated Appointment Booking & Calendar Sync",
       "Intelligent Enquiry Capture & Call Routing",
       "SMS Booking Confirmation & Reminder Pipeline"
     ],
-    status: "DEPLOYED SYSTEM / READY FOR SCALE",
-    metricsHighlight: "<600ms Response • 24/7 Call Coverage",
+    status: "AUTOMATION WORKFLOW / READY FOR DEPLOYMENT",
+    metricsHighlight: "24/7 Call Answering • Direct Booking",
     accentColor: "#B8FF3D"
   },
   {
@@ -232,8 +232,8 @@ export const FEATURED_PROJECTS = [
       "Integrated Enquiry Forms & Calendar Schedulers",
       "Sub-Second Performance & SEO Optimization"
     ],
-    status: "PRODUCTION DEPLOYMENT / VERIFIED",
-    metricsHighlight: "99+ Mobile Performance • Integrated Booking",
+    status: "WEB PLATFORM / READY FOR DEPLOYMENT",
+    metricsHighlight: "Mobile-Optimized • Integrated Booking",
     accentColor: "#B8FF3D"
   },
   {
@@ -274,47 +274,59 @@ export const SYSTEM_NODES = [
 export const APPROACH_STAGES = [
   {
     number: "01",
-    title: "DISCOVER",
-    subtitle: "Understanding your service requirements.",
-    description: "We audit how your business currently captures enquiries, handles calls, and presents its brand. We identify friction, missed calls, outdated web pages, and creative bottlenecks in your customer flow.",
-    deliverable: "Service Audit & Systems Matrix"
+    title: "SCOPING & ALIGNMENT",
+    subtitle: "Direct alignment on goals and constraints.",
+    description: "We work directly with your team to clarify operational requirements, technical constraints, and priorities before establishing the project roadmap and deliverables.",
+    deliverable: "Agreed Scope & Project Specification"
   },
   {
     number: "02",
-    title: "DESIGN",
-    subtitle: "Architectural blueprints & creative direction.",
-    description: "We design the complete solution: website architecture, enquiry and booking flows, AI voice prompts, WhatsApp automation trees, and commercial ad creative styles.",
-    deliverable: "Interactive Prototypes & System Blueprints"
+    title: "PROTOTYPING & REVIEW",
+    subtitle: "Interactive previews and structured feedback.",
+    description: "We share interactive design prototypes and conversational logic flows early, ensuring visual identity, copy, and customer journeys match your standards before full buildout.",
+    deliverable: "Interactive Prototypes & Flow Walkthroughs"
   },
   {
     number: "03",
-    title: "BUILD",
-    subtitle: "Precision engineering & AI integration.",
-    description: "We build the web platforms, deploy the AI receptionist and voice assistants, configure WhatsApp automation, and produce high-resolution AI imagery and video ads.",
-    deliverable: "Tested Production-Ready Deliverables"
+    title: "INTEGRATION & TESTING",
+    subtitle: "End-to-end quality and device verification.",
+    description: "Websites, voice agents, and automation workflows undergo rigorous testing across mobile and desktop environments, network conditions, and simulated user scenarios.",
+    deliverable: "Staging Preview & Verification Sign-Off"
   },
   {
     number: "04",
-    title: "LAUNCH",
-    subtitle: "Unified deployment & ongoing reliability.",
-    description: "We launch the live services across your channels. Your creative drives traffic; your website and landing pages capture intent; your AI automation and receptionists answer calls and book appointments around the clock.",
-    deliverable: "Live Launch & Post-Launch Hypercare"
+    title: "DEPLOYMENT & HANDOFF",
+    subtitle: "Seamless launch and operational independence.",
+    description: "We manage production domain deployment, hand over system documentation and access credentials, and review workflows with your team for effortless ongoing management.",
+    deliverable: "Live Deployment & Operational Handover"
   }
 ];
 
 export const PHILOSOPHY = [
-  { statement: "Technology should make business simpler.", elaboration: "Complexity wastes time. We build AI automation and modern web systems that handle enquiries and calls effortlessly." },
-  { statement: "Design should establish authority.", elaboration: "Your website is your digital foundation. Clean typography, fast performance, and intuitive booking give clients immediate confidence." },
-  { statement: "Automation should eliminate wait times.", elaboration: "No customer wants to wait hours for a reply. Automated WhatsApp and AI voice receptionists deliver respectful, instant service 24/7." },
-  { statement: "Creative should command attention.", elaboration: "In saturated digital feeds, high-end AI product photography and authentic UGC-style video ads cut through the noise and drive action." }
+  {
+    statement: "Simplicity over unnecessary complexity.",
+    elaboration: "Systems should save time, not create overhead. We build straightforward, reliable tools that handle customer communication and inquiries without bloated software stacks."
+  },
+  {
+    statement: "Design builds trust and credibility.",
+    elaboration: "A thoughtful digital presence establishes immediate authority. Fast loading, clear typography, and intuitive navigation give prospects confidence from the first click."
+  },
+  {
+    statement: "Responsiveness captures opportunities.",
+    elaboration: "Potential clients rarely wait for delayed follow-ups. Automated messaging and AI voice reception ensure questions are answered and appointments are booked when interest is highest."
+  },
+  {
+    statement: "Creative content must drive action.",
+    elaboration: "Visual assets should do more than look polished—they must communicate product value clearly and generate measurable engagement across digital channels."
+  }
 ];
 
 export const CONTACT_BUDGETS = [
-  "Under $5,000",
-  "$5,000 — $15,000",
-  "$15,000 — $35,000",
-  "$35,000 — $75,000",
-  "$75,000+"
+  "Under $3,000",
+  "$3,000 — $7,500",
+  "$7,500 — $15,000",
+  "$15,000 — $30,000",
+  "$30,000+"
 ];
 
 export const CONTACT_TIMELINES = [
@@ -350,8 +362,8 @@ export const LIVE_WEBSITE_PROJECTS = [
     domain: "noise-dept-six.vercel.app",
     image: "/images/projects/noise-dept.jpg",
     accentColor: "#EC3D31", // Kinetic Signal Red
-    badge: "LIVE PRODUCTION",
-    status: "ONLINE // VERIFIED",
+    badge: "INTERACTIVE DEMO",
+    status: "ONLINE // DEMO",
     shortDescription: "An unapologetically bold, experimental digital studio platform building high-impact digital systems for brands that refuse to blend in.",
     overview: "Noise Dept champions controlled disorder—rejecting sterile corporate conventions in favor of raw editorial brutalism, kinetic typography, and tactile digital artifacts. Built for creative leaders and disruptor brands seeking cultural resonance.",
     challenge: "Breaking away from ubiquitous minimalist templates while preserving razor-sharp readability, accessibility, and high conversion for client inquiries.",
@@ -379,8 +391,8 @@ export const LIVE_WEBSITE_PROJECTS = [
     domain: "spinform-eight.vercel.app",
     image: "/images/projects/spinform.jpg",
     accentColor: "#3B82F6", // High-Tech Cobalt Blue
-    badge: "LIVE PRODUCTION",
-    status: "ONLINE // VERIFIED",
+    badge: "INTERACTIVE DEMO",
+    status: "ONLINE // WEBGL DEMO",
     shortDescription: "A browser-based 3D motion application enabling designers to extrude flat vector logos, icons, and wordmarks into tactile 3D objects, animated brand loops, and GLB exports.",
     overview: "Spinform transforms 2D brand assets into tangible, interactive 3D models directly in WebGL. Users can assign ceramic, chrome, clay, glass, and rubber materials, animate camera paths, and export transparent video loops or 3D embeds in real time.",
     challenge: "3D software like Blender and Cinema 4D has an immense learning curve; designers needed an immediate, browser-native tool for instant 3D brand asset production.",
@@ -408,8 +420,8 @@ export const LIVE_WEBSITE_PROJECTS = [
     domain: "paloma-socail-house.vercel.app",
     image: "/images/projects/paloma-house.jpg",
     accentColor: "#D9492F", // Terracotta Red
-    badge: "LIVE PRODUCTION",
-    status: "ONLINE // VERIFIED",
+    badge: "CONCEPT PROJECT",
+    status: "ONLINE // RESTAURANT CONCEPT",
     shortDescription: "An energetic, multi-mood Mediterranean hospitality flagship spanning all-day wood-fired dining, golden-hour rooftop spritzes, and a late-night music-led social club.",
     overview: "Paloma Social House bridges morning espresso culture, golden-hour rooftop drinks, and late-night vinyl disco into one seamless digital destination. An interactive time-of-day selector dynamically transforms the aesthetic and menu offerings based on the venue's active mood.",
     challenge: "Hospitality websites often feel static and fail to communicate the shifting day-to-night ambiance of high-energy urban dining venues.",
@@ -437,8 +449,8 @@ export const LIVE_WEBSITE_PROJECTS = [
     domain: "vale-selvatico.vercel.app",
     image: "/images/projects/vale-selvatico.jpg",
     accentColor: "#C6923C", // Sunlit Sicilian Amber & Olive
-    badge: "LIVE PRODUCTION",
-    status: "ONLINE // VERIFIED",
+    badge: "CONCEPT PROJECT",
+    status: "ONLINE // APOTHECARY CONCEPT",
     shortDescription: "An editorial Mediterranean estate in Sicily cultivating bergamot, olives, and wild botanicals, transformed through patient craftsmanship into small-batch culinary oils and apothecary preserves.",
     overview: "Vale Selvatico is an editorial digital sanctuary conceived to reflect generations of patient cultivation beneath the Sicilian sun. The experience combines evocative land storytelling, seasonal solar harvest timelines, and a sensory e-commerce catalog featuring cold-pressed extra virgin oils and small-batch infusions.",
     challenge: "Artisanal heritage estates often struggle to convey tactile sensory authenticity online without falling into generic e-commerce templates that dilute brand prestige.",
@@ -466,8 +478,8 @@ export const LIVE_WEBSITE_PROJECTS = [
     domain: "aurenne-six.vercel.app",
     image: "/images/projects/aurenne.jpg",
     accentColor: "#D4AF37", // Imperial Gold
-    badge: "LIVE PRODUCTION",
-    status: "ONLINE // VERIFIED",
+    badge: "CONCEPT PROJECT",
+    status: "ONLINE // JEWELLERY CONCEPT",
     shortDescription: "A contemporary Parisian high-jewellery maison digital flagship showcasing sculptural 18k gold creations, rare Colombian emeralds, and limited-edition high jewellery emerging from architectural darkness.",
     overview: "Aurenne creates an immersive digital salon where fine jewellery is experienced as wearable sculpture. Emerging from obsidian darkness, 3D interactive gold rings and gemstone facets respond to user motion, accompanied by editorial exhibition essays and private salon appointment booking.",
     challenge: "Conveying the physical luster, depth, and prestige of high-end precious gemstones and polished metals in a browser environment.",
@@ -495,8 +507,8 @@ export const LIVE_WEBSITE_PROJECTS = [
     domain: "mosaic-state.vercel.app",
     image: "/images/projects/mosaic.jpg",
     accentColor: "#2454FF", // Electric Cobalt
-    badge: "LIVE PRODUCTION",
-    status: "ONLINE // VERIFIED",
+    badge: "INTERACTIVE DEMO",
+    status: "ONLINE // SYSTEMS DEMO",
     shortDescription: "An independent digital engineering and design practice turning complex data, stories, and organizational platforms into intuitive, structured experiences.",
     overview: "Mosaic / State operates at the intersection of technical architecture and visual clarity under the philosophy that 'Complex doesn't have to feel complicated.' The platform showcases interactive node networks, museum installations, and cartographic data visualization.",
     challenge: "Displaying multi-dimensional organizational data and complex technical concepts without overwhelming prospective enterprise clients.",
@@ -524,8 +536,8 @@ export const LIVE_WEBSITE_PROJECTS = [
     domain: "auto-mobile-black.vercel.app",
     image: "/images/projects/auto-mobile.jpg",
     accentColor: "#60A5FA", // Aero Vector Metallic Blue
-    badge: "LIVE PRODUCTION",
-    status: "ONLINE // VERIFIED",
+    badge: "CONCEPT DEMO",
+    status: "ONLINE // SHOWROOM CONCEPT",
     shortDescription: "A high-performance digital automotive showroom and vehicle configurator engineered with tactile chassis telemetry, aerodynamic optics, and bespoke specification tools.",
     overview: "Aurelis Motors presents an automotive flagship combining visceral vehicle photography, aerodynamic simulation data, and a live 3D paint and interior specification customizer for modern grand tourers and electric hyper-vehicles.",
     challenge: "Automotive configurators often suffer from sluggish loading and fragmented multi-step flows that disengage luxury car buyers.",

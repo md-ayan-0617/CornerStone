@@ -177,7 +177,7 @@ export const DigitalExperiencesPage = ({ onNavigate, hideCTA = false }) => {
                 }}
               >
                 <span className="lime-dot" style={{ width: '6px', height: '6px' }} />
-                <span>{LIVE_WEBSITE_PROJECTS.length} LIVE PRODUCTION PLATFORMS</span>
+                <span>{LIVE_WEBSITE_PROJECTS.length} INTERACTIVE WEBSITE DEMOS</span>
               </span>
 
               <button
@@ -328,7 +328,7 @@ export const DigitalExperiencesPage = ({ onNavigate, hideCTA = false }) => {
           >
             <div>
               <span className="micro-label" style={{ display: 'block', marginBottom: '0.4rem' }}>
-                SHOWING {filteredProjects.length} DIGITAL FLAGSHIPS
+                SHOWING {filteredProjects.length} DIGITAL DEMOS &amp; CONCEPTS
               </span>
               <h2
                 className="display-large"
@@ -337,12 +337,12 @@ export const DigitalExperiencesPage = ({ onNavigate, hideCTA = false }) => {
                   margin: 0
                 }}
               >
-                {activeCategory === "ALL" ? "ACTIVE PRODUCTION DEPLOYMENTS" : activeCategory}
+                {activeCategory === "ALL" ? "FEATURED WEBSITE DEMOS & CONCEPTS" : activeCategory}
               </h2>
             </div>
 
             <span className="micro-label" style={{ border: '1px solid var(--color-border-gray)', padding: '4px 10px' }}>
-              DIRECT LIVE LINKS VERIFIED
+              LIVE DEMO LINKS VERIFIED
             </span>
           </div>
 
@@ -413,7 +413,7 @@ export const DigitalExperiencesPage = ({ onNavigate, hideCTA = false }) => {
                 margin: 0
               }}
             >
-              Autonomous AI receptionist dispatch trees, WhatsApp routing graphs, and high-velocity asset generators designed as benchmark systems.
+              Technical specifications and workflow architectures behind our core automation systems, web platforms, and creative production pipelines.
             </p>
           </div>
 
@@ -424,7 +424,48 @@ export const DigitalExperiencesPage = ({ onNavigate, hideCTA = false }) => {
               gap: 'clamp(1.5rem, 3vw, 2.25rem)'
             }}
           >
-            {FEATURED_PROJECTS.map((concept) => (
+            {[
+              {
+                id: "spec-01",
+                number: "01",
+                title: "AI Receptionist & Voice Assistant",
+                category: "AI AUTOMATION",
+                purpose: "Handles inbound telephone inquiries, answers frequent business questions, captures customer details, and coordinates calendar bookings.",
+                implementation: "Voice synthesis engine, webhook event dispatch, calendar API synchronization.",
+                deliverables: ["24/7 Call Intake", "FAQ Resolution", "Direct Calendar Booking"],
+                statusBadge: "AUTOMATION WORKFLOW"
+              },
+              {
+                id: "spec-02",
+                number: "02",
+                title: "WhatsApp Automation System",
+                category: "AI AUTOMATION",
+                purpose: "Operates automated messaging flows on WhatsApp to answer customer questions, gather lead details, and send reservation confirmations.",
+                implementation: "WhatsApp Cloud API integration, structured conversational decision trees, webhook routing.",
+                deliverables: ["Instant Chat Replies", "Lead Capture Logic", "Booking Confirmations"],
+                statusBadge: "MESSAGING ENGINE"
+              },
+              {
+                id: "spec-03",
+                number: "03",
+                title: "Business Websites & Landing Pages",
+                category: "WEBSITES",
+                purpose: "Responsive digital flagships and single-objective campaign pages built with editorial typography and integrated inquiry forms.",
+                implementation: "Modern React component architecture, mobile-first layouts, optimized asset delivery.",
+                deliverables: ["Responsive Architecture", "Inquiry Form Flows", "SEO Optimization"],
+                statusBadge: "WEB ARCHITECTURE"
+              },
+              {
+                id: "spec-04",
+                number: "04",
+                title: "AI Creative Production Suite",
+                category: "CREATIVE PRODUCTION",
+                purpose: "Produces high-resolution visual assets, virtual model shoots, scripted video ads, and coordinated multi-placement ad creative.",
+                implementation: "AI image rendering pipeline, vertical 9:16 video composition, multi-ratio asset formatting.",
+                deliverables: ["High-Resolution Photography", "Vertical Video Ads", "Multi-Ratio Ad Sets"],
+                statusBadge: "CREATIVE PIPELINE"
+              }
+            ].map((concept) => (
               <div
                 key={concept.id}
                 className="arch-box"
@@ -462,14 +503,23 @@ export const DigitalExperiencesPage = ({ onNavigate, hideCTA = false }) => {
                       fontSize: '0.88rem',
                       lineHeight: 1.6,
                       color: 'var(--color-muted-gray)',
-                      margin: '0 0 1.5rem 0'
+                      margin: '0 0 1rem 0'
                     }}
                   >
-                    {concept.description}
+                    {concept.purpose}
                   </p>
 
+                  <div style={{ marginBottom: '1.25rem' }}>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: '#888', display: 'block', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                      IMPLEMENTATION:
+                    </span>
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.8rem', color: 'rgba(244, 243, 239, 0.75)', lineHeight: 1.4, display: 'block' }}>
+                      {concept.implementation}
+                    </span>
+                  </div>
+
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '1.5rem' }}>
-                    {concept.deliverables?.slice(0, 3).map((deliv, i) => (
+                    {concept.deliverables?.map((deliv, i) => (
                       <span
                         key={i}
                         style={{
@@ -497,7 +547,7 @@ export const DigitalExperiencesPage = ({ onNavigate, hideCTA = false }) => {
                   }}
                 >
                   <span className="micro-label" style={{ fontSize: '0.62rem', color: 'var(--color-accent-lime)' }}>
-                    {concept.metricsHighlight || 'PRODUCTION BENCHMARK'}
+                    {concept.statusBadge}
                   </span>
                   <button
                     onClick={() => onNavigate && onNavigate('/contact')}
@@ -514,7 +564,7 @@ export const DigitalExperiencesPage = ({ onNavigate, hideCTA = false }) => {
                       fontSize: '0.72rem'
                     }}
                   >
-                    <span>SPECIFY</span>
+                    <span>DISCUSS</span>
                     <ArrowUpRight size={12} />
                   </button>
                 </div>

@@ -9,13 +9,12 @@ import { ArrowUpRight, ExternalLink } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Curated 4 flagship live websites for homepage showcase:
-// Noise Dept., Spinform™, Paloma Social House, Vale Selvatico
+// Curated 3 strongest live website projects for homepage showcase:
+// Noise Dept. (Creative Studio), Spinform™ (3D Web App), Paloma Social House (Hospitality Flagship)
 const FEATURED_WEBSITES = [
   LIVE_WEBSITE_PROJECTS.find((p) => p.title === 'Noise Dept.') || LIVE_WEBSITE_PROJECTS[0],
   LIVE_WEBSITE_PROJECTS.find((p) => p.title === 'Spinform™') || LIVE_WEBSITE_PROJECTS[1],
-  LIVE_WEBSITE_PROJECTS.find((p) => p.title === 'Paloma Social House') || LIVE_WEBSITE_PROJECTS[2],
-  LIVE_WEBSITE_PROJECTS.find((p) => p.title === 'Vale Selvatico') || LIVE_WEBSITE_PROJECTS[3]
+  LIVE_WEBSITE_PROJECTS.find((p) => p.title === 'Paloma Social House') || LIVE_WEBSITE_PROJECTS[2]
 ];
 
 export const HomeWebsitesShowcase = ({ onNavigate }) => {
@@ -108,7 +107,7 @@ export const HomeWebsitesShowcase = ({ onNavigate }) => {
                 fontWeight: 600
               }}
             >
-              WEB // SELECTED PRODUCTION DEMOS
+              WEB // SELECTED WEBSITE DEMOS
             </span>
           </div>
 
@@ -161,17 +160,17 @@ export const HomeWebsitesShowcase = ({ onNavigate }) => {
               margin: '0.65rem 0 0 0'
             }}
           >
-            Four live digital flagship demonstrations engineered for culture, luxury, and conversion. Hover to scroll and explore inside each live deployment.
+            Three live interactive website demonstrations showcasing our design, motion, and web development capabilities. Hover to scroll and explore each live demo.
           </p>
         </div>
 
-        {/* 4 Cards: Balanced 2-Column Grid on Desktop, 1-Column on Mobile */}
+        {/* 3 Cards: Responsive Grid showcasing the 3 curated demos */}
         <div
           className="home-web-grid"
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 480px), 1fr))',
-            gap: 'clamp(2rem, 3.5vw, 3rem)'
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 360px), 1fr))',
+            gap: 'clamp(1.75rem, 3vw, 2.5rem)'
           }}
         >
           {FEATURED_WEBSITES.map((proj) => (
@@ -233,7 +232,7 @@ export const HomeWebsitesShowcase = ({ onNavigate }) => {
                         textTransform: 'uppercase'
                       }}
                     >
-                      LIVE DEMO
+                      {proj.badge || 'INTERACTIVE DEMO'}
                     </span>
                   </div>
                 </div>
@@ -415,7 +414,7 @@ export const HomeWebsitesShowcase = ({ onNavigate }) => {
                       gap: '6px'
                     }}
                   >
-                    <span>OPEN LIVE SITE</span>
+                    <span>OPEN LIVE DEMO</span>
                     <ExternalLink size={11} />
                   </a>
                 </div>

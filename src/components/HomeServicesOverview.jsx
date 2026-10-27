@@ -12,9 +12,9 @@ const SERVICES_DATA = [
     number: "01",
     code: "AI AUTOMATION",
     title: "AI AUTOMATION",
-    tagline: "Autonomous voice receptionists and WhatsApp pipelines that capture enquiries 24/7.",
+    tagline: "AI voice receptionists and automated WhatsApp workflows that capture inquiries and book appointments 24/7.",
     icon: Cpu,
-    highlights: ["Voice AI Receptionists", "WhatsApp Automation", "Autonomous Booking"],
+    highlights: ["AI Call Answering", "WhatsApp Messaging", "Automated Booking"],
     path: "/services"
   },
   {
@@ -22,9 +22,9 @@ const SERVICES_DATA = [
     number: "02",
     code: "WEBSITES",
     title: "WEBSITES",
-    tagline: "High-converting digital flagships and landing pages engineered to convert visitors.",
+    tagline: "Modern business websites and high-converting landing pages built to turn visitors into clients.",
     icon: Globe,
-    highlights: ["Custom Business Websites", "Conversion Landing Pages", "Sub-Second Performance"],
+    highlights: ["Business Websites", "Landing Pages", "Fast Performance & SEO"],
     path: "/work"
   },
   {
@@ -32,9 +32,9 @@ const SERVICES_DATA = [
     number: "03",
     code: "CREATIVE PRODUCTION",
     title: "CREATIVE PRODUCTION",
-    tagline: "Commercial AI photography, 9:16 vertical video reels, and high-impact ad campaigns.",
+    tagline: "Commercial product visuals, virtual model photography, and vertical video ads for digital advertising.",
     icon: Film,
-    highlights: ["AI Model & Product Visuals", "9:16 Portrait Video Ads", "Omnichannel Ad Creative"],
+    highlights: ["Product & Model Visuals", "Vertical Video Ads", "Multi-Placement Suites"],
     path: "/work#ads"
   }
 ];

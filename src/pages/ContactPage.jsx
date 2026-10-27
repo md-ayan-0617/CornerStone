@@ -3,7 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import CornerstoneMotif from '../components/CornerstoneMotif';
 import TypewriterText from '../components/TypewriterText';
-import { CONTACT_BUDGETS, CONTACT_TIMELINES, CONTACT_SERVICES } from '../data/siteContent';
+import { CONTACT_BUDGETS, CONTACT_SERVICES } from '../data/siteContent';
 import { 
   ArrowUpRight, 
   CheckCircle2, 
@@ -132,13 +132,13 @@ export const ContactPage = () => {
 
     const payload = {
       name: formData.name,
-      company: formData.company,
+      company: formData.company || 'N/A',
       email: formData.email,
-      phone: formData.phone,
-      website: formData.website,
-      budget: formData.budget,
-      timeline: formData.timeline,
-      services: formData.services,
+      phone: formData.phone || '',
+      website: formData.website || '',
+      budget: formData.budget || 'Not specified',
+      timeline: 'Flexible',
+      services: formData.services.length > 0 ? formData.services : 'General Inquiry',
       details: formData.details,
       hp_company_field: honeypot
     };
@@ -248,7 +248,7 @@ export const ContactPage = () => {
                     marginBottom: '1rem'
                   }}
                 >
-                  Direct access to system architects.
+                  Discuss your project directly.
                 </h3>
                 <p
                   style={{
@@ -259,11 +259,11 @@ export const ContactPage = () => {
                     marginBottom: '1.5rem'
                   }}
                 >
-                  Every submission is reviewed directly by our founding partners and systems engineers. We review project scope, assess technical feasibility, and prepare an initial architecture outline before our first meeting.
+                  Every submission is reviewed carefully to evaluate your project requirements and determine the most effective approach. We assess scope and feasibility before scheduling an introductory conversation.
                 </p>
               </div>
 
-              {/* Advisory Telemetry Status Card */}
+              {/* Project Intake Status Card */}
               <div
                 style={{
                   backgroundColor: 'rgba(20, 20, 20, 0.75)',
@@ -279,18 +279,18 @@ export const ContactPage = () => {
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <span className="lime-dot" style={{ width: '6px', height: '6px' }} />
                     <span className="micro-label" style={{ color: 'var(--color-warm-white)', fontWeight: 600 }}>
-                      SYSTEM CAPACITY STATUS
+                      INQUIRY STATUS
                     </span>
                   </div>
-                  <span className="micro-label-lime">Q2 / Q3 ACTIVE</span>
+                  <span className="micro-label-lime">OPEN FOR INQUIRIES</span>
                 </div>
                 <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.76rem', color: 'var(--color-muted-gray)', margin: '0 0 0.75rem 0', lineHeight: 1.5 }}>
-                  Currently accepting 2 select enterprise clients for full-cycle autonomous systems deployment.
+                  Currently accepting new client projects across AI automation, business websites, and creative production.
                 </p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '0.65rem' }}>
                   <Clock size={13} color="#B8FF3D" />
                   <span className="micro-label" style={{ fontSize: '0.66rem', color: 'var(--color-warm-white)' }}>
-                    TYPICAL INITIAL TRIAGE: &lt; 4 HOURS
+                    TYPICAL INITIAL REVIEW: 1–2 BUSINESS DAYS
                   </span>
                 </div>
               </div>
@@ -309,16 +309,10 @@ export const ContactPage = () => {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <MessageSquare size={16} color="#B8FF3D" />
                   <div>
-                    <span className="micro-label" style={{ display: 'block', fontSize: '0.62rem' }}>DIRECT WHATSAPP CHANNEL</span>
-                    <a
-                      href="https://wa.me/15550000000?text=Hi%20Cornerstone%2C%20I%20would%20like%20to%20discuss%20an%20architecture%20project."
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ fontFamily: 'var(--font-mono)', fontSize: '0.82rem', color: 'var(--color-accent-lime)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px' }}
-                    >
-                      <span>Connect with Desk on WhatsApp</span>
-                      <ArrowUpRight size={12} />
-                    </a>
+                    <span className="micro-label" style={{ display: 'block', fontSize: '0.62rem' }}>DIRECT MESSAGING</span>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.82rem', color: 'var(--color-muted-gray)' }}>
+                      Direct messaging channel provided upon inquiry confirmation
+                    </span>
                   </div>
                 </div>
 
@@ -327,7 +321,7 @@ export const ContactPage = () => {
                   <div>
                     <span className="micro-label" style={{ display: 'block', fontSize: '0.62rem' }}>CONFIDENTIALITY ASSURANCE</span>
                     <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.82rem', color: '#F4F3EF' }}>
-                      Mutual NDA automatically honored for technical blueprints
+                      Project details treated confidentially • Mutual NDAs available upon request
                     </span>
                   </div>
                 </div>
@@ -337,7 +331,7 @@ export const ContactPage = () => {
                   <div>
                     <span className="micro-label" style={{ display: 'block', fontSize: '0.62rem' }}>STUDIO PRESENCE</span>
                     <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.82rem', color: '#F4F3EF' }}>
-                      Global Engineering • London • New York • Dubai • Singapore
+                      Remote Studio • Serving clients globally
                     </span>
                   </div>
                 </div>
@@ -384,7 +378,7 @@ export const ContactPage = () => {
                       marginBottom: '1.25rem'
                     }}
                   >
-                    Your project inquiry for <strong>{formData.company || 'your organization'}</strong> has been verified and permanently committed to our systems desk database under reference <strong>{inquiryId}</strong>. We will review your scope against current deployment capacity and reply within 24 hours.
+                    Your project inquiry for <strong>{formData.company || 'your organization'}</strong> has been received under reference <strong>{inquiryId}</strong>. We will review your scope and follow up promptly to discuss next steps.
                   </p>
 
                   <div
@@ -415,8 +409,8 @@ export const ContactPage = () => {
                         phone: '',
                         website: '',
                         details: '',
-                        budget: CONTACT_BUDGETS[1],
-                        timeline: CONTACT_TIMELINES[0],
+                        budget: '',
+                        timeline: 'Flexible',
                         services: []
                       });
                     }}
@@ -453,10 +447,12 @@ export const ContactPage = () => {
                   <div className="corner-bracket-tl" />
                   <div className="corner-bracket-br" />
 
-                  {/* Identification Fields */}
+                  {/* Identification Fields: Name & Email */}
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))', gap: '1.25rem' }}>
                     <div>
-                      <label className="micro-label" style={{ display: 'block', marginBottom: '0.5rem' }}>YOUR NAME *</label>
+                      <label className="micro-label" style={{ display: 'block', marginBottom: '0.5rem' }}>
+                        YOUR NAME <span style={{ color: 'var(--color-accent-lime)' }}>*</span>
+                      </label>
                       <input
                         type="text"
                         required
@@ -477,56 +473,15 @@ export const ContactPage = () => {
                     </div>
 
                     <div>
-                      <label className="micro-label" style={{ display: 'block', marginBottom: '0.5rem' }}>COMPANY / ORGANIZATION *</label>
-                      <input
-                        type="text"
-                        required
-                        value={formData.company}
-                        onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                        placeholder="e.g. Vance Capital / Clinic"
-                        style={{
-                          width: '100%',
-                          padding: '0.85rem 1rem',
-                          backgroundColor: '#141414',
-                          border: '1px solid var(--color-border-gray)',
-                          color: '#F4F3EF',
-                          fontFamily: 'var(--font-body)',
-                          fontSize: '0.9rem',
-                          outline: 'none'
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))', gap: '1.25rem' }}>
-                    <div>
-                      <label className="micro-label" style={{ display: 'block', marginBottom: '0.5rem' }}>   EMAIL *</label>
+                      <label className="micro-label" style={{ display: 'block', marginBottom: '0.5rem' }}>
+                        BUSINESS EMAIL <span style={{ color: 'var(--color-accent-lime)' }}>*</span>
+                      </label>
                       <input
                         type="email"
                         required
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        placeholder="marcus@vance.com"
-                        style={{
-                          width: '100%',
-                          padding: '0.85rem 1rem',
-                          backgroundColor: '#141414',
-                          border: '1px solid var(--color-border-gray)',
-                          color: '#F4F3EF',
-                          fontFamily: 'var(--font-body)',
-                          fontSize: '0.9rem',
-                          outline: 'none'
-                        }}
-                      />
-                    </div>
-
-                    <div>
-                      <label className="micro-label" style={{ display: 'block', marginBottom: '0.5rem' }}>PHONE / WHATSAPP</label>
-                      <input
-                        type="tel"
-                        value={formData.phone}
-                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        placeholder="+1 (555) 000-0000"
+                        placeholder="marcus@company.com"
                         style={{
                           width: '100%',
                           padding: '0.85rem 1rem',
@@ -541,13 +496,16 @@ export const ContactPage = () => {
                     </div>
                   </div>
 
+                  {/* Company / Organization (Optional) */}
                   <div>
-                    <label className="micro-label" style={{ display: 'block', marginBottom: '0.5rem' }}>CURRENT WEBSITE (IF APPLICABLE)</label>
+                    <label className="micro-label" style={{ display: 'block', marginBottom: '0.5rem' }}>
+                      COMPANY / ORGANIZATION <span style={{ color: 'var(--color-muted-gray)', fontSize: '0.62rem' }}>(OPTIONAL)</span>
+                    </label>
                     <input
-                      type="url"
-                      value={formData.website}
-                      onChange={(e) => setFormData({ ...formData, website: e.target.value })}
-                      placeholder="https://yourcompany.com"
+                      type="text"
+                      value={formData.company}
+                      onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                      placeholder="e.g. Vance Studio / Clinic / Brand"
                       style={{
                         width: '100%',
                         padding: '0.85rem 1rem',
@@ -561,10 +519,10 @@ export const ContactPage = () => {
                     />
                   </div>
 
-                  {/* Multi-select Services */}
+                  {/* Project Type Multi-select */}
                   <div>
                     <label className="micro-label" style={{ display: 'block', marginBottom: '0.75rem' }}>
-                      WHAT ARE YOU LOOKING TO BUILD? (SELECT ALL THAT APPLY)
+                      WHAT ARE YOU LOOKING TO BUILD? <span style={{ color: 'var(--color-muted-gray)', fontSize: '0.62rem' }}>(OPTIONAL)</span>
                     </label>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
                       {CONTACT_SERVICES.map((srv) => {
@@ -594,72 +552,17 @@ export const ContactPage = () => {
                     </div>
                   </div>
 
-                  {/* Budget Selector */}
+                  {/* Project Details / Brief */}
                   <div>
-                    <label className="micro-label" style={{ display: 'block', marginBottom: '0.75rem' }}>
-                      ESTIMATED BUDGET RANGE
+                    <label className="micro-label" style={{ display: 'block', marginBottom: '0.5rem' }}>
+                      PROJECT BRIEF / SCOPE <span style={{ color: 'var(--color-accent-lime)' }}>*</span>
                     </label>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-                      {CONTACT_BUDGETS.map((b) => (
-                        <button
-                          type="button"
-                          key={b}
-                          onClick={() => setFormData({ ...formData, budget: b })}
-                          style={{
-                            padding: '8px 12px',
-                            backgroundColor: formData.budget === b ? '#FFF' : '#141414',
-                            color: formData.budget === b ? '#0A0A0A' : '#9B9A96',
-                            border: '1px solid',
-                            borderColor: formData.budget === b ? '#FFF' : 'var(--color-border-gray)',
-                            fontFamily: 'var(--font-mono)',
-                            fontSize: '0.72rem',
-                            fontWeight: 600,
-                            cursor: 'pointer'
-                          }}
-                        >
-                          {b}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Timeline Selector */}
-                  <div>
-                    <label className="micro-label" style={{ display: 'block', marginBottom: '0.75rem' }}>
-                      DEPLOYMENT TIMELINE
-                    </label>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-                      {CONTACT_TIMELINES.map((t) => (
-                        <button
-                          type="button"
-                          key={t}
-                          onClick={() => setFormData({ ...formData, timeline: t })}
-                          style={{
-                            padding: '8px 12px',
-                            backgroundColor: formData.timeline === t ? '#FFF' : '#141414',
-                            color: formData.timeline === t ? '#0A0A0A' : '#9B9A96',
-                            border: '1px solid',
-                            borderColor: formData.timeline === t ? '#FFF' : 'var(--color-border-gray)',
-                            fontFamily: 'var(--font-mono)',
-                            fontSize: '0.72rem',
-                            fontWeight: 600,
-                            cursor: 'pointer'
-                          }}
-                        >
-                          {t}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Project Details */}
-                  <div>
-                    <label className="micro-label" style={{ display: 'block', marginBottom: '0.5rem' }}>PROJECT SCOPE / OBJECTIVES</label>
                     <textarea
                       rows={4}
+                      required
                       value={formData.details}
                       onChange={(e) => setFormData({ ...formData, details: e.target.value })}
-                      placeholder="Outline current bottlenecks, desired patient/customer response flows, or branding goals..."
+                      placeholder="Briefly describe what you're looking to build, solve, or launch..."
                       style={{
                         width: '100%',
                         padding: '0.85rem 1rem',
@@ -672,6 +575,55 @@ export const ContactPage = () => {
                         resize: 'vertical'
                       }}
                     />
+                  </div>
+
+                  {/* Optional Budget Range */}
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                      <label className="micro-label" style={{ margin: 0 }}>
+                        ESTIMATED BUDGET RANGE <span style={{ color: 'var(--color-muted-gray)', fontSize: '0.62rem' }}>(OPTIONAL)</span>
+                      </label>
+                      {formData.budget && (
+                        <button
+                          type="button"
+                          onClick={() => setFormData({ ...formData, budget: '' })}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            color: 'var(--color-muted-gray)',
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: '0.62rem',
+                            cursor: 'pointer',
+                            textDecoration: 'underline'
+                          }}
+                        >
+                          Clear selection
+                        </button>
+                      )}
+                    </div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                      {CONTACT_BUDGETS.map((b) => (
+                        <button
+                          type="button"
+                          key={b}
+                          onClick={() => setFormData({ ...formData, budget: formData.budget === b ? '' : b })}
+                          style={{
+                            padding: '8px 12px',
+                            backgroundColor: formData.budget === b ? '#FFF' : '#141414',
+                            color: formData.budget === b ? '#0A0A0A' : '#9B9A96',
+                            border: '1px solid',
+                            borderColor: formData.budget === b ? '#FFF' : 'var(--color-border-gray)',
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: '0.72rem',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                            transition: 'all 0.15s ease'
+                          }}
+                        >
+                          {b}
+                        </button>
+                      ))}
+                    </div>
                   </div>
 
                   {submitError && (
@@ -706,7 +658,7 @@ export const ContactPage = () => {
                   </button>
 
                   <span className="micro-label" style={{ textAlign: 'center', fontSize: '0.62rem' }}>
-                    DIRECT ARCHITECTURAL REVIEW • STRICT CONFIDENTIALITY GUARANTEED
+                    DIRECT PROJECT REVIEW • CONFIDENTIAL EVALUATION
                   </span>
 
                 </form>
@@ -764,19 +716,19 @@ export const ContactPage = () => {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1.25rem' }}>
                   <span className="micro-label-lime" style={{ fontSize: '0.85rem' }}>STAGE 01</span>
                   <span className="micro-label" style={{ backgroundColor: 'rgba(255,255,255,0.05)', padding: '3px 8px' }}>
-                    0 — 24 HOURS
+                    REVIEW
                   </span>
                 </div>
                 <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.25rem', fontWeight: 800, color: 'var(--color-warm-white)', marginBottom: '0.75rem' }}>
-                  Technical Audit &amp; Feasibility
+                  Inquiry Review &amp; Assessment
                 </h3>
                 <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.88rem', lineHeight: 1.6, color: 'var(--color-muted-gray)', margin: 0 }}>
-                  A founding systems engineer reviews your submission, audits current integration endpoints (WhatsApp, CRM, telephony), and models latency expectations.
+                  We review your brief, assess technical feasibility and requirements, and determine how our capabilities match your goals.
                 </p>
               </div>
               <div style={{ borderTop: '1px solid var(--color-border-gray)', paddingTop: '0.85rem', marginTop: '1.5rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <Check size={14} color="#B8FF3D" />
-                <span className="micro-label" style={{ fontSize: '0.65rem' }}>NO GENERIC SALES CALLS</span>
+                <span className="micro-label" style={{ fontSize: '0.65rem' }}>THOROUGH EVALUATION</span>
               </div>
             </div>
 
@@ -798,19 +750,19 @@ export const ContactPage = () => {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1.25rem' }}>
                   <span className="micro-label-lime" style={{ fontSize: '0.85rem' }}>STAGE 02</span>
                   <span className="micro-label" style={{ backgroundColor: 'rgba(255,255,255,0.05)', padding: '3px 8px' }}>
-                    DAY 2 — 3
+                    ALIGNMENT
                   </span>
                 </div>
                 <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.25rem', fontWeight: 800, color: 'var(--color-warm-white)', marginBottom: '0.75rem' }}>
-                  Architectural Scope &amp; Blueprint
+                  Discovery &amp; Scope Alignment
                 </h3>
                 <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.88rem', lineHeight: 1.6, color: 'var(--color-muted-gray)', margin: 0 }}>
-                  We present a concrete architecture specification document with system node diagrams, fixed deployment milestones, and predictable deliverables.
+                  We schedule an initial discussion to clarify project requirements, agree on deliverables, and outline estimated timelines and milestones.
                 </p>
               </div>
               <div style={{ borderTop: '1px solid var(--color-border-gray)', paddingTop: '0.85rem', marginTop: '1.5rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <Check size={14} color="#B8FF3D" />
-                <span className="micro-label" style={{ fontSize: '0.65rem' }}>FIXED SCOPE &amp; TIMELINE</span>
+                <span className="micro-label" style={{ fontSize: '0.65rem' }}>CLEAR SCOPE &amp; EXPECTATIONS</span>
               </div>
             </div>
 
@@ -832,19 +784,19 @@ export const ContactPage = () => {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1.25rem' }}>
                   <span className="micro-label-lime" style={{ fontSize: '0.85rem' }}>STAGE 03</span>
                   <span className="micro-label" style={{ backgroundColor: 'rgba(255,255,255,0.05)', padding: '3px 8px' }}>
-                    WEEK 1 ONWARD
+                    EXECUTION
                   </span>
                 </div>
                 <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.25rem', fontWeight: 800, color: 'var(--color-warm-white)', marginBottom: '0.75rem' }}>
-                  Sprint 01 Production Rollout
+                  Implementation &amp; Delivery
                 </h3>
                 <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.88rem', lineHeight: 1.6, color: 'var(--color-muted-gray)', margin: 0 }}>
-                  Immediate development sprints with live staging links, dedicated private communication channel, and 30-day post-launch hypercare.
+                  We begin execution with staging links, regular progress updates, direct communication, and thorough testing prior to launch.
                 </p>
               </div>
               <div style={{ borderTop: '1px solid var(--color-border-gray)', paddingTop: '0.85rem', marginTop: '1.5rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <Check size={14} color="#B8FF3D" />
-                <span className="micro-label" style={{ fontSize: '0.65rem' }}>24/7 SLA HYPERCARE</span>
+                <span className="micro-label" style={{ fontSize: '0.65rem' }}>STRUCTURED PROGRESS UPDATES</span>
               </div>
             </div>
           </div>
@@ -980,7 +932,7 @@ export const ContactPage = () => {
         </div>
       </section>
 
-      {/* Section 04: Global Studio Telemetry & Nodes */}
+      {/* Section 04: Global Client Collaboration */}
       <section
         style={{
           paddingTop: 'clamp(3.5rem, 7vw, 5.5rem)',
@@ -992,9 +944,9 @@ export const ContactPage = () => {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem', borderBottom: '1px solid var(--color-border-gray)', paddingBottom: '0.85rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Globe size={15} color="#B8FF3D" />
-              <span className="micro-label-lime">GLOBAL STUDIO TOPOLOGY</span>
+              <span className="micro-label-lime">GLOBAL CLIENT COLLABORATION</span>
             </div>
-            <span className="micro-label">SYNCHRONIZED TIMEZONES</span>
+            <span className="micro-label">REMOTE-FIRST STUDIO</span>
           </div>
 
           <div
@@ -1007,13 +959,13 @@ export const ContactPage = () => {
             }}
           >
             {[
-              { city: "LONDON", tz: "UTC+0", role: "EMEA SYSTEMS DESK", status: "ACTIVE" },
-              { city: "NEW YORK", tz: "UTC-5", role: "US ENTERPRISE OPS", status: "ACTIVE" },
-              { city: "DUBAI", tz: "UTC+4", role: "MENA INTEGRATION HUB", status: "ACTIVE" },
-              { city: "SINGAPORE", tz: "UTC+8", role: "APAC VELOCITY NODE", status: "ACTIVE" }
+              { region: "AMERICAS", tz: "UTC-5 / UTC-8", role: "CLIENT COLLABORATION", status: "REMOTE" },
+              { region: "UK & EUROPE", tz: "UTC+0 / UTC+1", role: "DESIGN & DEVELOPMENT", status: "REMOTE" },
+              { region: "MIDDLE EAST & ASIA", tz: "UTC+4 / UTC+5:30", role: "SYSTEMS ENGINEERING", status: "REMOTE" },
+              { region: "ASIA-PACIFIC", tz: "UTC+8", role: "PRODUCTION & REVIEW", status: "REMOTE" }
             ].map((node) => (
               <div
-                key={node.city}
+                key={node.region}
                 style={{
                   backgroundColor: 'var(--color-charcoal)',
                   padding: '1.5rem',
@@ -1024,7 +976,7 @@ export const ContactPage = () => {
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-warm-white)' }}>
-                    {node.city}
+                    {node.region}
                   </span>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                     <span className="lime-dot" style={{ width: '5px', height: '5px' }} />

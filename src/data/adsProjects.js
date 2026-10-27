@@ -81,120 +81,120 @@ export const LOCAL_ADS_IMAGES = [
     number: "01",
     title: "LUMIÈRE EAU DE PARFUM",
     category: "LUXURY PERFUME",
-    client: "Lumière",
+    client: "Independent Concept",
     imageUrl: "/images/1.png",
     thumbnailUrl: "/images/1.png",
     aspectRatio: "9:16",
-    badge: "HAUTE PARFUMERIE",
-    tagline: "Amber glass reflections and couture perfume direction."
+    badge: "INDEPENDENT CONCEPT",
+    tagline: "Amber glass reflections and couture perfume visual exploration (Independent Concept)."
   },
   {
     id: "ad-img-02",
     number: "02",
     title: "DOT & KEY SUNSCREEN",
     category: "BEAUTY & SKINCARE",
-    client: "Dot & Key",
+    client: "Speculative Concept",
     imageUrl: "/images/2.png",
     thumbnailUrl: "/images/2.png",
     aspectRatio: "4:5",
-    badge: "SKINCARE CAMPAIGN",
-    tagline: "Watermelon cooling sunscreen commercial visuals."
+    badge: "SPECULATIVE CREATIVE CONCEPT",
+    tagline: "Watermelon cooling sunscreen commercial visuals (Speculative Creative Concept — Unofficial Brand Study)."
   },
   {
     id: "ad-img-03",
     number: "03",
     title: "MISS DIOR EAU DE PARFUM",
     category: "FASHION FRAGRANCE",
-    client: "Dior",
+    client: "Unofficial Brand Concept",
     imageUrl: "/images/3.png",
     thumbnailUrl: "/images/3.png",
     aspectRatio: "4:5",
-    badge: "PARISIAN EDITORIAL",
-    tagline: "Courtyard natural daylight and luxury fragrance styling."
+    badge: "UNOFFICIAL BRAND CONCEPT",
+    tagline: "Courtyard natural daylight and fragrance styling (Unofficial Brand Concept — Not commissioned by or affiliated with Dior)."
   },
   {
     id: "ad-img-04",
     number: "04",
     title: "AURORA FINE JEWELRY",
     category: "HIGH JEWELRY",
-    client: "Aurora",
+    client: "Independent Concept",
     imageUrl: "/images/4.png",
     thumbnailUrl: "/images/4.png",
     aspectRatio: "4:5",
-    badge: "FINE JEWELRY",
-    tagline: "Gold and pearl layering with minimalist linen contrast."
+    badge: "INDEPENDENT CONCEPT",
+    tagline: "Gold and pearl layering with minimalist linen contrast (Independent Creative Concept)."
   },
   {
     id: "ad-img-05",
     number: "05",
     title: "MINIMALIST VITAMIN C SERUM",
     category: "CLEAN COSMETICS",
-    client: "Minimalist",
+    client: "Speculative Concept",
     imageUrl: "/images/5.png",
     thumbnailUrl: "/images/5.png",
     aspectRatio: "4:5",
-    badge: "CLEAN BEAUTY",
-    tagline: "Sunlight warmth and active clinical skincare aesthetics."
+    badge: "SPECULATIVE CREATIVE CONCEPT",
+    tagline: "Sunlight warmth and active clinical skincare aesthetics (Speculative Creative Concept — Unofficial Brand Study)."
   },
   {
     id: "ad-img-06",
     number: "06",
     title: "SOLITAIRE HAUTE JOAILLERIE",
     category: "HAUTE JOAILLERIE",
-    client: "Solitaire",
+    client: "Independent Concept",
     imageUrl: "/images/6.png",
     thumbnailUrl: "/images/6.png",
     aspectRatio: "4:5",
-    badge: "DIAMOND SUITE",
-    tagline: "Pear-cut diamond brilliance on draped bronze silk."
+    badge: "INDEPENDENT CONCEPT",
+    tagline: "Pear-cut diamond brilliance on draped bronze silk (Independent Creative Concept)."
   },
   {
     id: "ad-img-07",
     number: "07",
     title: "FASHION WEEK: THE NEW MOOD",
     category: "EDITORIAL MONOGRAPH",
-    client: "Fashion Week",
+    client: "Independent Concept",
     imageUrl: "/images/7.png",
     thumbnailUrl: "/images/7.png",
     aspectRatio: "4:5",
-    badge: "RUNWAY EDITORIAL",
-    tagline: "Structured chocolate blazer and studio aperture lighting."
+    badge: "INDEPENDENT CONCEPT",
+    tagline: "Structured chocolate blazer and studio aperture lighting (Independent Editorial Concept)."
   },
   {
     id: "ad-img-08",
     number: "08",
     title: "HOUSE OF QUIRK: SIP PERSONALITY",
     category: "LIFESTYLE PRODUCT",
-    client: "House of Quirk",
+    client: "Speculative Concept",
     imageUrl: "/images/8.png",
     thumbnailUrl: "/images/8.png",
     aspectRatio: "4:5",
-    badge: "SUMMER CAMPAIGN",
-    tagline: "Playful pastel tumblers and high-energy commercial pop."
+    badge: "SPECULATIVE CREATIVE CONCEPT",
+    tagline: "Playful pastel tumblers and commercial pop visuals (Speculative Creative Concept — Unofficial Brand Study)."
   },
   {
     id: "ad-img-09",
     number: "09",
     title: "GUCCI: THE POETRY OF MOVEMENT",
     category: "LUXURY COUTURE",
-    client: "Gucci",
+    client: "Unofficial Brand Concept",
     imageUrl: "/images/9.png",
     thumbnailUrl: "/images/9.png",
     aspectRatio: "4:5",
-    badge: "COUTURE MONOGRAPH",
-    tagline: "Burgundy chiffon gown in sculpted architectural alcove."
+    badge: "UNOFFICIAL BRAND CONCEPT",
+    tagline: "Burgundy chiffon gown in sculpted architectural alcove (Unofficial Brand Concept — Not commissioned by or affiliated with Gucci)."
   },
   {
     id: "ad-img-10",
     number: "10",
     title: "CRUMBL: TAKE THE SCENIC SIP",
     category: "BEVERAGE & LIFESTYLE",
-    client: "Crumbl",
+    client: "Speculative Concept",
     imageUrl: "/images/10.png",
     thumbnailUrl: "/images/10.png",
     aspectRatio: "4:5",
-    badge: "CALIFORNIA CRUISE",
-    tagline: "Pink vintage convertible and sunny coastal lifestyle."
+    badge: "SPECULATIVE CREATIVE CONCEPT",
+    tagline: "Pink vintage convertible and sunny coastal lifestyle (Speculative Creative Concept — Unofficial Brand Study)."
   }
 ];
 

@@ -192,7 +192,7 @@ export const Hero = ({ onExploreWork, onStartProject, onExploreServices }) => {
             maxWidth: '18ch'
           }}
         >
-          BUILD <TypewriterText words={["WHAT'S NEXT.", "AI AUTOMATION.", "BUSINESS WEBSITES.", "CREATIVE PRODUCTION."]} />
+          BUILD <TypewriterText words={["WHAT'S NEXT.", "AI AUTOMATION.", "WEBSITE DEVELOPMENT.", "CREATIVE PRODUCTION."]} />
         </h1>
 
         {/* Supporting Copy & Grid Intersect */}
@@ -214,24 +214,24 @@ export const Hero = ({ onExploreWork, onStartProject, onExploreServices }) => {
                 fontSize: 'clamp(1.05rem, 1.6vw, 1.35rem)',
                 lineHeight: 1.45,
                 color: 'var(--color-warm-white)',
-                maxWidth: '42ch',
+                maxWidth: '44ch',
                 margin: 0,
                 fontWeight: 600
               }}
             >
-              AI automation, modern websites, and commercial creative production for forward-thinking businesses.
+              We build AI automation, modern websites, and commercial creative production that help ambitious businesses grow.
             </p>
             <p
               style={{
                 fontFamily: 'var(--font-body)',
-                fontSize: 'clamp(0.85rem, 1.1vw, 0.95rem)',
+                fontSize: 'clamp(0.88rem, 1.1vw, 1rem)',
                 lineHeight: 1.6,
                 color: 'var(--color-muted-gray)',
                 maxWidth: '46ch',
                 marginTop: '0.75rem'
               }}
             >
-              We engineer 24/7 AI voice receptionists, WhatsApp messaging workflows, high-converting business websites, and studio-grade AI creative to help you attract, convert and serve customers.
+              From 24/7 call answering and fast-loading web platforms to scroll-stopping ad creative, we deliver the digital foundation to attract, convert, and serve your customers.
             </p>
           </div>
 

@@ -86,19 +86,19 @@ export const HomeAboutSection = () => {
       number: "01",
       title: "CREATIVE THINKING",
       icon: Sparkles,
-      desc: "Brand positioning, visual hooks, and commercial creative production that cut through saturated feeds and command attention."
+      desc: "Compelling visual concepts, commercial photography, and video ads that capture customer attention across digital channels."
     },
     {
       number: "02",
       title: "MODERN TECHNOLOGY",
       icon: Terminal,
-      desc: "Sub-second web architectures, autonomous 24/7 AI voice receptionists, and instant WhatsApp customer messaging workflows."
+      desc: "Fast, responsive web platforms and automated 24/7 AI call answering systems that handle inquiries without delay."
     },
     {
       number: "03",
       title: "PRECISION EXECUTION",
       icon: Layers,
-      desc: "Architectural rigor, flawless multi-device responsiveness, and reliable systems engineered to scale as your business grows."
+      desc: "Reliable builds, clean responsive layouts, and disciplined delivery engineered to support your business as it scales."
     }
   ];
 
@@ -198,7 +198,7 @@ export const HomeAboutSection = () => {
                 margin: 0
               }}
             >
-              Too many businesses operate with fragmented digital foundations: slow legacy websites that fail to convert, customer calls going to voicemail during peak hours, and ad creatives that fatigue within days. We build the connected infrastructure behind modern commerce—bringing together 24/7 AI receptionists, fast web flagships, and studio-grade creative production under one disciplined roof.
+              We help businesses solve common growth bottlenecks: websites that fail to convert, customer inquiries lost to voicemail after hours, and ad creative that loses impact quickly. By combining automated call handling, high-performing websites, and commercial creative production, we give your business a reliable digital foundation to grow.
             </p>
           </div>
         </div>

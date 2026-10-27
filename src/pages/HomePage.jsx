@@ -2,7 +2,6 @@ import React from 'react';
 import Hero from '../components/Hero';
 import HomeAboutSection from '../components/HomeAboutSection';
 import HomeServicesOverview from '../components/HomeServicesOverview';
-import HomeCapabilitiesSection from '../components/HomeCapabilitiesSection';
 import HomeWebsitesShowcase from '../components/HomeWebsitesShowcase';
 import HomeProcessSection from '../components/HomeProcessSection';
 import FinalCTA from '../components/FinalCTA';
@@ -29,21 +28,14 @@ export const HomePage = ({ onNavigate }) => {
       <HomeAboutSection />
 
       {/* =========================================================================
-          SECTION 3: OUR SERVICES
-          The three core disciplines: AI Automation, Website Development,
-          and Creative Production, with interactive cards & hover states.
+          SECTION 3: OUR SERVICES (CORE DISCIPLINES)
+          The three core offerings: AI Automation, Website Development,
+          and Creative Production. Detailed specifications live on /services.
           ========================================================================= */}
       <HomeServicesOverview onNavigate={onNavigate} />
 
       {/* =========================================================================
-          SECTION 4: WHAT WE CAN BUILD (CAPABILITIES)
-          Concrete deliverables: Website Experiences, Interactive Digital Interfaces,
-          AI-Assisted Workflow Automation, Creative Digital Experiences, Brand Systems.
-          ========================================================================= */}
-      <HomeCapabilitiesSection onNavigate={onNavigate} />
-
-      {/* =========================================================================
-          SECTION 5: SELECTED WEBSITE WORK
+          SECTION 4: SELECTED WEBSITE WORK
           Curated website projects (Noise Dept, Spinform, Paloma Social House,
           Vale Selvatico) with 16:10 preview on top, project info directly below.
           ========================================================================= */}

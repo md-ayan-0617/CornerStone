@@ -117,7 +117,7 @@ export const FinalCTA = ({ onStartProject }) => {
               </div>
 
               <span className="micro-label" style={{ color: 'var(--color-muted-gray)', fontSize: '0.68rem' }}>
-                DIRECT CONSULTATION WITH SYSTEMS DIRECTORS • NO OBLIGATION
+                DIRECT PROJECT CONSULTATION • NO OBLIGATION
               </span>
             </div>
           </div>
@@ -144,7 +144,7 @@ export const FinalCTA = ({ onStartProject }) => {
                   <span className="micro-label-lime">INTAKE PROTOCOL</span>
                 </div>
                 <span className="micro-label" style={{ fontSize: '0.65rem', border: '1px solid var(--color-border-gray)', padding: '2px 8px' }}>
-                  ACTIVE ADVISORY
+                  PROJECT INTAKE
                 </span>
               </div>
 
@@ -152,9 +152,9 @@ export const FinalCTA = ({ onStartProject }) => {
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
                   <Clock size={16} color="var(--color-accent-lime)" style={{ marginTop: '3px', flexShrink: 0 }} />
                   <div>
-                    <span className="micro-label" style={{ display: 'block', fontSize: '0.65rem' }}>SPEED TO RESPONSE</span>
+                    <span className="micro-label" style={{ display: 'block', fontSize: '0.65rem' }}>INQUIRY REVIEW</span>
                     <p style={{ margin: '2px 0 0 0', fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--color-warm-white)' }}>
-                      Sub-4 Hour Advisory Review &amp; Architecture Roadmap
+                      Detailed Project Scope &amp; Technical Evaluation
                     </p>
                   </div>
                 </div>
@@ -162,9 +162,9 @@ export const FinalCTA = ({ onStartProject }) => {
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
                   <Layers size={16} color="var(--color-accent-lime)" style={{ marginTop: '3px', flexShrink: 0 }} />
                   <div>
-                    <span className="micro-label" style={{ display: 'block', fontSize: '0.65rem' }}>GLOBAL DEPLOYMENT SLOTS</span>
+                    <span className="micro-label" style={{ display: 'block', fontSize: '0.65rem' }}>PROJECT AVAILABILITY</span>
                     <p style={{ margin: '2px 0 0 0', fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--color-warm-white)' }}>
-                      Now Accepting Q2 / Q3 Client Engagements
+                      Open for New Client Projects &amp; Commissions
                     </p>
                   </div>
                 </div>
@@ -172,9 +172,9 @@ export const FinalCTA = ({ onStartProject }) => {
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
                   <ShieldCheck size={16} color="var(--color-accent-lime)" style={{ marginTop: '3px', flexShrink: 0 }} />
                   <div>
-                    <span className="micro-label" style={{ display: 'block', fontSize: '0.65rem' }}>DELIVERABLE COMMITMENT</span>
+                    <span className="micro-label" style={{ display: 'block', fontSize: '0.65rem' }}>DELIVERABLE OWNERSHIP</span>
                     <p style={{ margin: '2px 0 0 0', fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--color-warm-white)' }}>
-                      Full Code Ownership, Zero Recurring License Lock-in
+                      Full Code &amp; Asset Ownership Upon Delivery
                     </p>
                   </div>
                 </div>
@@ -182,7 +182,7 @@ export const FinalCTA = ({ onStartProject }) => {
 
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '1rem', borderTop: '1px solid var(--color-border-gray)' }}>
                 <span className="micro-label" style={{ color: 'var(--color-warm-white)' }}>
-                  OPEN DIRECT SPECIFICATION INTAKE
+                  START A PROJECT INQUIRY
                 </span>
                 <ArrowUpRight size={14} color="var(--color-accent-lime)" />
               </div>

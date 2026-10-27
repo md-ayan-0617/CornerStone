@@ -176,68 +176,14 @@ export const Footer = ({ onNavigate, currentPath }) => {
                   <ArrowUpRight size={12} className="footer-connect-arrow" aria-hidden="true" />
                 </a>
               </li>
-              <li>
-                <a
-                  href="https://instagram.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="footer-connect-link"
-                  aria-label="Cornerstone on Instagram"
-                  data-cursor="INSTAGRAM"
-                >
-                  <span className="footer-connect-icon-box">
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      aria-hidden="true"
-                    >
-                      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-                    </svg>
-                  </span>
-                  <span>Instagram</span>
-                  <ArrowUpRight size={12} className="footer-connect-arrow" aria-hidden="true" />
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://linkedin.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="footer-connect-link"
-                  aria-label="Cornerstone on LinkedIn"
-                  data-cursor="LINKEDIN"
-                >
-                  <span className="footer-connect-icon-box">
-                    <svg
-                      width="15"
-                      height="15"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.44 8.5h4.12v14.5H.44V8.5zm6.75 0h3.94v1.98h.06c.55-1.04 1.89-2.14 3.9-2.14 4.17 0 4.94 2.75 4.94 6.32v8.34h-4.12v-7.39c0-1.76-.03-4.03-2.45-4.03-2.46 0-2.83 1.92-2.83 3.91v7.51H7.19V8.5z" />
-                    </svg>
-                  </span>
-                  <span>LinkedIn</span>
-                  <ArrowUpRight size={12} className="footer-connect-arrow" aria-hidden="true" />
-                </a>
-              </li>
             </ul>
 
-            <div className="footer-availability" title="Studio is currently onboarding Q2/Q3 projects">
+            <div className="footer-availability" title="Studio is currently open for new project inquiries">
               <span className="footer-avail-radar">
                 <span className="footer-avail-ping" aria-hidden="true" />
                 <span className="footer-avail-dot" aria-hidden="true" />
               </span>
-              <span className="footer-avail-text">AVAILABLE FOR SELECT PROJECTS</span>
+              <span className="footer-avail-text">OPEN FOR NEW INQUIRIES</span>
             </div>
           </div>
 

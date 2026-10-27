@@ -17,13 +17,13 @@ export const ServicesPage = ({ onNavigate }) => {
       categoryTag: "SERVICE 01 — AI AUTOMATION",
       title: "AI AUTOMATION",
       headline: "Answer incoming calls, handle FAQs, capture enquiries, book appointments and route calls.",
-      description: "We deploy low-latency voice assistants, intelligent receptionists, and WhatsApp automation workflows that eliminate wait times, qualify customer intent, and capture bookings 24/7.",
+      description: "We deploy automated voice assistants, AI receptionists, and WhatsApp messaging workflows that answer questions, capture inquiries, and schedule appointments 24/7.",
       targetAudience: "Salons, clinics, restaurants, real estate and service businesses.",
       icon: Cpu,
       primaryImage: "/images/services/service-ai-receptionist.jpg",
       primaryImageTag: "AI RECEPTIONIST & VOICE ASSISTANT",
-      metrics: "< 600ms Latency • 24/7 Autonomous Triage",
-      deliverableSummary: "Deployed voice & chat infrastructure, prompt guardrails, telephony routing, WhatsApp Cloud API, and calendar synchronization.",
+      metrics: "24/7 Call Answering • Automated Appointment Booking",
+      deliverableSummary: "Configured voice assistant, telephony setup, FAQ integration, WhatsApp Cloud API workflows, and calendar synchronization.",
       services: [
         {
           id: "01.1",
@@ -32,10 +32,10 @@ export const ServicesPage = ({ onNavigate }) => {
           image: "/images/services/service-ai-receptionist.jpg",
           imageTag: "VOICE INTERFACE & CALL DISPATCH",
           features: [
-            "24/7 inbound phone call answering with sub-second response times",
-            "Natural voice synthesis trained on your business FAQs and operational SOPs",
+            "24/7 inbound phone call answering for inquiries and appointment requests",
+            "Natural voice conversation trained on your business FAQs and service information",
             "Direct calendar integration for instant appointment booking and rescheduling",
-            "Intelligent enquiry triage with emergency escalation and staff call routing"
+            "Enquiry capture, caller notification, and call routing to your team when required"
           ]
         },
         {
@@ -59,13 +59,13 @@ export const ServicesPage = ({ onNavigate }) => {
       categoryTag: "SERVICE 02 — WEBSITES",
       title: "WEBSITES",
       headline: "Professional business websites with enquiry forms and booking integrations.",
-      description: "We engineer architectural digital platforms and focused campaign landing pages that establish immediate market authority, load sub-second, and convert visitors into clients.",
+      description: "We build modern business websites and focused campaign landing pages engineered to present your business clearly, load quickly, and convert visitors into clients.",
       targetAudience: "New businesses and companies with outdated websites.",
       icon: Layout,
       primaryImage: "/images/services/service-business-websites.jpg",
       primaryImageTag: "BUSINESS WEBSITE ARCHITECTURE",
-      metrics: "Sub-400ms LCP • 100/100 Lighthouse Performance",
-      deliverableSummary: "Custom codebase, responsive breakpoints (320px–4K), integrated enquiry & booking forms, sub-second LCP, and SEO architecture.",
+      metrics: "High Performance • Fast Mobile Loading & Clear Conversion",
+      deliverableSummary: "Custom codebase, fully responsive design, integrated inquiry & booking forms, performance optimization, and search engine structure.",
       services: [
         {
           id: "02.1",
@@ -89,7 +89,7 @@ export const ServicesPage = ({ onNavigate }) => {
           features: [
             "Single-objective conversion layouts engineered specifically for paid traffic",
             "High-contrast visual hierarchy, concise messaging, and prominent CTAs",
-            "Sub-second load times eliminating visitor bounce before page interaction",
+            "Fast page loading designed to keep visitor attention and reduce bounce rates",
             "Integrated analytics, event telemetry, and conversion tracking pipelines"
           ]
         }
@@ -101,13 +101,13 @@ export const ServicesPage = ({ onNavigate }) => {
       categoryTag: "SERVICE 03 — CREATIVE PRODUCTION",
       title: "CREATIVE PRODUCTION",
       headline: "Product visuals, virtual model shoots, jewellery and fashion campaigns, and lifestyle imagery.",
-      description: "We direct and generate editorial visual assets—from hyper-realistic product shoots and virtual fashion models to high-conversion UGC spokesperson video ads and multi-channel creative suites.",
+      description: "We produce commercial visual assets—including high-detail product visuals, virtual model imagery, scripted UGC-style spokesperson video ads, and multi-placement digital ad suites.",
       targetAudience: "Jewellery, fashion, beauty and ecommerce brands, and businesses running digital ads.",
       icon: Sparkles,
       primaryImage: "/images/services/service-ai-photography.jpg",
       primaryImageTag: "AI PRODUCT & MODEL CAMPAIGN",
-      metrics: "8K Native Resolution • Multi-Variant Creative Pipeline",
-      deliverableSummary: "Ultra-high-res editorial photography, scripted vertical UGC ads, 9:16 / 1:1 / 16:9 social creative suites, and campaign strategy.",
+      metrics: "High-Resolution Output • Multi-Format Campaign Assets",
+      deliverableSummary: "High-resolution commercial photography, scripted vertical UGC-style video ads, multi-format social ad suites, and creative direction.",
       services: [
         {
           id: "03.1",
@@ -291,8 +291,8 @@ export const ServicesPage = ({ onNavigate }) => {
                   maxWidth: '20ch'
                 }}
               >
-                DISCIPLINES FOR{' '}
-                <TypewriterText words={["AUTONOMOUS SCALE.", "MARKET AUTHORITY.", "PERPETUAL GROWTH."]} />
+                SERVICES BUILT FOR{' '}
+                <TypewriterText words={["MODERN BUSINESS.", "BETTER ENGAGEMENT.", "PRACTICAL RESULTS."]} />
               </h1>
 
               <div className="services-hero-elem" style={{ borderTop: '1px solid var(--color-border-gray)', paddingTop: '1.75rem', maxWidth: '48ch', marginBottom: '2.5rem' }}>
@@ -305,7 +305,7 @@ export const ServicesPage = ({ onNavigate }) => {
                     margin: 0
                   }}
                 >
-                  Cornerstone positions your brand with three coordinated disciplines: 24/7 AI Automation, bespoke Websites, and studio-grade Creative Production.
+                  CornerStone delivers three integrated disciplines designed to help businesses operate efficiently and present themselves clearly: 24/7 AI Automation to capture inquiries, responsive Websites to engage clients, and Creative Production for compelling marketing visuals.
                 </p>
               </div>
 
@@ -341,8 +341,8 @@ export const ServicesPage = ({ onNavigate }) => {
               <div className="corner-bracket-br" />
 
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', borderBottom: '1px solid var(--color-border-gray)', paddingBottom: '0.85rem' }}>
-                <span className="micro-label-lime">TAXONOMY SPECIFICATION</span>
-                <span className="micro-label">3 DISCIPLINES // 7 SERVICES</span>
+                <span className="micro-label-lime">CORE DISCIPLINES</span>
+                <span className="micro-label">3 CAPABILITIES</span>
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
@@ -751,7 +751,9 @@ export const ServicesPage = ({ onNavigate }) => {
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <CornerstoneMotif size={14} variant="bracket" />
                     <span className="micro-label" style={{ color: 'var(--color-muted-gray)' }}>
-                      ESTIMATED TIMELINE: 1–3 WEEKS • PRODUCTION GRADE DEPLOYMENT
+                      {world.code === "AI_AUTOMATION" && "TIMELINE: SCOPE-DEPENDENT • TYPICALLY 1–3 WEEKS BASED ON WORKFLOWS & INTEGRATIONS"}
+                      {world.code === "WEBSITES" && "TIMELINE: SCOPE-DEPENDENT • TYPICALLY 2–4 WEEKS BASED ON ARCHITECTURE & CONTENT READINESS"}
+                      {world.code === "CREATIVE_PRODUCTION" && "TIMELINE: SCOPE-DEPENDENT • TYPICALLY 1–2 WEEKS BASED ON ASSET VOLUME & VARIATIONS"}
                     </span>
                   </div>
 

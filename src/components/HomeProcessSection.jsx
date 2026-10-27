@@ -12,32 +12,32 @@ const PROCESS_STAGES = [
     name: "DISCOVER",
     icon: Search,
     headline: "Understand requirements & audit workflows.",
-    description: "We audit how your business currently captures enquiries, handles calls, and presents its brand online. We identify friction, missed inquiries, outdated templates, and creative bottlenecks in your customer flow.",
-    deliverable: "Service Audit & Systems Matrix"
+    description: "We evaluate your current customer touchpoints, call handling, and digital presence to identify points of friction.",
+    deliverable: "Project Scope & Audit"
   },
   {
     step: "02",
     name: "PLAN",
     icon: Compass,
-    headline: "Define the scope, blueprints & creative direction.",
-    description: "We design the complete solution: website architecture, enquiry and booking flows, AI voice prompts, WhatsApp automation trees, and commercial ad creative styles.",
-    deliverable: "Architecture Blueprints & Scope Specs"
+    headline: "Define blueprints & creative direction.",
+    description: "We map out web architecture, conversational flows, and creative guidelines before production begins.",
+    deliverable: "Architecture & Specifications"
   },
   {
     step: "03",
     name: "CREATE",
     icon: Cpu,
-    headline: "Precision design & engineering.",
-    description: "We build the web platforms, deploy the AI receptionist and voice assistants, configure WhatsApp automation, and produce high-resolution AI imagery and video ads.",
-    deliverable: "Production-Ready Deliverables"
+    headline: "Design & engineering.",
+    description: "We develop the web platforms, configure AI reception and WhatsApp flows, and produce commercial creative assets.",
+    deliverable: "Tested Deliverables"
   },
   {
     step: "04",
     name: "DELIVER",
     icon: CheckCircle2,
-    headline: "Test, launch & hand over completed systems.",
-    description: "We rigorously test cross-browser performance, launch the live services across your channels, and hand over full operational control with comprehensive documentation.",
-    deliverable: "Live Launch & Ongoing Reliability"
+    headline: "Launch & hand over.",
+    description: "We deploy the systems to your live domains, run final verification checks, and provide operational handover.",
+    deliverable: "Live Launch & Handover"
   }
 ];
 

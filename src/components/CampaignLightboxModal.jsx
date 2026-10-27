@@ -10,9 +10,7 @@ export const CampaignLightboxModal = ({
   onSelectProject,
   onNavigate
 }) => {
-  if (!project) return null;
-
-  const currentIndex = allProjects.findIndex((p) => p.id === project.id);
+  const currentIndex = project ? allProjects.findIndex((p) => p.id === project.id) : -1;
   const hasPrev = currentIndex > 0;
   const hasNext = currentIndex >= 0 && currentIndex < allProjects.length - 1;
 
@@ -30,6 +28,7 @@ export const CampaignLightboxModal = ({
 
   // Keyboard navigation: Escape to close, Left/Right for pagination
   useEffect(() => {
+    if (!project) return;
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
         onClose();
@@ -49,7 +48,9 @@ export const CampaignLightboxModal = ({
       window.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = originalOverflow;
     };
-  }, [onClose, handlePrev, handleNext]);
+  }, [project, onClose, handlePrev, handleNext]);
+
+  if (!project) return null;
 
   const isVideo = project.mediaType === 'video';
   const embedUrl = isVideo ? getEmbedUrl(project.mediaUrl) : null;
