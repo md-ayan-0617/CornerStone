@@ -3,12 +3,13 @@ import { ChevronLeft, ChevronRight, Sparkles, Eye } from 'lucide-react';
 import CornerstoneMotif from './CornerstoneMotif';
 
 export const CampaignCarousel = ({ collection, onSelectImage }) => {
-  if (!collection || !collection.items || collection.items.length === 0) return null;
-
   const [activeIndex, setActiveIndex] = useState(0);
-  const items = collection.items;
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
+
+  if (!collection || !collection.items || collection.items.length === 0) return null;
+
+  const items = collection.items;
 
   const handlePrev = () => {
     setActiveIndex((prev) => (prev > 0 ? prev - 1 : items.length - 1));

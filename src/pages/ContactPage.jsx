@@ -3,7 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import CornerstoneMotif from '../components/CornerstoneMotif';
 import TypewriterText from '../components/TypewriterText';
-import { CONTACT_BUDGETS, CONTACT_SERVICES } from '../data/siteContent';
+import { CONTACT_BUDGETS, CONTACT_SERVICES, CONTACT_TIMELINES } from '../data/siteContent';
 import { 
   ArrowUpRight, 
   CheckCircle2, 
