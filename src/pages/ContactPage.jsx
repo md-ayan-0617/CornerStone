@@ -3,7 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import CornerstoneMotif from '../components/CornerstoneMotif';
 import TypewriterText from '../components/TypewriterText';
-import { CONTACT_BUDGETS, CONTACT_SERVICES, CONTACT_TIMELINES } from '../data/siteContent';
+import { CONTACT_BUDGETS, CONTACT_SERVICES, CONTACT_TIMELINES, SOCIAL_LINKS } from '../data/siteContent';
 import { 
   ArrowUpRight, 
   CheckCircle2, 
@@ -300,9 +300,46 @@ export const ContactPage = () => {
                   <Mail size={16} color="#B8FF3D" />
                   <div>
                     <span className="micro-label" style={{ display: 'block', fontSize: '0.62rem' }}>DIRECT INTAKE EMAIL</span>
-                    <a href="mailto:hello@cornerstone.build" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: '#F4F3EF', textDecoration: 'none' }}>
-                      hello@cornerstone.build
+                    <a href={`mailto:${SOCIAL_LINKS.email}`} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: '#F4F3EF', textDecoration: 'none' }}>
+                      {SOCIAL_LINKS.email}
                     </a>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                  <Globe size={16} color="#B8FF3D" style={{ marginTop: '2px' }} />
+                  <div>
+                    <span className="micro-label" style={{ display: 'block', fontSize: '0.62rem', marginBottom: '6px' }}>OFFICIAL SOCIAL CHANNELS</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
+                      <a
+                        href={SOCIAL_LINKS.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontFamily: 'var(--font-mono)', fontSize: '0.82rem', color: '#F4F3EF', textDecoration: 'none' }}
+                      >
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                          <rect width="4" height="12" x="2" y="9" />
+                          <circle cx="4" cy="4" r="2" />
+                        </svg>
+                        <span>LinkedIn</span>
+                        <ArrowUpRight size={11} color="var(--color-accent-lime)" />
+                      </a>
+                      <a
+                        href={SOCIAL_LINKS.instagram}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontFamily: 'var(--font-mono)', fontSize: '0.82rem', color: '#F4F3EF', textDecoration: 'none' }}
+                      >
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+                          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                          <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+                        </svg>
+                        <span>Instagram</span>
+                        <ArrowUpRight size={11} color="var(--color-accent-lime)" />
+                      </a>
+                    </div>
                   </div>
                 </div>
 
@@ -845,7 +882,7 @@ export const ContactPage = () => {
                   Ask our engineering desk directly for custom compliance or enterprise multi-tenant specifications.
                 </p>
                 <a
-                  href="mailto:hello@cornerstone.build?subject=Custom%20Architecture%20Inquiry"
+                  href={`mailto:${SOCIAL_LINKS.email}?subject=Custom%20Architecture%20Inquiry`}
                   className="btn-cornerstone-secondary"
                   style={{ padding: '0.65rem 1.15rem', fontSize: '0.7rem' }}
                 >

@@ -8,9 +8,15 @@ export const BRAND = {
   corePositioning: "Cornerstone provides AI automation, websites and creative production that help modern businesses attract, convert and serve customers.",
   supportingStatement: "Intelligent systems, modern web platforms and commercial creative engineered for businesses ready to scale.",
   concept: "A cornerstone is the foundational element that supports everything built on top of it. Build the right foundation. Everything else becomes possible.",
-  email: "hello@cornerstone.build",
+  email: "cornerstonesocialpresence@gmail.com",
   copyrightYear: 2026,
   location: "Global Studio / Remote Architecture",
+};
+
+export const SOCIAL_LINKS = {
+  email: "cornerstonesocialpresence@gmail.com",
+  linkedin: "https://www.linkedin.com/in/cornerstone-agency-182293446?utm_source=share_via&utm_content=profile&utm_medium=member_android",
+  instagram: "https://www.instagram.com/the.cornerstoneee/"
 };
 
 export const CAPABILITIES = [

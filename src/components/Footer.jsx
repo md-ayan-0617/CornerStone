@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Mail, ArrowUpRight, ArrowUp } from 'lucide-react';
+import { SOCIAL_LINKS } from '../data/siteContent';
 
 export const Footer = ({ onNavigate, currentPath }) => {
   const currentYear = 2026;
@@ -164,15 +165,75 @@ export const Footer = ({ onNavigate, currentPath }) => {
             <ul className="footer-connect-list">
               <li>
                 <a
-                  href="mailto:hello@cornerstone.build"
+                  href={`mailto:${SOCIAL_LINKS.email}`}
                   className="footer-connect-link"
-                  aria-label="Email Cornerstone at hello@cornerstone.build"
+                  aria-label={`Email Cornerstone at ${SOCIAL_LINKS.email}`}
                   data-cursor="EMAIL"
                 >
                   <span className="footer-connect-icon-box">
                     <Mail size={16} strokeWidth={1.8} aria-hidden="true" />
                   </span>
                   <span>Email</span>
+                  <ArrowUpRight size={12} className="footer-connect-arrow" aria-hidden="true" />
+                </a>
+              </li>
+              <li>
+                <a
+                  href={SOCIAL_LINKS.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="footer-connect-link"
+                  aria-label="Cornerstone on LinkedIn"
+                  data-cursor="LINKEDIN"
+                >
+                  <span className="footer-connect-icon-box">
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                      <rect width="4" height="12" x="2" y="9" />
+                      <circle cx="4" cy="4" r="2" />
+                    </svg>
+                  </span>
+                  <span>LinkedIn</span>
+                  <ArrowUpRight size={12} className="footer-connect-arrow" aria-hidden="true" />
+                </a>
+              </li>
+              <li>
+                <a
+                  href={SOCIAL_LINKS.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="footer-connect-link"
+                  aria-label="Cornerstone on Instagram"
+                  data-cursor="INSTAGRAM"
+                >
+                  <span className="footer-connect-icon-box">
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                    >
+                      <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+                      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                      <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+                    </svg>
+                  </span>
+                  <span>Instagram</span>
                   <ArrowUpRight size={12} className="footer-connect-arrow" aria-hidden="true" />
                 </a>
               </li>

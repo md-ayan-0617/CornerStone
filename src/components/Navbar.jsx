@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import CornerstoneMotif from './CornerstoneMotif';
+import { SOCIAL_LINKS } from '../data/siteContent';
 import {
   ArrowUpRight,
   Home,
@@ -344,6 +345,37 @@ export const Navbar = ({ currentPath = "/", onNavigate }) => {
               <span>START A PROJECT</span>
               <ArrowUpRight size={14} />
             </button>
+
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '20px', paddingTop: '4px' }}>
+              <a
+                href={`mailto:${SOCIAL_LINKS.email}`}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', color: '#8E8D8A', textDecoration: 'none', fontFamily: 'var(--font-mono)', fontSize: '0.72rem' }}
+                aria-label="Email Cornerstone"
+              >
+                <span>Email</span>
+                <ArrowUpRight size={11} color="var(--color-accent-lime)" />
+              </a>
+              <a
+                href={SOCIAL_LINKS.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', color: '#8E8D8A', textDecoration: 'none', fontFamily: 'var(--font-mono)', fontSize: '0.72rem' }}
+                aria-label="Cornerstone on LinkedIn"
+              >
+                <span>LinkedIn</span>
+                <ArrowUpRight size={11} color="var(--color-accent-lime)" />
+              </a>
+              <a
+                href={SOCIAL_LINKS.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', color: '#8E8D8A', textDecoration: 'none', fontFamily: 'var(--font-mono)', fontSize: '0.72rem' }}
+                aria-label="Cornerstone on Instagram"
+              >
+                <span>Instagram</span>
+                <ArrowUpRight size={11} color="var(--color-accent-lime)" />
+              </a>
+            </div>
 
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>

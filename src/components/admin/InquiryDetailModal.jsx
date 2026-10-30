@@ -81,7 +81,7 @@ export const InquiryDetailModal = ({
       setReplySubject(`Re: Project Inquiry [${inquiry.id}] - Cornerstone`);
       const greetingName = inquiry.name?.split(' ')[0] || inquiry.name || 'there';
       setReplyBody(
-        `Hi ${greetingName},\n\nThank you for reaching out to Cornerstone regarding your project inquiry.\n\nWe have reviewed your submission and would like to discuss next steps.\n\nBest regards,\nCornerstone Architecture Desk\nhello@cornerstone.build`
+        `Hi ${greetingName},\n\nThank you for reaching out to Cornerstone regarding your project inquiry.\n\nWe have reviewed your submission and would like to discuss next steps.\n\nBest regards,\nCornerstone Architecture Desk\ncornerstonesocialpresence@gmail.com`
       );
       setReplyError(null);
       setReplySuccess(null);
